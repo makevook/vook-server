@@ -37,6 +37,10 @@ dependencies {
 
     // meilisearch
     implementation 'com.meilisearch.sdk:meilisearch-java:0.11.8'
+
+    // swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.5.0'
 }
 
 tasks.named('test') {
