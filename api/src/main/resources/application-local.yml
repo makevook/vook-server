@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3307/vook
+    username: user
+    password: userPw
+  jpa:
+    hibernate:
+      ddl-auto: update
+server:
+  port: 8080
+service:
+  meilisearch:
+    host: http://localhost:7700
+    apiKey: aSampleMasterKey
