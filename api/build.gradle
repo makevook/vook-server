@@ -43,6 +43,11 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.5.0'
 }
 
+bootJar {
+    destinationDirectory = file(rootDir.absolutePath + '/jar')
+    archiveFileName = "${project.name}.jar"
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
