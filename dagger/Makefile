@@ -12,5 +12,5 @@ deploy-dev:
 
 .PHONY:build
 build:
-	dagger call -v build-api-jar --dir=../api -o out/api.jar
+	dagger call -v build-api-jar --dir=../api --test -o out/api.jar
 	dagger call -v build-api-image --jar-file=out/api.jar -o out/api_linux_arm64.tar
