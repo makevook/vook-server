@@ -41,6 +41,9 @@ dependencies {
     // swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.5.0'
+
+    // h2 database
+    testRuntimeOnly 'com.h2database:h2'
 }
 
 bootJar {

@@ -2,16 +2,20 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 )
 
 type VookServer struct{}
 
 func (v *VookServer) BuildApiJar(
+	ctx context.Context,
 	// 빌드 대상의 디렉토리
 	dir *Directory,
-) *File {
-	f := dag.Container().
+	// +optional
+	test bool,
+) (*File, error) {
+	c := dag.Container().
 		From("eclipse-temurin:21-jdk").
 		WithWorkdir("/app").
 		WithDirectory("/app/gradle", dir.Directory("gradle")).
@@ -21,11 +25,22 @@ func (v *VookServer) BuildApiJar(
 			dir.File("settings.gradle"),
 		}).
 		WithExec([]string{"./gradlew"}).
-		WithDirectory("/app/src", dir.Directory("src")).
+		WithDirectory("/app/src", dir.Directory("src"))
+
+	if test {
+		_, err := c.
+			WithExec([]string{"./gradlew", "test"}).
+			Sync(ctx)
+		if err != nil {
+			return nil, errors.New("test fail:" + err.Error())
+		}
+	}
+
+	jarFile := c.
 		WithExec([]string{"./gradlew", "bootJar"}).
 		File("jar/api.jar")
 
-	return f
+	return jarFile, nil
 }
 
 func (v *VookServer) BuildApiImage(
@@ -54,7 +69,7 @@ ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=` + profile + `", "app.jar
 
 	return dag.Docker().
 		Build(sourceDir, DockerBuildOpts{
-			Platform: []string{"linux/arm64"},
+			Platform: []Platform{"linux/arm64"},
 		}).
 		Save(DockerBuildSaveOpts{
 			Name: "api",
@@ -133,11 +148,14 @@ func (v *VookServer) Deploy(
 	version string,
 	command string,
 ) error {
-	jarFile := v.BuildApiJar(sourceDir)
+	jarFile, err := v.BuildApiJar(ctx, sourceDir, true)
+	if err != nil {
+		return err
+	}
 
 	imageTar := v.BuildApiImage(jarFile, "default")
 
-	err := v.SendImage(ctx, sshDest, sshKey, targetPath, imageTar)
+	err = v.SendImage(ctx, sshDest, sshKey, targetPath, imageTar)
 	if err != nil {
 		return err
 	}
