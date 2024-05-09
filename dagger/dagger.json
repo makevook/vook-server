@@ -8,11 +8,11 @@
     },
     {
       "name": "scp",
-      "source": "github.com/seungyeop-lee/daggerverse/scp@2d67873bd965c09398a08034068ff43586537f76"
+      "source": "github.com/seungyeop-lee/daggerverse/scp@63e721cf63323ede8b1f11aeff00d41960699920"
     },
     {
       "name": "ssh",
-      "source": "github.com/seungyeop-lee/daggerverse/ssh@f2a065a7441d08e18d34a12a5097a5335e663b69"
+      "source": "github.com/seungyeop-lee/daggerverse/ssh@63e721cf63323ede8b1f11aeff00d41960699920"
     }
   ],
   "source": ".",
