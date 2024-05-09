@@ -1,6 +1,9 @@
 spring:
   profiles:
     default: local
+  jpa:
+    properties:
+      hibernate.jdbc.time_zone: UTC
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
