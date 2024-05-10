@@ -91,7 +91,7 @@ func (v *VookServer) SendImage(
 	}
 
 	_, err = dag.Scp().
-		Config(sshDestText).
+		Config(strings.TrimSpace(sshDestText)).
 		WithIdentityFile(sshKey).
 		FileToRemote(imageTar, ScpCommanderFileToRemoteOpts{
 			Target: path,
@@ -124,7 +124,7 @@ func (v *VookServer) Apply(
 	}
 
 	_, err = dag.SSH().
-		Config(destinationText).
+		Config(strings.TrimSpace(destinationText)).
 		WithIdentityFile(sshKey).
 		Command(
 			fmt.Sprintf(`
