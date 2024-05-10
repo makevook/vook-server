@@ -14,7 +14,10 @@ public class Term extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 100, nullable = false)
     private String term;
+
+    @Column(length = 2000, nullable = false)
     private String meaning;
 
     @ManyToOne
