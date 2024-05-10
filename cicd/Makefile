@@ -4,6 +4,7 @@ VERSION := $(shell git describe --tags --always --dirty)
 deploy-dev:
 	dagger call -v deploy \
 	--source-dir=../api \
+	--profile=dev \
 	--ssh-dest=file:./secrets/dev/dest.txt \
 	--ssh-key=file:./secrets/dev/ssh.key \
 	--target-path=~/repo/makevook/vook-deployment/dev \
