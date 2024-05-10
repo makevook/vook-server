@@ -1,0 +1,2 @@
+### DB, Meilisearch 초기화
+POST http://localhost:8080/init
