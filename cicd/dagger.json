@@ -15,6 +15,6 @@
       "source": "github.com/seungyeop-lee/daggerverse/ssh@63e721cf63323ede8b1f11aeff00d41960699920"
     }
   ],
-  "source": ".",
+  "source": "dagger",
   "engineVersion": "v0.11.4"
 }

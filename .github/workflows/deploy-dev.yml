@@ -26,7 +26,7 @@ jobs:
         with:
           version: 0.11.4
           verb: call
-          module: ./dagger
+          module: ./cicd
           args: >-
             deploy
             --source-dir=api

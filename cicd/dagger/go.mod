@@ -1,4 +1,4 @@
-module dagger/dagger
+module dagger/vook-server
 
 go 1.22.2
 
