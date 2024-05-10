@@ -30,6 +30,7 @@ jobs:
           args: >-
             deploy
             --source-dir=api
+            --profile=dev
             --ssh-dest=env:SSH_DEST
             --ssh-key=env:SSH_KEY
             --target-path=~/repo/makevook/vook-deployment/dev

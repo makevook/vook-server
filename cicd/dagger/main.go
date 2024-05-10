@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 )
 
 type VookServer struct{}
@@ -48,10 +49,10 @@ func (v *VookServer) BuildApiImage(
 	jarFile *File,
 	// profile
 	// +optional
-	profile string,
+	profile []string,
 ) *File {
-	if profile == "" {
-		profile = "default"
+	if profile == nil {
+		profile = []string{"default"}
 	}
 
 	dockerfile := `
@@ -61,7 +62,7 @@ WORKDIR /app
 
 COPY app.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=` + profile + `", "app.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=` + strings.Join(profile, ",") + `", "app.jar"]
 `
 	sourceDir := dag.Directory().
 		WithFile("app.jar", jarFile).
@@ -90,7 +91,7 @@ func (v *VookServer) SendImage(
 	}
 
 	_, err = dag.Scp().
-		Config(sshDestText).
+		Config(strings.TrimSpace(sshDestText)).
 		WithIdentityFile(sshKey).
 		FileToRemote(imageTar, ScpCommanderFileToRemoteOpts{
 			Target: path,
@@ -123,7 +124,7 @@ func (v *VookServer) Apply(
 	}
 
 	_, err = dag.SSH().
-		Config(destinationText).
+		Config(strings.TrimSpace(destinationText)).
 		WithIdentityFile(sshKey).
 		Command(
 			fmt.Sprintf(`
@@ -142,6 +143,7 @@ FILENAME=%s VERSION=%s %s
 func (v *VookServer) Deploy(
 	ctx context.Context,
 	sourceDir *Directory,
+	profile string,
 	sshDest *Secret,
 	sshKey *Secret,
 	targetPath string,
@@ -153,7 +155,7 @@ func (v *VookServer) Deploy(
 		return err
 	}
 
-	imageTar := v.BuildApiImage(jarFile, "default")
+	imageTar := v.BuildApiImage(jarFile, []string{"default", profile})
 
 	err = v.SendImage(ctx, sshDest, sshKey, targetPath, imageTar)
 	if err != nil {
