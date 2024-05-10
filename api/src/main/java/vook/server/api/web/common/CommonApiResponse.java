@@ -8,11 +8,10 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommonApiResponse<T> {
 
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "응답 코드")
     private Integer code;
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "응답 메시지")
     private String message;
-    @Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private T result;
 
     public static <T> CommonApiResponse<T> ok() {

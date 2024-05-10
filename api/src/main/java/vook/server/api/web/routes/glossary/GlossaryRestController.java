@@ -12,10 +12,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/glossary")
 @RequiredArgsConstructor
-public class GlossaryRestController {
+public class GlossaryRestController implements GlossaryApi {
 
     private final GlossaryWebService service;
 
+    @Override
     @GetMapping
     public CommonApiResponse<List<RetrieveResponse>> retrieve() {
         List<Glossary> result = service.retrieve();
