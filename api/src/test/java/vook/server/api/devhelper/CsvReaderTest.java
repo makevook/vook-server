@@ -3,8 +3,11 @@ package vook.server.api.devhelper;
 import lombok.Getter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,6 +50,26 @@ class CsvReaderTest {
 
         // when
         List<Term> entity = reader.readValue(file, Term.class);
+
+        // then
+        assertThat(entity).hasSize(2);
+        assertThat(entity).extracting("term", "synonyms", "description")
+                .containsExactly(
+                        tuple("Java", "자바", "자바는 객체지향 프로그래밍 언어이다."),
+                        tuple("Spring", "스프링", "스프링은 자바 기반의 프레임워크이다.")
+                );
+    }
+
+    @Test
+    @DisplayName("TSV Reader - InputStream 변환")
+    void readValueInputStream() throws IOException {
+        // given
+        InputStream inputStream = new ClassPathResource("tsvreader/test.tsv").getInputStream();
+
+        CsvReader reader = new CsvReader("\t");
+
+        // when
+        List<Term> entity = reader.readValue(inputStream, Term.class);
 
         // then
         assertThat(entity).hasSize(2);

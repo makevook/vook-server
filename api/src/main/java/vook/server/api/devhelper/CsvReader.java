@@ -17,6 +17,14 @@ public class CsvReader {
         this.DELIMITER = delimiter;
     }
 
+    public <T> List<T> readValue(InputStream inputStream, Class<T> clazz) {
+        try {
+            return readValue(new InputStreamReader(inputStream), clazz);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public <T> List<T> readValue(File file, Class<T> clazz) {
         try {
             return readValue(new FileReader(file), clazz);
