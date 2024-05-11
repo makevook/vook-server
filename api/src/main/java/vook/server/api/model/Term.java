@@ -3,6 +3,7 @@ package vook.server.api.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -25,7 +26,7 @@ public class Term extends BaseEntity {
     private Glossary glossary;
 
     @OneToMany(mappedBy = "term", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TermSynonym> synonym;
+    private List<TermSynonym> synonyms = new ArrayList<>();
 
     public static Term forCreateOf(
             String term,
@@ -39,7 +40,7 @@ public class Term extends BaseEntity {
         return result;
     }
 
-    public void addSynonym(TermSynonym termSynonym) {
-        synonym.add(termSynonym);
+    public void addSynonym(String synonym) {
+        this.synonyms.add(TermSynonym.forCreateOf(synonym, this));
     }
 }

@@ -7,6 +7,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        highlight_sql: false
+        format_sql: true
 server:
   port: 8080
 service:
