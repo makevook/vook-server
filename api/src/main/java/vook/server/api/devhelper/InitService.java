@@ -78,7 +78,8 @@ public class InitService {
 
         public Term toTerm(Glossary glossary) {
             Term term = Term.forCreateOf(this.term, this.meaning, glossary);
-            Arrays.stream(this.synonyms.split("\\n"))
+            String[] synonymArray = this.synonyms.split("//n");
+            Arrays.stream(synonymArray)
                     .map(String::trim)
                     .forEach(term::addSynonym);
             return term;
