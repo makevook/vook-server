@@ -28,4 +28,21 @@ public interface GlossaryApi {
 
     class RetrieveApiResponse extends CommonApiResponse<List<RetrieveResponse>> {
     }
+
+    @Operation(summary = "용어집 내 용어 리스트 조회")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = FindAllTermsApiResponse.class)
+                    )
+            ),
+    })
+    CommonApiResponse<List<FindAllTermsResponse>> findAllTerms(String glossaryUid);
+
+    class FindAllTermsApiResponse extends CommonApiResponse<List<FindAllTermsResponse>> {
+    }
+
 }

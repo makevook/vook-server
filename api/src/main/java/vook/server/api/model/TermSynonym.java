@@ -3,6 +3,9 @@ package vook.server.api.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+/**
+ * 용어 동의어
+ */
 @Getter
 @Entity
 @Table(name = "term_synonym")
@@ -12,6 +15,9 @@ public class TermSynonym {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * 동의어
+     */
     @Column(length = 100, nullable = false)
     private String synonym;
 

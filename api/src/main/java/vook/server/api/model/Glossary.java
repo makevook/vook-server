@@ -5,6 +5,9 @@ import lombok.Getter;
 
 import java.util.UUID;
 
+/**
+ * 용어집
+ */
 @Getter
 @Entity
 @Table(name = "glossary")
@@ -14,7 +17,15 @@ public class Glossary extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * UID; 외부 노출용 식별자
+     */
+    @Column(length = 36, nullable = false, unique = true)
     private String uid;
+
+    /**
+     * 용어집 이름
+     */
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)

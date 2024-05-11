@@ -6,6 +6,9 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 용어
+ */
 @Getter
 @Entity
 @Table(name = "term")
@@ -15,9 +18,15 @@ public class Term extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * 용어 이름
+     */
     @Column(length = 100, nullable = false)
     private String term;
 
+    /**
+     * 용어 의미
+     */
     @Column(length = 2000, nullable = false)
     private String meaning;
 
@@ -25,7 +34,7 @@ public class Term extends BaseEntity {
     @JoinColumn(name = "glossary_id", nullable = false)
     private Glossary glossary;
 
-    @OneToMany(mappedBy = "term", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "term", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TermSynonym> synonyms = new ArrayList<>();
 
     public static Term forCreateOf(
