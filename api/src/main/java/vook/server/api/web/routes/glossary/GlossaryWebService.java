@@ -18,8 +18,9 @@ public class GlossaryWebService {
     private final GlossaryService glossaryService;
     private final TermService termService;
 
-    public List<Glossary> retrieve() {
-        return glossaryService.findAll();
+    public List<RetrieveResponse> retrieve() {
+        List<Glossary> glossaries = glossaryService.findAll();
+        return RetrieveResponse.from(glossaries);
     }
 
     public List<FindAllTermsResponse> findAllTerms(String glossaryUid) {
