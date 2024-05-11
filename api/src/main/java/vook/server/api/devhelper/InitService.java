@@ -48,7 +48,8 @@ public class InitService {
         searchService.createGlossary(practiceGlossary);
 
         List<Term> devTerms = getTerms("classpath:init/개발.tsv", devGlossary);
-        termRepository.saveAll(devTerms);
+        List<Term> terms = termRepository.saveAll(devTerms);
+        searchService.addTerms(terms, devGlossary);
     }
 
     private List<Term> getTerms(String location, Glossary glossary) {
