@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-public class FindAllTermsResponse {
+public class RetrieveTermsResponse {
 
     private String term;
 
@@ -23,14 +23,14 @@ public class FindAllTermsResponse {
 
     private String createdBy;
 
-    public static List<FindAllTermsResponse> from(Glossary glossary, List<Term> terms) {
+    public static List<RetrieveTermsResponse> from(Glossary glossary, List<Term> terms) {
         return terms.stream()
                 .map(term -> from(glossary, term))
                 .toList();
     }
 
-    public static FindAllTermsResponse from(Glossary glossary, Term term) {
-        FindAllTermsResponse response = new FindAllTermsResponse();
+    public static RetrieveTermsResponse from(Glossary glossary, Term term) {
+        RetrieveTermsResponse response = new RetrieveTermsResponse();
         response.term = term.getTerm();
         response.synonyms = term.getSynonyms().stream().map(TermSynonym::getSynonym).toList();
         response.meaning = term.getMeaning();

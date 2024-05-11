@@ -1,6 +1,8 @@
 package vook.server.api.web.routes.glossary;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +27,11 @@ public class GlossaryRestController implements GlossaryApi {
 
     @Override
     @GetMapping("/{glossaryUid}/terms")
-    public CommonApiResponse<List<FindAllTermsResponse>> findAllTerms(@PathVariable String glossaryUid) {
-        List<FindAllTermsResponse> result = service.findAllTerms(glossaryUid);
+    public CommonApiResponse<List<RetrieveTermsResponse>> retrieveTerms(
+            @PathVariable String glossaryUid,
+            @PageableDefault(size = Integer.MAX_VALUE, sort = "term") Pageable pageable
+    ) {
+        List<RetrieveTermsResponse> result = service.retrieveTerms(glossaryUid, pageable);
         return CommonApiResponse.okWithResult(result);
     }
 }

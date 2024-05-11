@@ -1,10 +1,10 @@
 package vook.server.api.app;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vook.server.api.model.Glossary;
 import vook.server.api.model.Term;
-import vook.server.api.model.TermRepository;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TermService {
 
-    private final TermRepository repository;
+    private final TermSearchRepository searchRepository;
 
-    public List<Term> findAllBy(Glossary glossary) {
-        return repository.findAllByGlossary(glossary);
+    public List<Term> findAllBy(Glossary glossary, Pageable pageable) {
+        return searchRepository.search(glossary.getUid(), pageable);
     }
 }

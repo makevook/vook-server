@@ -1,6 +1,7 @@
 package vook.server.api.web.routes.glossary;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.GlossaryService;
@@ -23,9 +24,9 @@ public class GlossaryWebService {
         return RetrieveResponse.from(glossaries);
     }
 
-    public List<FindAllTermsResponse> findAllTerms(String glossaryUid) {
+    public List<RetrieveTermsResponse> retrieveTerms(String glossaryUid, Pageable pageable) {
         Glossary glossary = glossaryService.findByUid(glossaryUid).orElseThrow();
-        List<Term> terms = termService.findAllBy(glossary);
-        return FindAllTermsResponse.from(glossary, terms);
+        List<Term> terms = termService.findAllBy(glossary, pageable);
+        return RetrieveTermsResponse.from(glossary, terms);
     }
 }
