@@ -25,7 +25,7 @@ public class Term extends BaseEntity {
     @JoinColumn(name = "glossary_id", nullable = false)
     private Glossary glossary;
 
-    @OneToMany(mappedBy = "term", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "term", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TermSynonym> synonyms = new ArrayList<>();
 
     public static Term forCreateOf(
