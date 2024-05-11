@@ -9,8 +9,8 @@ import vook.server.api.model.*;
 import vook.server.api.outbound.search.SearchClearable;
 import vook.server.api.outbound.search.SearchService;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,9 +54,11 @@ public class InitService {
 
     private List<Term> getTerms(String location, Glossary glossary) {
         try {
-            File tsvFile = resourceLoader.getResource(location).getFile();
+            // file로 바로 접근 할 경우, IDE에서는 접근 가능하나, jar로 패키징 후 실행 시에는 접근 불가능
+            // ref) https://velog.io/@haron/트러블슈팅-Spring-IDE-에서-되는데-배포하면-안-돼요
+            InputStream tsvFileInputStream = resourceLoader.getResource(location).getInputStream();
             CsvReader tsvReader = new CsvReader("\t");
-            List<RawTerm> rawTerms = tsvReader.readValue(tsvFile, RawTerm.class);
+            List<RawTerm> rawTerms = tsvReader.readValue(tsvFileInputStream, RawTerm.class);
             return toTerms(rawTerms, glossary);
         } catch (IOException e) {
             throw new RuntimeException(e);

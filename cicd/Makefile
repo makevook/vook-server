@@ -11,7 +11,14 @@ deploy-dev:
 	--version=${VERSION} \
 	--command="make deploy-api"
 
-.PHONY:build
-build:
+.PHONY:build-jar
+build-jar:
 	dagger call -v build-api-jar --dir=../api --test -o out/api.jar
+
+.PHONY:build-image
+build-image: build-jar
 	dagger call -v build-api-image --jar-file=out/api.jar -o out/api_linux_arm64.tar
+
+.PHONY:run-jar
+run-jar:
+	(cd out && java -jar api.jar)
