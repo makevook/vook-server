@@ -19,14 +19,13 @@ public class TermSynonym {
     @JoinColumn(name = "term_id", nullable = false)
     private Term term;
 
-    public static TermSynonym forCreateOf(
+    static TermSynonym forCreateOf(
             String synonym,
             Term term
     ) {
         TermSynonym result = new TermSynonym();
         result.synonym = synonym;
         result.term = term;
-        term.addSynonym(result);
         return result;
     }
 }
