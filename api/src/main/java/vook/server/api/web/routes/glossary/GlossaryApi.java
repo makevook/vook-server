@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import vook.server.api.web.common.CommonApiResponse;
 
 import java.util.List;
@@ -36,13 +38,16 @@ public interface GlossaryApi {
                     description = "성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = FindAllTermsApiResponse.class)
+                            schema = @Schema(implementation = RetrieveTermsApiResponse.class)
                     )
             ),
     })
-    CommonApiResponse<List<FindAllTermsResponse>> findAllTerms(String glossaryUid);
+    CommonApiResponse<List<RetrieveTermsResponse>> retrieveTerms(
+            String glossaryUid,
+            @ParameterObject Pageable pageable
+    );
 
-    class FindAllTermsApiResponse extends CommonApiResponse<List<FindAllTermsResponse>> {
+    class RetrieveTermsApiResponse extends CommonApiResponse<List<RetrieveTermsResponse>> {
     }
 
 }
