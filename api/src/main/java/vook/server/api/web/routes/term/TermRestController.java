@@ -10,10 +10,11 @@ import vook.server.api.web.common.CommonApiResponse;
 @RestController
 @RequestMapping("/terms")
 @RequiredArgsConstructor
-public class TermRestController {
+public class TermRestController implements TermRestApi {
 
     private final TermWebService service;
 
+    @Override
     @PostMapping("/search")
     public CommonApiResponse<SearchResponse> search(
             @RequestBody SearchRequest request
