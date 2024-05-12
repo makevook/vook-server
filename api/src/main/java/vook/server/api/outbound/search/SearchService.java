@@ -9,4 +9,6 @@ public interface SearchService {
     void createGlossary(Glossary glossary);
 
     void addTerms(List<Term> terms, Glossary glossary);
+
+    SearchResult search(SearchParams params);
 }

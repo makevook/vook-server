@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meilisearch.sdk.Client;
 import com.meilisearch.sdk.Config;
 import com.meilisearch.sdk.Index;
+import com.meilisearch.sdk.SearchRequest;
 import com.meilisearch.sdk.model.IndexesQuery;
 import com.meilisearch.sdk.model.Results;
+import com.meilisearch.sdk.model.Searchable;
 import com.meilisearch.sdk.model.TaskInfo;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
@@ -63,6 +65,18 @@ public class MeilisearchService implements SearchService, SearchClearable {
         Index index = client.index(getIndexUid(glossary));
         TaskInfo taskInfo = index.addDocuments(getDocuments(terms));
         client.waitForTask(taskInfo.getTaskUid());
+    }
+
+    @Override
+    public SearchResult search(SearchParams params) {
+        SearchRequest searchRequest = SearchRequest.builder()
+                .q(params.getQuery())
+                .attributesToHighlight(new String[]{"*"})
+                .highlightPreTag("<strong>")
+                .highlightPostTag("</strong>")
+                .build();
+        Searchable search = this.client.getIndex(getIndexUid(params.getGlossary())).search(searchRequest);
+        return SearchResult.from(search);
     }
 
     @NotNull
