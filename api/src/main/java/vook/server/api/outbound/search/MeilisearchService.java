@@ -69,12 +69,7 @@ public class MeilisearchService implements SearchService, SearchClearable {
 
     @Override
     public SearchResult search(SearchParams params) {
-        SearchRequest searchRequest = SearchRequest.builder()
-                .q(params.getQuery())
-                .attributesToHighlight(new String[]{"*"})
-                .highlightPreTag("<strong>")
-                .highlightPostTag("</strong>")
-                .build();
+        SearchRequest searchRequest = params.buildSearchRequest();
         Searchable search = this.client.getIndex(getIndexUid(params.getGlossary())).search(searchRequest);
         return SearchResult.from(search);
     }
