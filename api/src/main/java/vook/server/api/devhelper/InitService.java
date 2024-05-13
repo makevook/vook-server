@@ -5,9 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.model.*;
-import vook.server.api.outbound.search.SearchClearable;
-import vook.server.api.outbound.search.SearchService;
+import vook.server.api.model.demo.*;
+import vook.server.api.outbound.search.DemoTermSearchService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,38 +20,32 @@ public class InitService {
 
     private final ResourceLoader resourceLoader;
 
-    private final MemberRepository memberRepository;
-    private final GlossaryRepository glossaryRepository;
-    private final TermRepository termRepository;
-    private final TermSynonymRepository termSynonymRepository;
-    private final SearchClearable searchClearable;
-
-    private final SearchService searchService;
+    private final DemoGlossaryRepository demoGlossaryRepository;
+    private final DemoTermRepository demoTermRepository;
+    private final DemoTermSynonymRepository demoTermSynonymRepository;
+    private final DemoTermSearchService searchService;
 
     public void init() {
-        termSynonymRepository.deleteAllInBatch();
-        termRepository.deleteAllInBatch();
-        glossaryRepository.deleteAllInBatch();
-        memberRepository.deleteAllInBatch();
-        searchClearable.clearAll();
+        demoTermSynonymRepository.deleteAllInBatch();
+        demoTermRepository.deleteAllInBatch();
+        demoGlossaryRepository.deleteAllInBatch();
+        searchService.clearAll();
 
-        Member vook = memberRepository.save(Member.forCreateOf("vook"));
-
-        Glossary devGlossary = glossaryRepository.save(Glossary.forCreateOf("개발", vook));
+        DemoGlossary devGlossary = demoGlossaryRepository.save(DemoGlossary.forCreateOf("개발"));
         searchService.createGlossary(devGlossary);
-        Glossary designGlossary = glossaryRepository.save(Glossary.forCreateOf("디자인", vook));
+        DemoGlossary designGlossary = demoGlossaryRepository.save(DemoGlossary.forCreateOf("디자인"));
         searchService.createGlossary(designGlossary);
-        Glossary marketingGlossary = glossaryRepository.save(Glossary.forCreateOf("마케팅", vook));
+        DemoGlossary marketingGlossary = demoGlossaryRepository.save(DemoGlossary.forCreateOf("마케팅"));
         searchService.createGlossary(marketingGlossary);
-        Glossary practiceGlossary = glossaryRepository.save(Glossary.forCreateOf("실무", vook));
+        DemoGlossary practiceGlossary = demoGlossaryRepository.save(DemoGlossary.forCreateOf("실무"));
         searchService.createGlossary(practiceGlossary);
 
-        List<Term> devTerms = getTerms("classpath:init/개발.tsv", devGlossary);
-        List<Term> terms = termRepository.saveAll(devTerms);
-        searchService.addTerms(terms, devGlossary);
+        List<DemoTerm> devTerms = getTerms("classpath:init/개발.tsv", devGlossary);
+        List<DemoTerm> terms = demoTermRepository.saveAll(devTerms);
+        searchService.addTerms(devGlossary, terms);
     }
 
-    private List<Term> getTerms(String location, Glossary glossary) {
+    private List<DemoTerm> getTerms(String location, DemoGlossary glossary) {
         try {
             // file로 바로 접근 할 경우, IDE에서는 접근 가능하나, jar로 패키징 후 실행 시에는 접근 불가능
             // ref) https://velog.io/@haron/트러블슈팅-Spring-IDE-에서-되는데-배포하면-안-돼요
@@ -65,7 +58,7 @@ public class InitService {
         }
     }
 
-    private static @NotNull List<Term> toTerms(List<RawTerm> rawTerms, Glossary glossary) {
+    private static @NotNull List<DemoTerm> toTerms(List<RawTerm> rawTerms, DemoGlossary glossary) {
         return rawTerms.stream()
                 .map(rawTerm -> rawTerm.toTerm(glossary))
                 .toList();
@@ -76,8 +69,8 @@ public class InitService {
         private String synonyms;
         private String meaning;
 
-        public Term toTerm(Glossary glossary) {
-            Term term = Term.forCreateOf(this.term, this.meaning, glossary);
+        public DemoTerm toTerm(DemoGlossary glossary) {
+            DemoTerm term = DemoTerm.forCreateOf(this.term, this.meaning, glossary);
             String[] synonymArray = this.synonyms.split("//n");
             Arrays.stream(synonymArray)
                     .map(String::trim)

@@ -2,9 +2,8 @@ package vook.server.api.web.routes.demo.reqres;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
-import vook.server.api.model.Glossary;
-import vook.server.api.model.Term;
-import vook.server.api.model.TermSynonym;
+import vook.server.api.model.demo.DemoTerm;
+import vook.server.api.model.demo.DemoTermSynonym;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,19 +22,19 @@ public class RetrieveTermsResponse {
 
     private String createdBy;
 
-    public static List<RetrieveTermsResponse> from(Glossary glossary, List<Term> terms) {
+    public static List<RetrieveTermsResponse> from(List<DemoTerm> terms) {
         return terms.stream()
-                .map(term -> from(glossary, term))
+                .map(RetrieveTermsResponse::from)
                 .toList();
     }
 
-    public static RetrieveTermsResponse from(Glossary glossary, Term term) {
+    public static RetrieveTermsResponse from(DemoTerm term) {
         RetrieveTermsResponse response = new RetrieveTermsResponse();
         response.term = term.getTerm();
-        response.synonyms = term.getSynonyms().stream().map(TermSynonym::getSynonym).toList();
+        response.synonyms = term.getSynonyms().stream().map(DemoTermSynonym::getSynonym).toList();
         response.meaning = term.getMeaning();
         response.createdAt = term.getCreatedAt();
-        response.createdBy = glossary.getMember().getName();
+        response.createdBy = "vook";
         return response;
     }
 }
