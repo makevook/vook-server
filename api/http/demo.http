@@ -2,7 +2,7 @@
 POST http://localhost:8080/init
 
 ### 용어집 리스트
-GET http://localhost:8080/glossary
+GET http://localhost:8080/demo/glossaries
 
 > {%
     let devGlossaryUid = response.body.result.filter((item) => item.name === '개발')[0].uid;
@@ -10,8 +10,11 @@ GET http://localhost:8080/glossary
     client.global.set('uid', devGlossaryUid);
 %}
 
+### 용어집 내 용어 리스트
+GET http://localhost:8080/demo/glossaries/{{uid}}/terms
+
 ### 용어 검색
-POST http://localhost:8080/terms/search
+POST http://localhost:8080/demo/glossaries/{{uid}}/terms/search
 Content-Type: application/json
 
 {

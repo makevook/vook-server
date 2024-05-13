@@ -1,4 +1,4 @@
-package vook.server.api.web.routes.term;
+package vook.server.api.web.routes.demo.reqres;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -8,10 +8,7 @@ import vook.server.api.outbound.search.SearchParams;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @Data
-public class SearchRequest {
-
-    @Schema(description = "용어집 UID", requiredMode = REQUIRED, example = "0e840100-9302-4f8b-8110-ffd321c3ccb9")
-    private String glossaryUid;
+public class SearchTermRequest {
 
     @Schema(description = "검색 쿼리", requiredMode = REQUIRED, example = "하이브리드앱")
     private String query;

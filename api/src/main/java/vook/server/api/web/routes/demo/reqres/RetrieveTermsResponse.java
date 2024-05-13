@@ -1,4 +1,4 @@
-package vook.server.api.web.routes.glossary;
+package vook.server.api.web.routes.demo.reqres;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
