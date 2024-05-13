@@ -1,7 +1,7 @@
 package vook.server.api.web.routes.demo.reqres;
 
 import lombok.Getter;
-import vook.server.api.outbound.search.SearchResult;
+import vook.server.api.outbound.search.DemoTermSearchResult;
 
 import java.util.List;
 import java.util.Map;
@@ -12,10 +12,10 @@ public class SearchTermResponse {
     private String query;
     private List<Document> hits;
 
-    public static SearchTermResponse from(SearchResult searchResult) {
-        SearchTermResponse searchTermResponse = new SearchTermResponse();
-        searchTermResponse.query = searchResult.getQuery();
-        searchTermResponse.hits = searchResult.getHits().stream().map(document -> {
+    public static SearchTermResponse from(DemoTermSearchResult searchResult) {
+        SearchTermResponse searchResponse = new SearchTermResponse();
+        searchResponse.query = searchResult.getQuery();
+        searchResponse.hits = searchResult.getHits().stream().map(document -> {
             Object formatted = document.get("_formatted");
             if (formatted instanceof Map formattedDocument) {
                 return Document.from(formattedDocument);
@@ -23,7 +23,7 @@ public class SearchTermResponse {
                 return Document.from(document);
             }
         }).toList();
-        return searchTermResponse;
+        return searchResponse;
     }
 
     @Getter

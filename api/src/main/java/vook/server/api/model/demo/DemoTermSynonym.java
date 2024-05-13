@@ -1,15 +1,15 @@
-package vook.server.api.model;
+package vook.server.api.model.demo;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 
 /**
- * 용어 동의어
+ * 데모 용어 동의어
  */
 @Getter
 @Entity
-@Table(name = "term_synonym")
-public class TermSynonym {
+@Table(name = "demo_term_synonym")
+public class DemoTermSynonym {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,16 +22,16 @@ public class TermSynonym {
     private String synonym;
 
     @ManyToOne
-    @JoinColumn(name = "term_id", nullable = false)
-    private Term term;
+    @JoinColumn(name = "demo_term_id", nullable = false)
+    private DemoTerm demoTerm;
 
-    static TermSynonym forCreateOf(
+    static DemoTermSynonym forCreateOf(
             String synonym,
-            Term term
+            DemoTerm demoTerm
     ) {
-        TermSynonym result = new TermSynonym();
+        DemoTermSynonym result = new DemoTermSynonym();
         result.synonym = synonym;
-        result.term = term;
+        result.demoTerm = demoTerm;
         return result;
     }
 }

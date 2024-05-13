@@ -2,8 +2,8 @@ package vook.server.api.web.routes.demo.reqres;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import vook.server.api.model.Glossary;
-import vook.server.api.outbound.search.SearchParams;
+import vook.server.api.model.demo.DemoGlossary;
+import vook.server.api.outbound.search.DemoTermSearchParams;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
@@ -22,9 +22,9 @@ public class SearchTermRequest {
     @Schema(description = "하이라이트 종료 태그, 포맷 적용 여부가 true일 때만 적용 됨", defaultValue = "</em>")
     private String highlightPostTag;
 
-    public SearchParams toSearchParam(Glossary glossary) {
-        return SearchParams.builder()
-                .glossary(glossary)
+    public DemoTermSearchParams toSearchParam(DemoGlossary glossary) {
+        return DemoTermSearchParams.builder()
+                .demoGlossary(glossary)
                 .query(query)
                 .withFormat(withFormat)
                 .highlightPreTag(highlightPreTag)

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import vook.server.api.model.MemberRepository;
+import vook.server.api.model.demo.DemoGlossaryRepository;
 
 @Slf4j
 @Profile("local")
@@ -13,12 +13,12 @@ import vook.server.api.model.MemberRepository;
 @RequiredArgsConstructor
 public class LocalInit {
 
-    private final MemberRepository memberRepository;
+    private final DemoGlossaryRepository demoGlossaryRepository;
     private final InitService initService;
 
     @PostConstruct
     public void init() {
-        if (memberRepository.count() > 0) {
+        if (demoGlossaryRepository.count() > 0) {
             return;
         }
 

@@ -4,16 +4,16 @@ import com.meilisearch.sdk.SearchRequest;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
-import vook.server.api.model.Glossary;
+import vook.server.api.model.demo.DemoGlossary;
 
 @Getter
 @Builder
-public class SearchParams {
+public class DemoTermSearchParams {
 
     private static final String DEFAULT_HIGHLIGHT_PRE_TAG = "<em>";
     private static final String DEFAULT_HIGHLIGHT_POST_TAG = "</em>";
 
-    private Glossary glossary;
+    private DemoGlossary demoGlossary;
     private String query;
     private boolean withFormat;
     private String highlightPreTag;

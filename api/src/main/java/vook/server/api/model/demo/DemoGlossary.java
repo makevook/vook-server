@@ -1,17 +1,18 @@
-package vook.server.api.model;
+package vook.server.api.model.demo;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import vook.server.api.model.BaseEntity;
 
 import java.util.UUID;
 
 /**
- * 용어집
+ * 데모 용어집
  */
 @Getter
 @Entity
-@Table(name = "glossary")
-public class Glossary extends BaseEntity {
+@Table(name = "demo_glossary")
+public class DemoGlossary extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,18 +29,12 @@ public class Glossary extends BaseEntity {
      */
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
-
-    public static Glossary forCreateOf(
-            String name,
-            Member member
+    public static DemoGlossary forCreateOf(
+            String name
     ) {
-        Glossary result = new Glossary();
+        DemoGlossary result = new DemoGlossary();
         result.uid = UUID.randomUUID().toString();
         result.name = name;
-        result.member = member;
         return result;
     }
 }
