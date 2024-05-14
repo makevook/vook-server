@@ -129,7 +129,7 @@ func (v *VookServer) Apply(
 		Command(
 			fmt.Sprintf(`
 cd %s
-FILENAME=%s VERSION=%s %s
+API_FILENAME=%s API_VERSION=%s %s
 `, path, filename, version, command),
 		).
 		Sync(ctx)
