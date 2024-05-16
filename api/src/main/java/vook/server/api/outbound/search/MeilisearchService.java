@@ -25,13 +25,13 @@ public abstract class MeilisearchService {
         this.client = new Client(new Config(host, apiKey));
     }
 
-    protected void clearAll(String prefix) {
+    protected void clearAll(String uidPrefix) {
         Results<Index> indexes = client.getIndexes(new IndexesQuery() {{
             setLimit(Integer.MAX_VALUE);
         }});
         Arrays.stream(indexes.getResults())
                 .map(Index::getUid)
-                .filter(uid -> uid.startsWith(prefix))
+                .filter(uid -> uid.startsWith(uidPrefix))
                 .forEach(uid -> {
                     client.deleteIndex(uid);
                 });
