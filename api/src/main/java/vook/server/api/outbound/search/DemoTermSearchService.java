@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vook.server.api.model.demo.DemoGlossary;
 import vook.server.api.model.demo.DemoTerm;
 import vook.server.api.model.demo.DemoTermSynonym;
 
@@ -23,22 +22,20 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DemoTermSearchService extends MeilisearchService {
 
-    private static final String INDEX_PREFIX = "demo-";
+    private static final String DEMO_TERMS_INDEX_UID = "demo-terms";
 
     private final ObjectMapper objectMapper;
 
     public void clearAll() {
-        clearAll(INDEX_PREFIX);
+        clearAll(DEMO_TERMS_INDEX_UID);
     }
 
-    public void createGlossary(DemoGlossary demoGlossary) {
-        String indexUid = getIndexUid(demoGlossary);
-
-        TaskInfo indexCreateTask = client.createIndex(indexUid, "id");
+    public void init() {
+        TaskInfo indexCreateTask = client.createIndex(DEMO_TERMS_INDEX_UID, "id");
         client.waitForTask(indexCreateTask.getTaskUid());
 
         // 용어, 동의어, 뜻에 대해서만 검색
-        client.index(indexUid).updateSearchableAttributesSettings(new String[]{
+        client.index(DEMO_TERMS_INDEX_UID).updateSearchableAttributesSettings(new String[]{
                 "term",
                 "synonyms",
                 "meaning"
@@ -47,24 +44,20 @@ public class DemoTermSearchService extends MeilisearchService {
         // 오타 용인을 비활성화 하여도 띄어쓰기에 대해서는 검색이 됨으로 비활성화 함
         TypoTolerance typoTolerance = new TypoTolerance();
         typoTolerance.setEnabled(false);
-        client.index(indexUid).updateTypoToleranceSettings(typoTolerance);
+        TaskInfo updateTypoToleranceSettingsTask = client.index(DEMO_TERMS_INDEX_UID).updateTypoToleranceSettings(typoTolerance);
+        client.waitForTask(updateTypoToleranceSettingsTask.getTaskUid());
     }
 
-    public void addTerms(DemoGlossary demoGlossary, List<DemoTerm> terms) {
-        String indexUid = getIndexUid(demoGlossary);
-        Index index = client.index(indexUid);
+    public void addTerms(List<DemoTerm> terms) {
+        Index index = client.index(DEMO_TERMS_INDEX_UID);
         TaskInfo taskInfo = index.addDocuments(getDocuments(terms));
         client.waitForTask(taskInfo.getTaskUid());
     }
 
     public DemoTermSearchResult search(DemoTermSearchParams params) {
         SearchRequest searchRequest = params.buildSearchRequest();
-        Searchable search = this.client.getIndex(getIndexUid(params.getDemoGlossary())).search(searchRequest);
+        Searchable search = this.client.getIndex(DEMO_TERMS_INDEX_UID).search(searchRequest);
         return DemoTermSearchResult.from(search);
-    }
-
-    private static String getIndexUid(DemoGlossary glossary) {
-        return INDEX_PREFIX + glossary.getUid();
     }
 
     private String getDocuments(List<DemoTerm> terms) {
