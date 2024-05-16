@@ -11,7 +11,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 @Data
 public class SearchTermRequest {
 
-    @Schema(description = "검색 쿼리", requiredMode = REQUIRED, example = "하이브리드앱")
+    @Schema(description = "검색 쿼리, 빈 문자열을 보낼경우 모든 데이터가 반환된다.", requiredMode = REQUIRED, example = "하이브리드앱")
     private String query;
 
     @Schema(description = "포맷 적용 여부", defaultValue = "false")
