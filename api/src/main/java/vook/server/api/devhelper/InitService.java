@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.app.demo.DemoTermRepository;
+import vook.server.api.app.demo.DemoTermSynonymRepository;
 import vook.server.api.model.demo.DemoTerm;
-import vook.server.api.model.demo.DemoTermRepository;
-import vook.server.api.model.demo.DemoTermSynonymRepository;
 import vook.server.api.outbound.search.DemoTermSearchService;
 
 import java.io.IOException;
