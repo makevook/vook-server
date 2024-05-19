@@ -1,4 +1,4 @@
-package vook.server.api.swagger;
+package vook.server.api.web.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.servers.Server;

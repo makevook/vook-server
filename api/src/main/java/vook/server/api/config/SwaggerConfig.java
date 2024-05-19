@@ -4,8 +4,8 @@ import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springdoc.core.customizers.GlobalOperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import vook.server.api.swagger.GlobalOpenApiCustomizerImpl;
-import vook.server.api.swagger.GlobalOperationCustomizerImpl;
+import vook.server.api.web.swagger.GlobalOpenApiCustomizerImpl;
+import vook.server.api.web.swagger.GlobalOperationCustomizerImpl;
 
 @Configuration
 public class SwaggerConfig {
