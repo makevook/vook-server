@@ -21,8 +21,14 @@ import vook.server.api.model.values.AuthValues;
                         ## Authorization (토큰 획득 방법)
                                                 
                         - [구글 로그인](/oauth2/authorization/google)을 통해 로그인 한 후, 
-                        redirect URL에 포함된 accessToken을 사용합니다. refreshToken은 토큰 갱신 때 사용합니다."""),
-        servers = {@Server(url = "/", description = "Default Server URL")},
+                        redirect URL에 포함된 accessToken을 사용합니다. refreshToken은 토큰 갱신 때 사용합니다.
+                                                
+                        ## URL 정보
+                                                
+                        - 구글 로그인: ${service.baseUrl}/oauth2/authorization/google
+                        - 로그인 성공 콜백: ${service.oauth2.tokenNoticeUrl}
+                        - 로그인 실패 (혹은 취소): ${service.oauth2.loginFailUrl}"""),
+        servers = {@Server(url = "${service.baseUrl}")},
         security = {
                 @SecurityRequirement(name = "AccessToken")
         }
