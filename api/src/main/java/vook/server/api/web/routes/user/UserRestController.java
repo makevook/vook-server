@@ -3,9 +3,7 @@ package vook.server.api.web.routes.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vook.server.api.config.auth.common.VookLoginUser;
 import vook.server.api.web.common.CommonApiResponse;
 
@@ -32,5 +30,15 @@ public class UserRestController implements UserApi {
     @GetMapping("/terms")
     public CommonApiResponse<List<UserTermsResponse>> terms() {
         return CommonApiResponse.okWithResult(service.terms());
+    }
+
+    @Override
+    @PostMapping("/register")
+    public CommonApiResponse<Void> register(
+            @AuthenticationPrincipal VookLoginUser user,
+            @RequestBody UserRegisterRequest request
+    ) {
+        service.register(user, request);
+        return CommonApiResponse.ok();
     }
 }

@@ -43,4 +43,13 @@ public interface UserApi {
 
     class UserApiTermsResponse extends CommonApiResponse<List<UserTermsResponse>> {
     }
+
+    @Operation(summary = "회원가입")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "성공"
+            ),
+    })
+    CommonApiResponse<Void> register(VookLoginUser user, UserRegisterRequest request);
 }

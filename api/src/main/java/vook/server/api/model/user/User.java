@@ -32,6 +32,9 @@ public class User {
     @OneToOne(mappedBy = "user")
     private UserInfo userInfo;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserTermsAgree> userTermsAgrees = new ArrayList<>();
+
     public static User forSignUpFromSocialOf(
             String email
     ) {
@@ -44,5 +47,13 @@ public class User {
 
     public void addSocialUser(SocialUser socialUser) {
         socialUsers.add(socialUser);
+    }
+
+    public void addUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+
+    public void addUserTermsAgree(UserTermsAgree userTermsAgree) {
+        userTermsAgrees.add(userTermsAgree);
     }
 }

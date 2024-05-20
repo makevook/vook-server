@@ -28,4 +28,12 @@ public class UserWebService {
         List<Terms> terms = termsService.findAll();
         return UserTermsResponse.from(terms);
     }
+
+    public void register(VookLoginUser loginUser, UserRegisterRequest request) {
+        List<Long> agreeTermsId = request.getAgreeTermsId();
+        if (!termsService.includeAllRequiredTerms(agreeTermsId)) {
+            throw new IllegalArgumentException("동의 필수인 약관이 누락되었습니다.");
+        }
+        userService.register(request.toCommand(loginUser.getUid(), termsService::find));
+    }
 }

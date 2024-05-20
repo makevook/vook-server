@@ -24,6 +24,7 @@ public class UserInfo {
     ) {
         UserInfo result = new UserInfo();
         result.nickname = nickname;
+        result.user = user;
         return result;
     }
 }
