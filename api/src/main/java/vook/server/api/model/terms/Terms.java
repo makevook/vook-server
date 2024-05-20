@@ -17,17 +17,17 @@ public class Terms {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private Long version;
+    private Boolean required;
 
     public static Terms of(
             String title,
             String content,
-            Long version
+            Boolean required
     ) {
         Terms result = new Terms();
         result.title = title;
         result.content = content;
-        result.version = version;
+        result.required = required;
         return result;
     }
 }

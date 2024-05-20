@@ -11,7 +11,7 @@ public class UserTermsResponse {
     private Long id;
     private String title;
     private String content;
-    private Long version;
+    private Boolean required;
 
     public static List<UserTermsResponse> from(List<Terms> terms) {
         return terms.stream()
@@ -24,7 +24,7 @@ public class UserTermsResponse {
         response.id = terms.getId();
         response.title = terms.getTitle();
         response.content = terms.getContent();
-        response.version = terms.getVersion();
+        response.required = terms.getRequired();
         return response;
     }
 }

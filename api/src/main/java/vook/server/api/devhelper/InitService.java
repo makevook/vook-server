@@ -40,9 +40,9 @@ public class InitService {
         termsRepository.deleteAllInBatch();
         searchService.clearAll();
 
-        termsRepository.save(Terms.of("이용약관", loadContents("classpath:init/이용약관.txt"), 1L));
-        termsRepository.save(Terms.of("개인정보 수집 이용 약관", loadContents("classpath:init/개인정보_수집_이용_약관.txt"), 1L));
-        termsRepository.save(Terms.of("마케팅 메일 수신 약관", loadContents("classpath:init/마케팅_메일_수신_약관.txt"), 1L));
+        termsRepository.save(Terms.of("이용약관", loadContents("classpath:init/이용약관.txt"), true));
+        termsRepository.save(Terms.of("개인정보 수집 이용 약관", loadContents("classpath:init/개인정보_수집_이용_약관.txt"), true));
+        termsRepository.save(Terms.of("마케팅 메일 수신 약관", loadContents("classpath:init/마케팅_메일_수신_약관.txt"), false));
 
         List<DemoTerm> devTerms = getTerms("classpath:init/개발.tsv");
         demoTermRepository.saveAll(devTerms);
