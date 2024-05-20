@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vook.server.api.model.user.SocialUser;
 import vook.server.api.model.user.User;
+import vook.server.api.model.user.UserInfo;
+import vook.server.api.model.user.UserTermsAgree;
 
 import java.util.Optional;
 
@@ -13,6 +15,8 @@ public class UserService {
 
     private final UserRepository repository;
     private final SocialUserRepository socialUserRepository;
+    private final UserInfoRepository userInfoRepository;
+    private final UserTermsAgreeRepository userTermsAgreeRepository;
 
     public Optional<SocialUser> findByProvider(String provider, String providerUserId) {
         return socialUserRepository.findByProviderAndProviderUserId(provider, providerUserId);
@@ -31,5 +35,28 @@ public class UserService {
 
     public Optional<User> findByUid(String uid) {
         return repository.findByUid(uid);
+    }
+
+    public void register(RegisterCommand command) {
+        User user = repository.findByUid(command.getUserUid()).orElseThrow();
+
+        UserInfo userInfo = UserInfo.forRegisterOf(command.getNickname(), user);
+        UserInfo savedUserInfo = userInfoRepository.save(userInfo);
+        user.addUserInfo(savedUserInfo);
+
+        for (RegisterCommand.TermsAgree termsAgree : command.getTermsAgrees()) {
+            UserTermsAgree userTermsAgree = UserTermsAgree.of(user, termsAgree.getTerms(), termsAgree.getAgree());
+            UserTermsAgree savedUserTermsAgree = userTermsAgreeRepository.save(userTermsAgree);
+            user.addUserTermsAgree(savedUserTermsAgree);
+        }
+
+        user.registered();
+    }
+
+    public void completeOnboarding(CompleteOnboardingCommand command) {
+        User user = repository.findByUid(command.getUserUid()).orElseThrow();
+        user.onboardingCompleted();
+
+        user.getUserInfo().addOnboardingInfo(command.getFunnel(), command.getJob());
     }
 }
