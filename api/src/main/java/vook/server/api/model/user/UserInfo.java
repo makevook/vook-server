@@ -14,6 +14,10 @@ public class UserInfo {
 
     private String nickname;
 
+    private String funnel;
+
+    private String job;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -26,5 +30,10 @@ public class UserInfo {
         result.nickname = nickname;
         result.user = user;
         return result;
+    }
+
+    public void addOnboardingInfo(String funnel, String job) {
+        this.funnel = funnel;
+        this.job = job;
     }
 }

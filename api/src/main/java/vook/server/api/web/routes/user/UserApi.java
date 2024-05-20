@@ -68,4 +68,18 @@ public interface UserApi {
             ),
     })
     CommonApiResponse<Void> register(VookLoginUser user, UserRegisterRequest request);
+
+    @Operation(
+            summary = "온보딩 완료",
+            security = {
+                    @SecurityRequirement(name = "AccessToken")
+            }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "성공"
+            ),
+    })
+    CommonApiResponse<Void> onboardingComplete(VookLoginUser user, UserOnboardingCompleteRequest request);
 }

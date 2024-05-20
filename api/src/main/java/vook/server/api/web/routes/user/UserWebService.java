@@ -36,4 +36,8 @@ public class UserWebService {
         }
         userService.register(request.toCommand(loginUser.getUid(), termsService::find));
     }
+
+    public void onboardingComplete(VookLoginUser loginUser, UserOnboardingCompleteRequest request) {
+        userService.completeOnboarding(request.toCommand(loginUser.getUid()));
+    }
 }

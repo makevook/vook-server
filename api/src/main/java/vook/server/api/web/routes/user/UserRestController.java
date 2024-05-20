@@ -41,4 +41,14 @@ public class UserRestController implements UserApi {
         service.register(user, request);
         return CommonApiResponse.ok();
     }
+
+    @Override
+    @PostMapping("/onboarding/complete")
+    public CommonApiResponse<Void> onboardingComplete(
+            @AuthenticationPrincipal VookLoginUser user,
+            @RequestBody UserOnboardingCompleteRequest request
+    ) {
+        service.onboardingComplete(user, request);
+        return CommonApiResponse.ok();
+    }
 }

@@ -52,4 +52,11 @@ public class UserService {
 
         user.registered();
     }
+
+    public void completeOnboarding(CompleteOnboardingCommand command) {
+        User user = repository.findByUid(command.getUserUid()).orElseThrow();
+        user.onboardingCompleted();
+
+        user.getUserInfo().addOnboardingInfo(command.getFunnel(), command.getJob());
+    }
 }

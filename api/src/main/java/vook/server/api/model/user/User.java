@@ -60,4 +60,8 @@ public class User {
     public void registered() {
         this.status = UserStatus.REGISTERED;
     }
+
+    public void onboardingCompleted() {
+        this.status = UserStatus.ONBOARDING_COMPLETED;
+    }
 }
