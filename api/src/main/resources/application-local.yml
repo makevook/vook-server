@@ -12,9 +12,29 @@ spring:
       hibernate:
         highlight_sql: false
         format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-name: google
+            client-id: 888756350502-376ig1il0g9mdb8vbs1nj8u291lh4hl3.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            authorization-grant-type: authorization_code
+            scope:
+              - profile
+              - email
 server:
   port: 8080
 service:
   meilisearch:
     host: http://localhost:7700
     apiKey: aSampleMasterKey
+  jwt:
+    secret: vmfhaltmskdlstkfkdgodyroqkfwkdba
+  oauth2:
+    tokenNoticeUrl: http://localhost:3000/auth/token
+    loginFailUrl: http://localhost:3000/auth?error
+    accessTokenExpiredMinute: 30 # 30 minutes
+    refreshTokenExpiredMinute: 10080 # 60 * 24 * 7 == 1 week

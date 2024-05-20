@@ -8,7 +8,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "init", description = "초기화 API")
 public interface InitApi {
 
-    @Operation(summary = "DB, Meilisearch 데이터 초기화")
+    @Operation(
+            summary = "데이터 초기화",
+            description = "모든 데이터를 삭제하고, 데모용 데이터를 생성시킨 상태로 초기화 시킵니다."
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",

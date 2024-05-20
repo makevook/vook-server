@@ -1,4 +1,4 @@
-package vook.server.api.swagger;
+package vook.server.api.web.swagger;
 
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.examples.Example;

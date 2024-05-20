@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.app.demo.DemoTermRepository;
+import vook.server.api.app.demo.DemoTermSynonymRepository;
+import vook.server.api.app.user.SocialUserRepository;
+import vook.server.api.app.user.UserRepository;
 import vook.server.api.model.demo.DemoTerm;
-import vook.server.api.model.demo.DemoTermRepository;
-import vook.server.api.model.demo.DemoTermSynonymRepository;
 import vook.server.api.outbound.search.DemoTermSearchService;
 
 import java.io.IOException;
@@ -24,10 +26,14 @@ public class InitService {
     private final DemoTermRepository demoTermRepository;
     private final DemoTermSynonymRepository demoTermSynonymRepository;
     private final DemoTermSearchService searchService;
+    private final SocialUserRepository socialUserRepository;
+    private final UserRepository userRepository;
 
     public void init() {
         demoTermSynonymRepository.deleteAllInBatch();
         demoTermRepository.deleteAllInBatch();
+        socialUserRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
         searchService.clearAll();
 
         List<DemoTerm> devTerms = getTerms("classpath:init/개발.tsv");
