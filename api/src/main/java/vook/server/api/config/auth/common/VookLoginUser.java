@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import vook.server.api.helper.jwt.JWTReader;
-import vook.server.api.helper.jwt.JWTWriter;
 import vook.server.api.model.user.SocialUser;
 
 import java.util.Collection;
@@ -30,10 +28,6 @@ public class VookLoginUser implements OAuth2User {
         return VookLoginUser.of(user.getUser().getUid());
     }
 
-    public static VookLoginUser from(JWTReader jwtReader) {
-        return VookLoginUser.of(jwtReader.getClaim("uid"));
-    }
-
     @Override
     public Map<String, Object> getAttributes() {
         return Map.of();
@@ -49,19 +43,4 @@ public class VookLoginUser implements OAuth2User {
         return this.uid;
     }
 
-    public String toAccessToken(JWTWriter jwtWriter, Integer accessTokenExpiredMinute) {
-        return jwtWriter
-                .withExpiredMs(1000L * 60 * accessTokenExpiredMinute)
-                .withClaim("category", "access")
-                .withClaim("uid", this.uid)
-                .jwtString();
-    }
-
-    public String toRefreshToken(JWTWriter jwtWriter, Integer refreshTokenExpiredMinute) {
-        return jwtWriter
-                .withExpiredMs(1000L * 60 * refreshTokenExpiredMinute)
-                .withClaim("category", "refresh")
-                .withClaim("uid", this.uid)
-                .jwtString();
-    }
 }
