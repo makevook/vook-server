@@ -8,7 +8,9 @@ import vook.server.api.app.demo.DemoTermRepository;
 import vook.server.api.app.demo.DemoTermSynonymRepository;
 import vook.server.api.app.terms.TermsRepository;
 import vook.server.api.app.user.SocialUserRepository;
+import vook.server.api.app.user.UserInfoRepository;
 import vook.server.api.app.user.UserRepository;
+import vook.server.api.app.user.UserTermsAgreeRepository;
 import vook.server.api.model.demo.DemoTerm;
 import vook.server.api.model.terms.Terms;
 import vook.server.api.outbound.search.DemoTermSearchService;
@@ -27,6 +29,8 @@ public class InitService {
 
     private final DemoTermRepository demoTermRepository;
     private final DemoTermSynonymRepository demoTermSynonymRepository;
+    private final UserTermsAgreeRepository userTermsAgreeRepository;
+    private final UserInfoRepository userInfoRepository;
     private final SocialUserRepository socialUserRepository;
     private final UserRepository userRepository;
     private final TermsRepository termsRepository;
@@ -35,6 +39,8 @@ public class InitService {
     public void init() {
         demoTermSynonymRepository.deleteAllInBatch();
         demoTermRepository.deleteAllInBatch();
+        userTermsAgreeRepository.deleteAllInBatch();
+        userInfoRepository.deleteAllInBatch();
         socialUserRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
         termsRepository.deleteAllInBatch();
