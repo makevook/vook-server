@@ -8,8 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
-import vook.server.api.app.auth.GeneratedToken;
 import vook.server.api.app.auth.TokenService;
+import vook.server.api.app.auth.data.GeneratedToken;
 import vook.server.api.config.auth.common.VookLoginUser;
 
 import java.io.IOException;

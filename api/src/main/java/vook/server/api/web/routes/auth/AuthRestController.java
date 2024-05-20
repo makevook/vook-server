@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vook.server.api.app.auth.GeneratedToken;
 import vook.server.api.app.auth.TokenService;
+import vook.server.api.app.auth.data.GeneratedToken;
 import vook.server.api.model.values.AuthValues;
 
 @RestController
