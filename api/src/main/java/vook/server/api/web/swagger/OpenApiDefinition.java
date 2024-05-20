@@ -12,7 +12,16 @@ import org.springframework.context.annotation.Configuration;
 import vook.server.api.model.values.AuthValues;
 
 @OpenAPIDefinition(
-        info = @Info(title = "Vook Server API", version = "0.1", description = "Vook Server API"),
+        info = @Info(
+                title = "Vook Server API",
+                version = "0.1",
+                description = """
+                        Vook 서버 API 문서입니다.
+                                                
+                        ## Authorization (토큰 획득 방법)
+                                                
+                        - [구글 로그인](/oauth2/authorization/google)을 통해 로그인 한 후, 
+                        redirect URL에 포함된 accessToken을 사용합니다. refreshToken은 토큰 갱신 때 사용합니다."""),
         servers = {@Server(url = "/", description = "Default Server URL")},
         security = {
                 @SecurityRequirement(name = "AccessToken")
