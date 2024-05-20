@@ -1,4 +1,4 @@
-package vook.server.api.web.routes.user;
+package vook.server.api.web.routes.user.reqres;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

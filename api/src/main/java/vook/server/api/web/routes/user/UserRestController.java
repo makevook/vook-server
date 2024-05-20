@@ -6,6 +6,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import vook.server.api.config.auth.common.VookLoginUser;
 import vook.server.api.web.common.CommonApiResponse;
+import vook.server.api.web.routes.user.reqres.UserInfoResponse;
+import vook.server.api.web.routes.user.reqres.UserOnboardingCompleteRequest;
+import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
+import vook.server.api.web.routes.user.reqres.UserTermsResponse;
 
 import java.util.List;
 
