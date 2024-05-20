@@ -1,0 +1,34 @@
+services:
+  db:
+    build:
+      context: .
+      dockerfile: mariadb.Dockerfile
+    volumes:
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_PORT: 3306
+      MYSQL_ROOT_PASSWORD: rootPw
+      MYSQL_DATABASE: vook
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userPw
+      TZ: Asia/Seoul
+    ports:
+      - "3307:3306"
+    mem_limit: 300m
+    restart: unless-stopped
+  meilisearch:
+    image: getmeili/meilisearch:v1.8.0
+    volumes:
+      - meili_data:/meili_data
+    ports:
+      - "7700:7700"
+    environment:
+      - MEILI_ENV=development
+      - MEILI_MASTER_KEY=aSampleMasterKey
+    mem_limit: 1000m
+    restart: unless-stopped
+
+volumes:
+  db-data: {}
+  meili_data: {}
