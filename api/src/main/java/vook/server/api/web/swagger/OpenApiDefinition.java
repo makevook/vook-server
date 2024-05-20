@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import io.swagger.v3.oas.annotations.servers.Server;
@@ -28,10 +27,7 @@ import vook.server.api.model.values.AuthValues;
                         - 구글 로그인: ${service.baseUrl}/oauth2/authorization/google
                         - 로그인 성공 콜백: ${service.oauth2.tokenNoticeUrl}
                         - 로그인 실패 (혹은 취소): ${service.oauth2.loginFailUrl}"""),
-        servers = {@Server(url = "${service.baseUrl}")},
-        security = {
-                @SecurityRequirement(name = "AccessToken")
-        }
+        servers = {@Server(url = "${service.baseUrl}")}
 )
 @SecuritySchemes({
         @SecurityScheme(
