@@ -28,4 +28,8 @@ public class UserService {
 
         return savedSocialUser;
     }
+
+    public Optional<User> findByUid(String uid) {
+        return repository.findByUid(uid);
+    }
 }

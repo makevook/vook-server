@@ -1,7 +1,9 @@
 package vook.server.api.model.user;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "user_info")
 public class UserInfo {
