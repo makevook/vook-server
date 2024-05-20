@@ -9,7 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import vook.server.api.config.auth.common.VookLoginUser;
 import vook.server.api.web.common.CommonApiResponse;
 
-@Tag(name = "user", description = "사용자 관련 API")
+import java.util.List;
+
+@Tag(name = "user", description = "사용자 관련 API **(인증 필요!)**")
 public interface UserApi {
 
     @Operation(summary = "사용자 정보")
@@ -25,5 +27,20 @@ public interface UserApi {
     CommonApiResponse<UserInfoResponse> userInfo(VookLoginUser user);
 
     class UserApiUerInfoResponse extends CommonApiResponse<UserInfoResponse> {
+    }
+
+    @Operation(summary = "약관 목록")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "성공",
+                    content = @Content(
+                            schema = @Schema(implementation = UserApiTermsResponse.class)
+                    )
+            ),
+    })
+    CommonApiResponse<List<UserTermsResponse>> terms();
+
+    class UserApiTermsResponse extends CommonApiResponse<List<UserTermsResponse>> {
     }
 }
