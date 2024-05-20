@@ -1,8 +1,8 @@
-package vook.server.api.web.routes.user;
+package vook.server.api.web.routes.user.reqres;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import vook.server.api.app.user.RegisterCommand;
+import vook.server.api.app.user.data.RegisterCommand;
 import vook.server.api.model.terms.Terms;
 
 import java.util.List;

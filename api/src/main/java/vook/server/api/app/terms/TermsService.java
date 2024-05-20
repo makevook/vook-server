@@ -2,6 +2,7 @@ package vook.server.api.app.terms;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import vook.server.api.app.terms.repo.TermsRepository;
 import vook.server.api.model.terms.Terms;
 
 import java.util.HashSet;

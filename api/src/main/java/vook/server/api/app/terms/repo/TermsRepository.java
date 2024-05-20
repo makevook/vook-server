@@ -1,4 +1,4 @@
-package vook.server.api.app.terms;
+package vook.server.api.app.terms.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import vook.server.api.model.terms.Terms;

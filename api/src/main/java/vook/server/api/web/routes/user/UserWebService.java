@@ -8,6 +8,10 @@ import vook.server.api.app.user.UserService;
 import vook.server.api.config.auth.common.VookLoginUser;
 import vook.server.api.model.terms.Terms;
 import vook.server.api.model.user.User;
+import vook.server.api.web.routes.user.reqres.UserInfoResponse;
+import vook.server.api.web.routes.user.reqres.UserOnboardingCompleteRequest;
+import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
+import vook.server.api.web.routes.user.reqres.UserTermsResponse;
 
 import java.util.List;
 

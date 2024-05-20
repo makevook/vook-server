@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.app.demo.DemoTermRepository;
-import vook.server.api.app.demo.DemoTermSynonymRepository;
-import vook.server.api.app.terms.TermsRepository;
-import vook.server.api.app.user.SocialUserRepository;
-import vook.server.api.app.user.UserInfoRepository;
-import vook.server.api.app.user.UserRepository;
-import vook.server.api.app.user.UserTermsAgreeRepository;
+import vook.server.api.app.demo.repo.DemoTermRepository;
+import vook.server.api.app.demo.repo.DemoTermSynonymRepository;
+import vook.server.api.app.terms.repo.TermsRepository;
+import vook.server.api.app.user.repo.SocialUserRepository;
+import vook.server.api.app.user.repo.UserInfoRepository;
+import vook.server.api.app.user.repo.UserRepository;
+import vook.server.api.app.user.repo.UserTermsAgreeRepository;
 import vook.server.api.model.demo.DemoTerm;
 import vook.server.api.model.terms.Terms;
 import vook.server.api.outbound.search.DemoTermSearchService;
@@ -37,14 +37,7 @@ public class InitService {
     private final DemoTermSearchService searchService;
 
     public void init() {
-        demoTermSynonymRepository.deleteAllInBatch();
-        demoTermRepository.deleteAllInBatch();
-        userTermsAgreeRepository.deleteAllInBatch();
-        userInfoRepository.deleteAllInBatch();
-        socialUserRepository.deleteAllInBatch();
-        userRepository.deleteAllInBatch();
-        termsRepository.deleteAllInBatch();
-        searchService.clearAll();
+        deleteAll();
 
         termsRepository.save(Terms.of("이용약관", loadContents("classpath:init/이용약관.txt"), true));
         termsRepository.save(Terms.of("개인정보 수집 이용 약관", loadContents("classpath:init/개인정보_수집_이용_약관.txt"), true));
@@ -55,6 +48,24 @@ public class InitService {
 
         searchService.init();
         searchService.addTerms(devTerms);
+    }
+
+    private void deleteAll() {
+        // 데모 용어
+        demoTermSynonymRepository.deleteAllInBatch();
+        demoTermRepository.deleteAllInBatch();
+
+        // 사용자
+        userTermsAgreeRepository.deleteAllInBatch();
+        userInfoRepository.deleteAllInBatch();
+        socialUserRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
+
+        // 약관
+        termsRepository.deleteAllInBatch();
+
+        // 검색 엔진
+        searchService.clearAll();
     }
 
     private String loadContents(String location) {

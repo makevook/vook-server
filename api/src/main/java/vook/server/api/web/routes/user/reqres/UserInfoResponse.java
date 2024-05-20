@@ -1,4 +1,4 @@
-package vook.server.api.web.routes.user;
+package vook.server.api.web.routes.user.reqres;
 
 import lombok.Getter;
 import vook.server.api.model.user.User;

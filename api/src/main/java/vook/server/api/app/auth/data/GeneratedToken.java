@@ -1,4 +1,4 @@
-package vook.server.api.app.auth;
+package vook.server.api.app.auth.data;
 
 import lombok.Getter;
 

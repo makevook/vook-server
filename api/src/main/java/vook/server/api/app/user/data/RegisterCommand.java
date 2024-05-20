@@ -1,4 +1,4 @@
-package vook.server.api.app.user;
+package vook.server.api.app.user.data;
 
 import lombok.Getter;
 import vook.server.api.model.terms.Terms;
