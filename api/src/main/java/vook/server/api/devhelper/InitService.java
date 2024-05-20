@@ -37,14 +37,7 @@ public class InitService {
     private final DemoTermSearchService searchService;
 
     public void init() {
-        demoTermSynonymRepository.deleteAllInBatch();
-        demoTermRepository.deleteAllInBatch();
-        userTermsAgreeRepository.deleteAllInBatch();
-        userInfoRepository.deleteAllInBatch();
-        socialUserRepository.deleteAllInBatch();
-        userRepository.deleteAllInBatch();
-        termsRepository.deleteAllInBatch();
-        searchService.clearAll();
+        deleteAll();
 
         termsRepository.save(Terms.of("이용약관", loadContents("classpath:init/이용약관.txt"), true));
         termsRepository.save(Terms.of("개인정보 수집 이용 약관", loadContents("classpath:init/개인정보_수집_이용_약관.txt"), true));
@@ -55,6 +48,24 @@ public class InitService {
 
         searchService.init();
         searchService.addTerms(devTerms);
+    }
+
+    private void deleteAll() {
+        // 데모 용어
+        demoTermSynonymRepository.deleteAllInBatch();
+        demoTermRepository.deleteAllInBatch();
+
+        // 사용자
+        userTermsAgreeRepository.deleteAllInBatch();
+        userInfoRepository.deleteAllInBatch();
+        socialUserRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
+
+        // 약관
+        termsRepository.deleteAllInBatch();
+
+        // 검색 엔진
+        searchService.clearAll();
     }
 
     private String loadContents(String location) {
