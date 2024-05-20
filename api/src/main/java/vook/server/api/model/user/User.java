@@ -56,4 +56,8 @@ public class User {
     public void addUserTermsAgree(UserTermsAgree userTermsAgree) {
         userTermsAgrees.add(userTermsAgree);
     }
+
+    public void registered() {
+        this.status = UserStatus.REGISTERED;
+    }
 }

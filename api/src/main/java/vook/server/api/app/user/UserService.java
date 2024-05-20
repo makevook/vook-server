@@ -49,5 +49,7 @@ public class UserService {
             UserTermsAgree savedUserTermsAgree = userTermsAgreeRepository.save(userTermsAgree);
             user.addUserTermsAgree(savedUserTermsAgree);
         }
+
+        user.registered();
     }
 }
