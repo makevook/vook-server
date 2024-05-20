@@ -1,0 +1,6 @@
+dsn: mariadb://user:userPw@localhost:3307/vook
+
+docPath: docs/schema
+
+er:
+  format: mermaid
