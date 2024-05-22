@@ -3,6 +3,10 @@
   "sdk": "go",
   "dependencies": [
     {
+      "name": "java",
+      "source": "github.com/seungyeop-lee/daggerverse/java@a5e511cb5adec1bf0b67ef8856d4191e61ab4711"
+    },
+    {
       "name": "docker",
       "source": "github.com/purpleclay/daggerverse/docker@43c1c55dadf15afc9ba401dc59e04baaa3802cca"
     },

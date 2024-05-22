@@ -16,21 +16,15 @@ func (v *VookServer) BuildApiJar(
 	// +optional
 	test bool,
 ) (*File, error) {
-	c := dag.Container().
-		From("eclipse-temurin:21-jdk").
-		WithWorkdir("/app").
-		WithDirectory("/app/gradle", dir.Directory("gradle")).
-		WithFiles("/app", []*File{dir.File("gradlew")}).
-		WithFiles("/app", []*File{
-			dir.File("build.gradle"),
-			dir.File("settings.gradle"),
-		}).
-		WithExec([]string{"./gradlew"}).
-		WithDirectory("/app/src", dir.Directory("src"))
+	c := dag.Java().
+		Init().
+		WithGradleCache().
+		WithDir(dir).
+		Container()
 
 	if test {
 		_, err := c.
-			With(dag.DockerService().BindAsService).
+			With(dag.DockerService().WithCacheVolume("docker-var/lib/docker").BindAsService).
 			WithExec([]string{"./gradlew", "test", "--info"}).
 			Sync(ctx)
 		if err != nil {
