@@ -7,6 +7,10 @@
       "source": "github.com/purpleclay/daggerverse/docker@43c1c55dadf15afc9ba401dc59e04baaa3802cca"
     },
     {
+      "name": "dockerService",
+      "source": "github.com/aweris/daggerverse/docker@980888a31696001fe024dc38ff104368f4a1931d"
+    },
+    {
       "name": "scp",
       "source": "github.com/seungyeop-lee/daggerverse/scp@63e721cf63323ede8b1f11aeff00d41960699920"
     },

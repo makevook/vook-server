@@ -30,7 +30,8 @@ func (v *VookServer) BuildApiJar(
 
 	if test {
 		_, err := c.
-			WithExec([]string{"./gradlew", "test"}).
+			With(dag.DockerService().BindAsService).
+			WithExec([]string{"./gradlew", "test", "--info"}).
 			Sync(ctx)
 		if err != nil {
 			return nil, errors.New("test fail:" + err.Error())
