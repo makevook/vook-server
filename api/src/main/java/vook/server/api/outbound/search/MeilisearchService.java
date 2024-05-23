@@ -5,24 +5,15 @@ import com.meilisearch.sdk.Config;
 import com.meilisearch.sdk.Index;
 import com.meilisearch.sdk.model.IndexesQuery;
 import com.meilisearch.sdk.model.Results;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Arrays;
 
 public abstract class MeilisearchService {
 
-    @Value("${service.meilisearch.host:}")
-    protected String host;
+    protected final Client client;
 
-    @Value("${service.meilisearch.apiKey:}")
-    protected String apiKey;
-
-    protected Client client;
-
-    @PostConstruct
-    public void postConstruct() {
-        this.client = new Client(new Config(host, apiKey));
+    protected MeilisearchService(MeilisearchProperties properties) {
+        this.client = new Client(new Config(properties.getHost(), properties.getApiKey()));
     }
 
     protected void clearAll(String uidPrefix) {
