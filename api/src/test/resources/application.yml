@@ -30,9 +30,6 @@ logging:
         orm:
           jdbc: TRACE
 service:
-  meilisearch:
-    host: http://localhost:7700
-    apiKey: aSampleMasterKey
   jwt:
     secret: vmfhaltmskdlstkfkdgodyroqkfwkdba
   oauth2:
