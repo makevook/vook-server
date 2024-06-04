@@ -12,9 +12,6 @@ import vook.server.api.web.common.CommonApiResponse;
 import vook.server.api.web.routes.user.reqres.UserInfoResponse;
 import vook.server.api.web.routes.user.reqres.UserOnboardingCompleteRequest;
 import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
-import vook.server.api.web.routes.user.reqres.UserTermsResponse;
-
-import java.util.List;
 
 @Tag(name = "user", description = "사용자 관련 API")
 public interface UserApi {
@@ -37,26 +34,6 @@ public interface UserApi {
     CommonApiResponse<UserInfoResponse> userInfo(VookLoginUser user);
 
     class UserApiUerInfoResponse extends CommonApiResponse<UserInfoResponse> {
-    }
-
-    @Operation(
-            summary = "약관 목록",
-            security = {
-                    @SecurityRequirement(name = "AccessToken")
-            }
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "성공",
-                    content = @Content(
-                            schema = @Schema(implementation = UserApiTermsResponse.class)
-                    )
-            ),
-    })
-    CommonApiResponse<List<UserTermsResponse>> terms();
-
-    class UserApiTermsResponse extends CommonApiResponse<List<UserTermsResponse>> {
     }
 
     @Operation(
