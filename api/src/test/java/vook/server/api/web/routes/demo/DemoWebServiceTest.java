@@ -10,7 +10,7 @@ import vook.server.api.app.demo.repo.DemoTermRepository;
 import vook.server.api.devhelper.TestTermsLoader;
 import vook.server.api.model.demo.DemoTerm;
 import vook.server.api.outbound.search.DemoTermSearchService;
-import vook.server.api.testhelper.ApiTest;
+import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.web.routes.demo.reqres.SearchTermRequest;
 import vook.server.api.web.routes.demo.reqres.SearchTermResponse;
 
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DemoWebServiceTest extends ApiTest {
+class DemoWebServiceTest extends IntegrationTestBase {
 
     @Autowired
     private DemoWebService demoWebService;

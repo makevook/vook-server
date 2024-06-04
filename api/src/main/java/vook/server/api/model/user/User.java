@@ -19,6 +19,7 @@ public class User {
 
     private String uid;
 
+    @Column(unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
