@@ -9,9 +9,6 @@ import vook.server.api.web.common.CommonApiResponse;
 import vook.server.api.web.routes.user.reqres.UserInfoResponse;
 import vook.server.api.web.routes.user.reqres.UserOnboardingCompleteRequest;
 import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
-import vook.server.api.web.routes.user.reqres.UserTermsResponse;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -28,12 +25,6 @@ public class UserRestController implements UserApi {
     ) {
         UserInfoResponse response = service.userInfo(user);
         return CommonApiResponse.okWithResult(response);
-    }
-
-    @Override
-    @GetMapping("/terms")
-    public CommonApiResponse<List<UserTermsResponse>> terms() {
-        return CommonApiResponse.okWithResult(service.terms());
     }
 
     @Override

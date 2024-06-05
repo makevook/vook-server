@@ -14,6 +14,8 @@ public class UserInfo {
 
     private String nickname;
 
+    private Boolean marketingEmailOptIn;
+
     private String funnel;
 
     private String job;
@@ -24,11 +26,13 @@ public class UserInfo {
 
     public static UserInfo forRegisterOf(
             String nickname,
-            User user
+            User user,
+            boolean marketingEmailOptIn
     ) {
         UserInfo result = new UserInfo();
         result.nickname = nickname;
         result.user = user;
+        result.marketingEmailOptIn = marketingEmailOptIn;
         return result;
     }
 
