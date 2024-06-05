@@ -23,6 +23,9 @@ public class CommonApiException {
     }
 
     public static class BadRequest extends Exception {
+
+        private static final int STATUS_CODE = 400;
+
         public BadRequest(String message, Throwable cause) {
             super(message, cause);
         }
@@ -33,18 +36,29 @@ public class CommonApiException {
 
         @Override
         public CommonApiResponse<?> response() {
-            return CommonApiResponse.noResult(400, message);
+            return CommonApiResponse.noResult(STATUS_CODE, message);
         }
     }
 
     public static class ServerError extends Exception {
+
+        private static final int STATUS_CODE = 500;
+
+        public ServerError(String message, Throwable cause) {
+            super(message, cause);
+        }
+
         public ServerError(Throwable cause) {
             super(cause);
         }
 
         @Override
         public CommonApiResponse<?> response() {
-            return CommonApiResponse.noResult(500, "처리되지 않은 서버 에러가 발생하였습니다.");
+            return CommonApiResponse.noResult(STATUS_CODE, message);
+        }
+
+        public CommonApiResponse<?> response(String message) {
+            return CommonApiResponse.noResult(STATUS_CODE, message);
         }
     }
 }

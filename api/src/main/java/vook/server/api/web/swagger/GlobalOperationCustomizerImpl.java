@@ -10,7 +10,7 @@ import org.springdoc.core.customizers.GlobalOperationCustomizer;
 import org.springframework.web.method.HandlerMethod;
 import vook.server.api.web.common.CommonApiResponse;
 
-import java.util.Map;
+import java.util.HashMap;
 
 public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer {
 
@@ -21,21 +21,36 @@ public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer 
     }
 
     private static void applyInternalServerErrorApiResponse(Operation operation) {
-        ApiResponse internalServerErrorApiResponse = new ApiResponse()
-                .description("처리되지 않은 서버 에러")
-                .content(new Content().addMediaType(
-                        "application/json",
-                        new MediaType()
-                                .schema(new Schema<CommonApiResponse>().$ref("#/components/schemas/CommonApiResponse"))
-                                .examples(Map.of("서버 에러", new Example().value(
-                                        """
-                                                {
-                                                    "code": 500, 
-                                                    "message": "처리되지 않은 서버 에러가 발생하였습니다."
-                                                }"""
-                                )))
-                ));
+        MediaType jsonType = prepareOrGetJsonMediaType(operation);
 
-        operation.getResponses().addApiResponse("500", internalServerErrorApiResponse);
+        if (jsonType.getSchema() == null) {
+            jsonType.setSchema(new Schema<CommonApiResponse>().$ref("#/components/schemas/CommonApiResponse"));
+        }
+
+        jsonType.getExamples().put("처리되지 않은 서버 에러",
+                new Example()
+                        .description("처리되지 않은 서버 에러")
+                        .value("""
+                                {
+                                    "code": 500,
+                                    "message": "처리되지 않은 서버 에러가 발생하였습니다."
+                                }""")
+        );
+    }
+
+    private static MediaType prepareOrGetJsonMediaType(Operation operation) {
+        ApiResponse apiResponse = operation.getResponses().computeIfAbsent("500", k -> new ApiResponse());
+
+        if (apiResponse.getContent() == null) {
+            apiResponse.setContent(new Content());
+        }
+
+        MediaType jsonType = apiResponse.getContent().computeIfAbsent("application/json", k -> new MediaType());
+
+        if (jsonType.getExamples() == null) {
+            jsonType.setExamples(new HashMap<>());
+        }
+
+        return jsonType;
     }
 }

@@ -22,7 +22,9 @@ public class GlobalRestControllerAdvice {
     public ResponseEntity<?> handleException(Exception e) {
         log.error(e.getMessage(), e);
 
-        CommonApiResponse<?> response = new CommonApiException.ServerError(e).response();
+        CommonApiResponse<?> response = new CommonApiException
+                .ServerError("처리되지 않은 서버 에러가 발생하였습니다.", e)
+                .response();
 
         return ResponseEntity.status(response.getCode()).body(response);
     }
