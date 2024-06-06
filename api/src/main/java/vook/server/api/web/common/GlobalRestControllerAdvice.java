@@ -2,6 +2,7 @@ package vook.server.api.web.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -14,6 +15,15 @@ public class GlobalRestControllerAdvice {
         log.error(e.getMessage(), e);
 
         CommonApiResponse<?> response = e.response();
+
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        CommonApiResponse<?> response = new CommonApiException
+                .BadRequest("요청이 잘못되었습니다.", e)
+                .response();
 
         return ResponseEntity.status(response.getCode()).body(response);
     }

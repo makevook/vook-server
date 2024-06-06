@@ -17,8 +17,9 @@ public class GlobalOpenApiCustomizerImpl implements GlobalOpenApiCustomizer {
     private static void applyCommonApiResponseSchema(OpenAPI openApi) {
         openApi.getComponents()
                 .addSchemas("CommonApiResponse", new Schema<Map<String, Object>>()
-                        .addProperty("code", new IntegerSchema().description("응답 코드"))
-                        .addProperty("message", new StringSchema().description("응답 메시지"))
+                        .addProperty("code", new IntegerSchema().description("응답 코드")).addRequiredItem("code")
+                        .addProperty("message", new StringSchema().description("응답 메시지")).addRequiredItem("message")
+                        .addProperty("result", new StringSchema().description("응답 결과"))
                 );
     }
 }
