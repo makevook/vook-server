@@ -13,29 +13,19 @@ public class GlobalRestControllerAdvice {
     @ExceptionHandler(CommonApiException.Exception.class)
     public ResponseEntity<?> handleCommonApiException(CommonApiException.Exception e) {
         log.error(e.getMessage(), e);
-
-        CommonApiResponse<?> response = e.response();
-
-        return ResponseEntity.status(response.getCode()).body(response);
+        return ResponseEntity.status(e.statusCode()).body(e.response());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        CommonApiResponse<?> response = new CommonApiException
-                .BadRequest("요청이 잘못되었습니다.", e)
-                .response();
-
-        return ResponseEntity.status(response.getCode()).body(response);
+        CommonApiException.BadRequest badRequest = new CommonApiException.BadRequest("INVALID_PARAMETER", e);
+        return ResponseEntity.status(badRequest.statusCode()).body(badRequest.response());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
         log.error(e.getMessage(), e);
-
-        CommonApiResponse<?> response = new CommonApiException
-                .ServerError("처리되지 않은 서버 에러가 발생하였습니다.", e)
-                .response();
-
-        return ResponseEntity.status(response.getCode()).body(response);
+        CommonApiException.ServerError serverError = new CommonApiException.ServerError("UNHANDLED_ERROR", e);
+        return ResponseEntity.status(serverError.statusCode()).body(serverError.response());
     }
 }

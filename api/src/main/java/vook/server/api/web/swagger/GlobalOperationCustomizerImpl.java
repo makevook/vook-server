@@ -32,8 +32,7 @@ public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer 
                         .description("처리되지 않은 서버 에러")
                         .value("""
                                 {
-                                    "code": 500,
-                                    "message": "처리되지 않은 서버 에러가 발생하였습니다."
+                                    "code": "UNHANDLED_ERROR"
                                 }""")
         );
     }

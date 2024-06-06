@@ -8,14 +8,12 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommonApiResponse<T> {
 
-    @Schema(description = "응답 코드", requiredMode = Schema.RequiredMode.REQUIRED)
-    private Integer code;
-    @Schema(description = "응답 메시지", requiredMode = Schema.RequiredMode.REQUIRED)
-    private String message;
+    @Schema(description = "결과 코드", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String code;
     private T result;
 
     public static <T> CommonApiResponse<T> ok() {
-        return noResult(200, "API 요청이 성공했습니다.");
+        return noResult("success");
     }
 
     public static <T> CommonApiResponse<T> okWithResult(T result) {
@@ -24,17 +22,15 @@ public class CommonApiResponse<T> {
         return response;
     }
 
-    public static <T> CommonApiResponse<T> noResult(Integer code, String message) {
+    public static <T> CommonApiResponse<T> noResult(String code) {
         CommonApiResponse<T> response = new CommonApiResponse<>();
         response.code = code;
-        response.message = message;
         return response;
     }
 
-    public static <T> CommonApiResponse<T> withResult(Integer code, String message, T result) {
+    public static <T> CommonApiResponse<T> withResult(String code, T result) {
         CommonApiResponse<T> response = new CommonApiResponse<>();
         response.code = code;
-        response.message = message;
         response.result = result;
         return response;
     }

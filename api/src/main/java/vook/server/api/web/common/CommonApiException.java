@@ -2,63 +2,50 @@ package vook.server.api.web.common;
 
 public class CommonApiException {
     public static abstract class Exception extends RuntimeException {
-        protected String message;
+        
+        protected String code;
 
-        public Exception(Throwable cause) {
-            super(cause);
-            this.message = cause.getMessage();
-        }
-
-        public Exception(String message) {
-            super(message);
-            this.message = message;
-        }
-
-        public Exception(String message, Throwable cause) {
-            super(message, cause);
-            this.message = message;
+        public Exception(String code, Throwable cause) {
+            super(code, cause);
+            this.code = code;
         }
 
         abstract CommonApiResponse<?> response();
+
+        abstract int statusCode();
     }
 
     public static class BadRequest extends Exception {
 
-        private static final int STATUS_CODE = 400;
-
-        public BadRequest(String message, Throwable cause) {
-            super(message, cause);
-        }
-
-        public BadRequest(String message) {
-            super(message);
+        public BadRequest(String code, Throwable cause) {
+            super(code, cause);
         }
 
         @Override
         public CommonApiResponse<?> response() {
-            return CommonApiResponse.noResult(STATUS_CODE, message);
+            return CommonApiResponse.noResult(code);
+        }
+
+        @Override
+        int statusCode() {
+            return 400;
         }
     }
 
     public static class ServerError extends Exception {
 
-        private static final int STATUS_CODE = 500;
-
-        public ServerError(String message, Throwable cause) {
-            super(message, cause);
-        }
-
-        public ServerError(Throwable cause) {
-            super(cause);
+        public ServerError(String code, Throwable cause) {
+            super(code, cause);
         }
 
         @Override
         public CommonApiResponse<?> response() {
-            return CommonApiResponse.noResult(STATUS_CODE, message);
+            return CommonApiResponse.noResult(code);
         }
 
-        public CommonApiResponse<?> response(String message) {
-            return CommonApiResponse.noResult(STATUS_CODE, message);
+        @Override
+        int statusCode() {
+            return 500;
         }
     }
 }
