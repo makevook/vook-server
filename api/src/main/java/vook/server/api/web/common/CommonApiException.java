@@ -2,11 +2,11 @@ package vook.server.api.web.common;
 
 public class CommonApiException {
     public static abstract class Exception extends RuntimeException {
-        
-        protected String code;
 
-        public Exception(String code, Throwable cause) {
-            super(code, cause);
+        protected ApiResponseCode code;
+
+        public Exception(ApiResponseCode code, Throwable cause) {
+            super(code.code(), cause);
             this.code = code;
         }
 
@@ -17,7 +17,7 @@ public class CommonApiException {
 
     public static class BadRequest extends Exception {
 
-        public BadRequest(String code, Throwable cause) {
+        public BadRequest(ApiResponseCode code, Throwable cause) {
             super(code, cause);
         }
 
@@ -34,7 +34,7 @@ public class CommonApiException {
 
     public static class ServerError extends Exception {
 
-        public ServerError(String code, Throwable cause) {
+        public ServerError(ApiResponseCode code, Throwable cause) {
             super(code, cause);
         }
 
