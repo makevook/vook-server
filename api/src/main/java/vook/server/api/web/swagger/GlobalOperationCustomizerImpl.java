@@ -6,18 +6,37 @@ import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import org.springdoc.core.customizers.GlobalOperationCustomizer;
 import org.springframework.web.method.HandlerMethod;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer {
 
     @Override
     public Operation customize(Operation operation, HandlerMethod handlerMethod) {
         applyDefaultOkApiResponse(operation);
+        applyUnauthorizedApiResponse(operation);
         applyInternalServerErrorApiResponse(operation);
         return operation;
+    }
+
+    private void applyUnauthorizedApiResponse(Operation operation) {
+        List<SecurityRequirement> security = operation.getSecurity();
+        if (security == null) {
+            return;
+        }
+
+        security.forEach(sr -> {
+            if (sr.containsKey("AccessToken")) {
+                operation.getResponses().computeIfAbsent(
+                        "401",
+                        k -> new ApiResponse().description("Unauthorized")
+                );
+            }
+        });
     }
 
     private void applyDefaultOkApiResponse(Operation operation) {

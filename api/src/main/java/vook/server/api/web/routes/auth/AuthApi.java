@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
-import vook.server.api.model.values.AuthValues;
+import vook.server.api.web.auth.data.AuthValues;
 
 @Tag(name = "auth", description = "인증 관련 API")
 public interface AuthApi {

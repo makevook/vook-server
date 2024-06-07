@@ -1,4 +1,4 @@
-package vook.server.api.model.values;
+package vook.server.api.web.auth.data;
 
 public class AuthValues {
     public static final String AUTHORIZATION_HEADER = "Authorization";

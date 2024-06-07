@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vook.server.api.app.auth.TokenService;
-import vook.server.api.app.auth.data.GeneratedToken;
-import vook.server.api.model.values.AuthValues;
+import vook.server.api.web.auth.app.TokenService;
+import vook.server.api.web.auth.data.AuthValues;
+import vook.server.api.web.auth.data.GeneratedToken;
 
 @RestController
 @RequestMapping("/auth")

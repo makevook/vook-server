@@ -1,4 +1,4 @@
-package vook.server.api.config.auth.common;
+package vook.server.api.web.auth.data;
 
 import lombok.Getter;
 import lombok.ToString;
