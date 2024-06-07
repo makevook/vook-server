@@ -17,8 +17,8 @@ public interface DemoApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "성공",
                     content = @Content(
+                            mediaType = "application/json",
                             schema = @Schema(implementation = SearchApiTermResponse.class)
                     )
             ),

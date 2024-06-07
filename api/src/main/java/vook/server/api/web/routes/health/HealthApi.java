@@ -2,6 +2,7 @@ package vook.server.api.web.routes.health;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -15,7 +16,8 @@ public interface HealthApi {
     @ApiResponse(
             responseCode = "200",
             content = @Content(
-                    mediaType = "text/plain"
+                    mediaType = "text/plain",
+                    examples = @ExampleObject(name = "성공", value = "OK")
             )
     )
     String health();

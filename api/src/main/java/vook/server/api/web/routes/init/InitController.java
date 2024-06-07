@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vook.server.api.devhelper.InitService;
+import vook.server.api.web.common.CommonApiResponse;
 
 @Profile({"local", "dev", "stag"})
 @RestController
@@ -16,7 +17,8 @@ public class InitController implements InitApi {
     private final InitService initService;
 
     @PostMapping
-    public void init() {
+    public CommonApiResponse<Void> init() {
         initService.init();
+        return CommonApiResponse.ok();
     }
 }

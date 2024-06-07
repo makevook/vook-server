@@ -3,19 +3,21 @@ package vook.server.api.web.routes.user;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.user.UserService;
 import vook.server.api.config.auth.common.VookLoginUser;
 import vook.server.api.model.user.User;
 import vook.server.api.model.user.UserStatus;
+import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.TestDataCreator;
-import vook.server.api.testhelper.WebServiceTest;
 import vook.server.api.web.routes.user.reqres.UserInfoResponse;
 import vook.server.api.web.routes.user.reqres.UserOnboardingCompleteRequest;
 import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserWebServiceTest extends WebServiceTest {
+@Transactional
+class UserWebServiceTest extends IntegrationTestBase {
 
     @Autowired
     UserWebService userWebService;

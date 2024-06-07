@@ -1,7 +1,9 @@
 package vook.server.api.testhelper;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +32,9 @@ public abstract class IntegrationTestBase {
         mariaDBContainer.start();
         meilisearchContainer.start();
     }
+
+    @Autowired
+    protected TestRestTemplate rest;
 
     @BeforeEach
     void init() {

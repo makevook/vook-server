@@ -16,7 +16,7 @@ public interface AuthApi {
             summary = "토큰 갱신",
             description = """
                     리프레시 토큰을 이용하여 엑세스 토큰과 리프레시 토큰을 갱신합니다.
-                    리프레시 토큰은 최상위 Description에 Authorzation 항목을 참고하세요."""
+                    리프레시 토큰은 최상위 Description의 Authorzation 항목을 참고하세요."""
     )
     @ApiResponses(value = {
             @ApiResponse(
