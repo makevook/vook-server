@@ -1,4 +1,4 @@
-package vook.server.api.config.auth.oauth2;
+package vook.server.api.web.auth.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.user.UserService;
 import vook.server.api.app.user.data.SignUpFromSocialCommand;
-import vook.server.api.config.auth.common.VookLoginUser;
 import vook.server.api.model.user.SocialUser;
+import vook.server.api.web.auth.data.VookLoginUser;
 
 @Slf4j
 @Service

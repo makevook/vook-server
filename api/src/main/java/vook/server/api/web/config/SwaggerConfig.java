@@ -1,4 +1,4 @@
-package vook.server.api.config;
+package vook.server.api.web.config;
 
 import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springdoc.core.customizers.GlobalOperationCustomizer;

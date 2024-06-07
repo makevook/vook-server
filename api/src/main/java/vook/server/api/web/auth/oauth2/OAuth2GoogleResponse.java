@@ -1,4 +1,4 @@
-package vook.server.api.config.auth.oauth2;
+package vook.server.api.web.auth.oauth2;
 
 import java.util.Map;
 

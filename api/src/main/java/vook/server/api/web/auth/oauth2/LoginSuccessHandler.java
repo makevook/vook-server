@@ -1,4 +1,4 @@
-package vook.server.api.config.auth.oauth2;
+package vook.server.api.web.auth.oauth2;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,9 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
-import vook.server.api.app.auth.TokenService;
-import vook.server.api.app.auth.data.GeneratedToken;
-import vook.server.api.config.auth.common.VookLoginUser;
+import vook.server.api.web.auth.app.TokenService;
+import vook.server.api.web.auth.data.GeneratedToken;
+import vook.server.api.web.auth.data.VookLoginUser;
 
 import java.io.IOException;
 

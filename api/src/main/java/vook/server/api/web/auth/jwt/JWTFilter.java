@@ -1,4 +1,4 @@
-package vook.server.api.config.auth.jwt;
+package vook.server.api.web.auth.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,9 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import vook.server.api.app.auth.TokenService;
-import vook.server.api.config.auth.common.VookLoginUser;
-import vook.server.api.model.values.AuthValues;
+import vook.server.api.web.auth.app.TokenService;
+import vook.server.api.web.auth.data.AuthValues;
+import vook.server.api.web.auth.data.VookLoginUser;
 
 import java.io.IOException;
 

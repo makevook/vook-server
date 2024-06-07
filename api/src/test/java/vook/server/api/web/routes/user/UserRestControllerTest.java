@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import vook.server.api.app.auth.data.GeneratedToken;
 import vook.server.api.model.user.User;
 import vook.server.api.testhelper.HttpEntityBuilder;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.TestDataCreator;
+import vook.server.api.web.auth.data.GeneratedToken;
 
 import java.util.Map;
 
