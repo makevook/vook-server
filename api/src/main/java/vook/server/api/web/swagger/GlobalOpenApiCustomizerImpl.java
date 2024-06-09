@@ -35,6 +35,14 @@ public class GlobalOpenApiCustomizerImpl implements GlobalOpenApiCustomizer {
                                     "code": "%s"
                                 }""", ApiResponseCode.BadRequest.INVALID_PARAMETER.code()))
                 )
+                .addExamples(getKey(ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE), new Example()
+                        .description("비즈니스 규칙 위반")
+                        .value(String.format("""
+                                {
+                                    "code": "%s",
+                                    "result": "규칙 위반 내용 (ex. NotReadyToOnboarding)"
+                                }""", ApiResponseCode.BadRequest.VIOLATION_BUSINESS_RULE.code()))
+                )
                 .addExamples(getKey(ComponentRefConsts.Example.UNHANDLED_ERROR), new Example()
                         .description("처리되지 않은 서버 에러")
                         .value(String.format("""

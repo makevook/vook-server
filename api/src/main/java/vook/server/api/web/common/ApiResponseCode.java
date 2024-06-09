@@ -16,7 +16,9 @@ public interface ApiResponseCode {
 
     enum BadRequest implements ApiResponseCode {
 
-        INVALID_PARAMETER;
+        INVALID_PARAMETER,
+        VIOLATION_BUSINESS_RULE,
+        ;
 
         @Override
         public String code() {

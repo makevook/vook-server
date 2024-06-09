@@ -6,10 +6,18 @@ import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import vook.server.api.app.common.AppException;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalRestControllerAdvice {
+
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<?> handleAppException(AppException e) {
+        log.error(e.getMessage(), e);
+        CommonApiException badRequest = CommonApiException.badRequest(ApiResponseCode.BadRequest.VIOLATION_BUSINESS_RULE, e, e.contents());
+        return ResponseEntity.status(badRequest.statusCode()).body(badRequest.response());
+    }
 
     @ExceptionHandler(CommonApiException.class)
     public ResponseEntity<?> handleCommonApiException(CommonApiException e) {

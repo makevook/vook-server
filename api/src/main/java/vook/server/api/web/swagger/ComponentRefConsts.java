@@ -13,5 +13,6 @@ public class ComponentRefConsts {
         public static final String SUCCESS = "#/components/examples/Success";
         public static final String INVALID_PARAMETER = "#/components/examples/InvalidParameter";
         public static final String UNHANDLED_ERROR = "#/components/examples/UnhandledError";
+        public static final String VIOLATION_BUSINESS_RULE = "#/components/examples/ViolationBusinessRule";
     }
 }
