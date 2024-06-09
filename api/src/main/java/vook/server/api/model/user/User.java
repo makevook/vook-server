@@ -51,12 +51,9 @@ public class User {
         socialUsers.add(socialUser);
     }
 
-    public void addUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }
-
-    public void registered() {
+    public void register(UserInfo userInfo) {
         this.status = UserStatus.REGISTERED;
+        this.userInfo = userInfo;
     }
 
     public void onboarding(Funnel funnel, Job job) {
@@ -65,6 +62,10 @@ public class User {
     }
 
     public boolean isReadyToOnboarding() {
+        return status == UserStatus.REGISTERED;
+    }
+
+    public boolean isRegistered() {
         return status == UserStatus.REGISTERED;
     }
 }

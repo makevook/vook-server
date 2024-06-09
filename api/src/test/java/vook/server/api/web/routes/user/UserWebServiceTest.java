@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.user.UserService;
+import vook.server.api.app.user.exception.AlreadyRegisteredException;
 import vook.server.api.app.user.exception.NotReadyToOnboardingException;
 import vook.server.api.model.user.Funnel;
 import vook.server.api.model.user.Job;
@@ -110,6 +111,23 @@ class UserWebServiceTest extends IntegrationTestBase {
         assertThat(user.getUserInfo()).isNotNull();
         assertThat(user.getUserInfo().getNickname()).isEqualTo(request.getNickname());
         assertThat(user.getUserInfo().getMarketingEmailOptIn()).isEqualTo(request.isMarketingEmailOptIn());
+    }
+
+    @Test
+    @DisplayName("회원 가입 - 에러; 이미 가입된 유저")
+    void registerError1() {
+        // given
+        User registeredUser = testDataCreator.createRegisteredUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(registeredUser.getUid());
+
+        UserRegisterRequest request = new UserRegisterRequest();
+        request.setNickname("nickname");
+        request.setRequiredTermsAgree(true);
+        request.setMarketingEmailOptIn(true);
+
+        // when
+        assertThatThrownBy(() -> userWebService.register(vookLoginUser, request))
+                .isInstanceOf(AlreadyRegisteredException.class);
     }
 
     @Test

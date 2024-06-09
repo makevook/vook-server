@@ -42,7 +42,11 @@ public interface UserApi {
             summary = "회원가입",
             security = {
                     @SecurityRequirement(name = "AccessToken")
-            }
+            },
+            description = """
+                    비즈니스 규칙 위반 내용
+                    - AlreadyRegistered: 이미 회원가입이 완료된 유저가 해당 API를 호출 할 경우
+                    """
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -50,7 +54,10 @@ public interface UserApi {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
-                            examples = @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER)
+                            examples = {
+                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
+                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
+                            }
                     )
             ),
     })
