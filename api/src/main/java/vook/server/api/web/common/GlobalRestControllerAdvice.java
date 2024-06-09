@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalRestControllerAdvice {
 
-    @ExceptionHandler(CommonApiException.Exception.class)
-    public ResponseEntity<?> handleCommonApiException(CommonApiException.Exception e) {
+    @ExceptionHandler(CommonApiException.class)
+    public ResponseEntity<?> handleCommonApiException(CommonApiException e) {
         log.error(e.getMessage(), e);
         return ResponseEntity.status(e.statusCode()).body(e.response());
     }
@@ -20,21 +20,21 @@ public class GlobalRestControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.debug(e.getMessage(), e);
-        CommonApiException.BadRequest badRequest = new CommonApiException.BadRequest(ApiResponseCode.BadRequest.INVALID_PARAMETER, e);
+        CommonApiException badRequest = CommonApiException.badRequest(ApiResponseCode.BadRequest.INVALID_PARAMETER, e);
         return ResponseEntity.status(badRequest.statusCode()).body(badRequest.response());
     }
 
     @ExceptionHandler(HttpMessageConversionException.class)
     public ResponseEntity<?> handleHttpMessageConversionException(HttpMessageConversionException e) {
         log.debug(e.getMessage(), e);
-        CommonApiException.BadRequest badRequest = new CommonApiException.BadRequest(ApiResponseCode.BadRequest.INVALID_PARAMETER, e);
+        CommonApiException badRequest = CommonApiException.badRequest(ApiResponseCode.BadRequest.INVALID_PARAMETER, e);
         return ResponseEntity.status(badRequest.statusCode()).body(badRequest.response());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
         log.error(e.getMessage(), e);
-        CommonApiException.ServerError serverError = new CommonApiException.ServerError(ApiResponseCode.ServerError.UNHANDLED_ERROR, e);
+        CommonApiException serverError = CommonApiException.serverError(ApiResponseCode.ServerError.UNHANDLED_ERROR, e);
         return ResponseEntity.status(serverError.statusCode()).body(serverError.response());
     }
 }
