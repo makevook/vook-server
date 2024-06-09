@@ -40,7 +40,7 @@ public class GlobalOpenApiCustomizerImpl implements GlobalOpenApiCustomizer {
                         .value(String.format("""
                                 {
                                     "code": "%s",
-                                    "result": "규칙 위반 내용 (ex. NotReadyToOnboarding)"
+                                    "result": "규칙 위반 내용"
                                 }""", ApiResponseCode.BadRequest.VIOLATION_BUSINESS_RULE.code()))
                 )
                 .addExamples(getKey(ComponentRefConsts.Example.UNHANDLED_ERROR), new Example()
