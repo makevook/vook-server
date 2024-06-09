@@ -17,26 +17,10 @@ public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer 
 
     @Override
     public Operation customize(Operation operation, HandlerMethod handlerMethod) {
-        applyDefaultOkApiResponse(operation);
-        applyUnauthorizedApiResponse(operation);
-        applyInternalServerErrorApiResponse(operation);
+        applyDefaultOkApiResponse(operation); //200
+        applyUnauthorizedApiResponse(operation); //401
+        applyInternalServerErrorApiResponse(operation); //500
         return operation;
-    }
-
-    private void applyUnauthorizedApiResponse(Operation operation) {
-        List<SecurityRequirement> security = operation.getSecurity();
-        if (security == null) {
-            return;
-        }
-
-        security.forEach(sr -> {
-            if (sr.containsKey("AccessToken")) {
-                operation.getResponses().computeIfAbsent(
-                        "401",
-                        k -> new ApiResponse().description("Unauthorized")
-                );
-            }
-        });
     }
 
     private void applyDefaultOkApiResponse(Operation operation) {
@@ -63,17 +47,23 @@ public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer 
                 .addExamples("성공", new Example().$ref(ComponentRefConsts.Example.SUCCESS)));
     }
 
-    private static void applyInternalServerErrorApiResponse(Operation operation) {
-        MediaType jsonType = prepareOrGetJsonMediaType(operation);
-
-        if (jsonType.getSchema() == null) {
-            jsonType.setSchema(new Schema<>().$ref(ComponentRefConsts.Schema.COMMON_API_RESPONSE));
+    private void applyUnauthorizedApiResponse(Operation operation) {
+        List<SecurityRequirement> security = operation.getSecurity();
+        if (security == null) {
+            return;
         }
 
-        jsonType.getExamples().put("처리되지 않은 서버 에러", new Example().$ref(ComponentRefConsts.Example.UNHANDLED_ERROR));
+        security.forEach(sr -> {
+            if (sr.containsKey("AccessToken")) {
+                operation.getResponses().computeIfAbsent(
+                        "401",
+                        k -> new ApiResponse().description("Unauthorized")
+                );
+            }
+        });
     }
 
-    private static MediaType prepareOrGetJsonMediaType(Operation operation) {
+    private void applyInternalServerErrorApiResponse(Operation operation) {
         ApiResponse apiResponse = operation.getResponses().computeIfAbsent(
                 "500",
                 k -> new ApiResponse().description("Internal Server Error")
@@ -85,10 +75,15 @@ public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer 
 
         MediaType jsonType = apiResponse.getContent().computeIfAbsent("application/json", k -> new MediaType());
 
+        if (jsonType.getSchema() == null) {
+            jsonType.setSchema(new Schema<>().$ref(ComponentRefConsts.Schema.COMMON_API_RESPONSE));
+        }
+
         if (jsonType.getExamples() == null) {
             jsonType.setExamples(new HashMap<>());
         }
 
-        return jsonType;
+        jsonType.getExamples().put("처리되지 않은 서버 에러", new Example().$ref(ComponentRefConsts.Example.UNHANDLED_ERROR));
     }
+
 }
