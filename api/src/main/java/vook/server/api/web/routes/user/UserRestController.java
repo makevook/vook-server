@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.common.CommonApiResponse;
 import vook.server.api.web.routes.user.reqres.UserInfoResponse;
-import vook.server.api.web.routes.user.reqres.UserOnboardingCompleteRequest;
+import vook.server.api.web.routes.user.reqres.UserOnboardingRequest;
 import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
 
 @Slf4j
@@ -39,12 +39,12 @@ public class UserRestController implements UserApi {
     }
 
     @Override
-    @PostMapping("/onboarding/complete")
-    public CommonApiResponse<Void> onboardingComplete(
+    @PostMapping("/onboarding")
+    public CommonApiResponse<Void> onboarding(
             @AuthenticationPrincipal VookLoginUser user,
-            @RequestBody UserOnboardingCompleteRequest request
+            @RequestBody UserOnboardingRequest request
     ) {
-        service.onboardingComplete(user, request);
+        service.onboarding(user, request);
         return CommonApiResponse.ok();
     }
 }

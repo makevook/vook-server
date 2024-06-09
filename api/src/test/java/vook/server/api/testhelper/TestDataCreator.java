@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.user.UserService;
-import vook.server.api.app.user.data.CompleteOnboardingCommand;
+import vook.server.api.app.user.data.OnboardingCommand;
 import vook.server.api.app.user.data.RegisterCommand;
 import vook.server.api.app.user.data.SignUpFromSocialCommand;
 import vook.server.api.model.user.Funnel;
@@ -37,7 +37,7 @@ public class TestDataCreator {
 
     public User createCompletedOnboardingUser() {
         User user = createRegisteredUser();
-        userService.completeOnboarding(CompleteOnboardingCommand.of(user.getUid(), Funnel.OTHER, Job.OTHER));
+        userService.onboarding(OnboardingCommand.of(user.getUid(), Funnel.OTHER, Job.OTHER));
         return userService.findByUid(user.getUid()).orElseThrow();
     }
 

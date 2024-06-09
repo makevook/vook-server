@@ -25,6 +25,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
+    @Column(nullable = false)
+    private Boolean onboardingCompleted;
+
+    private LocalDateTime registeredAt;
+
+    private LocalDateTime onboardingCompletedAt;
+
+    private LocalDateTime lastUpdatedAt;
+
     private LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -40,6 +49,7 @@ public class User {
         user.uid = UUID.randomUUID().toString();
         user.email = email;
         user.status = UserStatus.SOCIAL_LOGIN_COMPLETED;
+        user.onboardingCompleted = false;
         return user;
     }
 
@@ -47,19 +57,23 @@ public class User {
         socialUsers.add(socialUser);
     }
 
-    public void addUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }
-
-    public void registered() {
+    public void register(UserInfo userInfo) {
         this.status = UserStatus.REGISTERED;
+        this.userInfo = userInfo;
+        this.registeredAt = LocalDateTime.now();
     }
 
-    public void onboardingCompleted() {
-        this.status = UserStatus.ONBOARDING_COMPLETED;
+    public void onboarding(Funnel funnel, Job job) {
+        this.onboardingCompleted = true;
+        this.userInfo.addOnboardingInfo(funnel, job);
+        this.onboardingCompletedAt = LocalDateTime.now();
     }
 
     public boolean isReadyToOnboarding() {
+        return status == UserStatus.REGISTERED;
+    }
+
+    public boolean isRegistered() {
         return status == UserStatus.REGISTERED;
     }
 }

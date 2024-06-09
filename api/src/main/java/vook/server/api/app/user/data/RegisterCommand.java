@@ -7,12 +7,12 @@ public class RegisterCommand {
 
     private String userUid;
     private String nickname;
-    private boolean marketingEmailOptIn;
+    private Boolean marketingEmailOptIn;
 
     public static RegisterCommand of(
             String userUid,
             String nickname,
-            boolean marketingEmailOptIn
+            Boolean marketingEmailOptIn
     ) {
         RegisterCommand command = new RegisterCommand();
         command.userUid = userUid;

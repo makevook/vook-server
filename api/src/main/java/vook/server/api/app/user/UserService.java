@@ -2,9 +2,11 @@ package vook.server.api.app.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vook.server.api.app.user.data.CompleteOnboardingCommand;
+import vook.server.api.app.user.data.OnboardingCommand;
 import vook.server.api.app.user.data.RegisterCommand;
 import vook.server.api.app.user.data.SignUpFromSocialCommand;
+import vook.server.api.app.user.exception.AlreadyOnboardingException;
+import vook.server.api.app.user.exception.AlreadyRegisteredException;
 import vook.server.api.app.user.exception.NotReadyToOnboardingException;
 import vook.server.api.app.user.repo.SocialUserRepository;
 import vook.server.api.app.user.repo.UserInfoRepository;
@@ -44,26 +46,27 @@ public class UserService {
 
     public void register(RegisterCommand command) {
         User user = repository.findByUid(command.getUserUid()).orElseThrow();
+        if (user.isRegistered()) {
+            throw new AlreadyRegisteredException();
+        }
 
-        UserInfo userInfo = UserInfo.forRegisterOf(
+        UserInfo userInfo = userInfoRepository.save(UserInfo.forRegisterOf(
                 command.getNickname(),
                 user,
-                command.isMarketingEmailOptIn()
-        );
-        UserInfo savedUserInfo = userInfoRepository.save(userInfo);
-        user.addUserInfo(savedUserInfo);
-
-        user.registered();
+                command.getMarketingEmailOptIn()
+        ));
+        user.register(userInfo);
     }
 
-    public void completeOnboarding(CompleteOnboardingCommand command) {
+    public void onboarding(OnboardingCommand command) {
         User user = repository.findByUid(command.getUserUid()).orElseThrow();
         if (!user.isReadyToOnboarding()) {
             throw new NotReadyToOnboardingException();
         }
+        if (user.getOnboardingCompleted()) {
+            throw new AlreadyOnboardingException();
+        }
 
-        user.onboardingCompleted();
-
-        user.getUserInfo().addOnboardingInfo(command.getFunnel(), command.getJob());
+        user.onboarding(command.getFunnel(), command.getJob());
     }
 }

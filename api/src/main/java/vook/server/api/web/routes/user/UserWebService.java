@@ -7,7 +7,7 @@ import vook.server.api.app.user.UserService;
 import vook.server.api.model.user.User;
 import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.routes.user.reqres.UserInfoResponse;
-import vook.server.api.web.routes.user.reqres.UserOnboardingCompleteRequest;
+import vook.server.api.web.routes.user.reqres.UserOnboardingRequest;
 import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
 
 @Service
@@ -26,7 +26,7 @@ public class UserWebService {
         userService.register(request.toCommand(loginUser.getUid()));
     }
 
-    public void onboardingComplete(VookLoginUser loginUser, UserOnboardingCompleteRequest request) {
-        userService.completeOnboarding(request.toCommand(loginUser.getUid()));
+    public void onboarding(VookLoginUser loginUser, UserOnboardingRequest request) {
+        userService.onboarding(request.toCommand(loginUser.getUid()));
     }
 }

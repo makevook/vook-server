@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.common.CommonApiResponse;
 import vook.server.api.web.routes.user.reqres.UserInfoResponse;
-import vook.server.api.web.routes.user.reqres.UserOnboardingCompleteRequest;
+import vook.server.api.web.routes.user.reqres.UserOnboardingRequest;
 import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
 import vook.server.api.web.swagger.ComponentRefConsts;
 
@@ -42,25 +42,11 @@ public interface UserApi {
             summary = "회원가입",
             security = {
                     @SecurityRequirement(name = "AccessToken")
-            }
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
-                            examples = @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER)
-                    )
-            ),
-    })
-    CommonApiResponse<Void> register(VookLoginUser user, UserRegisterRequest request);
-
-    @Operation(
-            summary = "온보딩 완료",
-            security = {
-                    @SecurityRequirement(name = "AccessToken")
-            }
+            },
+            description = """
+                    비즈니스 규칙 위반 내용
+                    - AlreadyRegistered: 이미 회원가입이 완료된 유저가 해당 API를 호출 할 경우
+                    """
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -75,5 +61,30 @@ public interface UserApi {
                     )
             ),
     })
-    CommonApiResponse<Void> onboardingComplete(VookLoginUser user, UserOnboardingCompleteRequest request);
+    CommonApiResponse<Void> register(VookLoginUser user, UserRegisterRequest request);
+
+    @Operation(
+            summary = "온보딩 완료",
+            security = {
+                    @SecurityRequirement(name = "AccessToken")
+            },
+            description = """
+                    비즈니스 규칙 위반 내용
+                    - NotReadyToOnboarding: 회원 가입이 완료되지 않은 유저가 해당 API를 호출 할 경우
+                    - AlreadyOnboarding: 이미 온보딩이 완료된 유저가 해당 API를 호출 할 경우"""
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
+                            examples = {
+                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
+                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
+                            }
+                    )
+            ),
+    })
+    CommonApiResponse<Void> onboarding(VookLoginUser user, UserOnboardingRequest request);
 }
