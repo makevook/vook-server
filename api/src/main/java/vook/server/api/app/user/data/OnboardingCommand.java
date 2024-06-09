@@ -5,18 +5,18 @@ import vook.server.api.model.user.Funnel;
 import vook.server.api.model.user.Job;
 
 @Getter
-public class CompleteOnboardingCommand {
+public class OnboardingCommand {
 
     public String userUid;
     public Funnel funnel;
     public Job job;
 
-    public static CompleteOnboardingCommand of(
+    public static OnboardingCommand of(
             String userUid,
             Funnel funnel,
             Job job
     ) {
-        CompleteOnboardingCommand command = new CompleteOnboardingCommand();
+        OnboardingCommand command = new OnboardingCommand();
         command.userUid = userUid;
         command.funnel = funnel;
         command.job = job;

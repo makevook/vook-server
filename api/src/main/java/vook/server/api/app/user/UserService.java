@@ -2,7 +2,7 @@ package vook.server.api.app.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vook.server.api.app.user.data.CompleteOnboardingCommand;
+import vook.server.api.app.user.data.OnboardingCommand;
 import vook.server.api.app.user.data.RegisterCommand;
 import vook.server.api.app.user.data.SignUpFromSocialCommand;
 import vook.server.api.app.user.exception.NotReadyToOnboardingException;
@@ -56,12 +56,12 @@ public class UserService {
         user.registered();
     }
 
-    public void completeOnboarding(CompleteOnboardingCommand command) {
+    public void onboarding(OnboardingCommand command) {
         User user = repository.findByUid(command.getUserUid()).orElseThrow();
         if (!user.isReadyToOnboarding()) {
             throw new NotReadyToOnboardingException();
         }
 
-        user.onboardingCompleted(command.getFunnel(), command.getJob());
+        user.onboarding(command.getFunnel(), command.getJob());
     }
 }

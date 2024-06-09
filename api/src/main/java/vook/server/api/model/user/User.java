@@ -59,7 +59,7 @@ public class User {
         this.status = UserStatus.REGISTERED;
     }
 
-    public void onboardingCompleted(Funnel funnel, Job job) {
+    public void onboarding(Funnel funnel, Job job) {
         this.onboardingCompleted = true;
         this.userInfo.addOnboardingInfo(funnel, job);
     }

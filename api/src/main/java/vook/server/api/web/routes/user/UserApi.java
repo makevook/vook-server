@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.common.CommonApiResponse;
 import vook.server.api.web.routes.user.reqres.UserInfoResponse;
-import vook.server.api.web.routes.user.reqres.UserOnboardingCompleteRequest;
+import vook.server.api.web.routes.user.reqres.UserOnboardingRequest;
 import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
 import vook.server.api.web.swagger.ComponentRefConsts;
 
@@ -75,5 +75,5 @@ public interface UserApi {
                     )
             ),
     })
-    CommonApiResponse<Void> onboardingComplete(VookLoginUser user, UserOnboardingCompleteRequest request);
+    CommonApiResponse<Void> onboarding(VookLoginUser user, UserOnboardingRequest request);
 }

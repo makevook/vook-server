@@ -14,7 +14,7 @@ import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.TestDataCreator;
 import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.routes.user.reqres.UserInfoResponse;
-import vook.server.api.web.routes.user.reqres.UserOnboardingCompleteRequest;
+import vook.server.api.web.routes.user.reqres.UserOnboardingRequest;
 import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -114,17 +114,17 @@ class UserWebServiceTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("온보딩 완료 - 정상")
-    void onboardingComplete1() {
+    void onboarding1() {
         // given
         User registeredUser = testDataCreator.createRegisteredUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(registeredUser.getUid());
 
-        UserOnboardingCompleteRequest request = new UserOnboardingCompleteRequest();
+        UserOnboardingRequest request = new UserOnboardingRequest();
         request.setFunnel(Funnel.OTHER);
         request.setJob(Job.OTHER);
 
         // when
-        userWebService.onboardingComplete(vookLoginUser, request);
+        userWebService.onboarding(vookLoginUser, request);
 
         // then
         User user = userService.findByUid(registeredUser.getUid()).orElseThrow();
@@ -137,17 +137,17 @@ class UserWebServiceTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("온보딩 완료 - 에러; 미 가입 유저")
-    void onboardingCompleteError1() {
+    void onboardingError1() {
         // given
         User unregisteredUser = testDataCreator.createUnregisteredUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(unregisteredUser.getUid());
 
-        UserOnboardingCompleteRequest request = new UserOnboardingCompleteRequest();
+        UserOnboardingRequest request = new UserOnboardingRequest();
         request.setFunnel(Funnel.OTHER);
         request.setJob(Job.OTHER);
 
         // when
-        assertThatThrownBy(() -> userWebService.onboardingComplete(vookLoginUser, request))
+        assertThatThrownBy(() -> userWebService.onboarding(vookLoginUser, request))
                 .isInstanceOf(NotReadyToOnboardingException.class);
     }
 }
