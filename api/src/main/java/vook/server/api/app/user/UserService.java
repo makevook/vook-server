@@ -62,8 +62,6 @@ public class UserService {
             throw new NotReadyToOnboardingException();
         }
 
-        user.onboardingCompleted();
-
-        user.getUserInfo().addOnboardingInfo(command.getFunnel(), command.getJob());
+        user.onboardingCompleted(command.getFunnel(), command.getJob());
     }
 }

@@ -47,6 +47,7 @@ class UserWebServiceTest extends IntegrationTestBase {
         assertThat(response.getEmail()).isEqualTo(unregisteredUser.getEmail());
         assertThat(response.getNickname()).isNull();
         assertThat(response.getStatus()).isEqualTo(UserStatus.SOCIAL_LOGIN_COMPLETED);
+        assertThat(response.getOnboardingCompleted()).isFalse();
     }
 
     @Test
@@ -65,6 +66,7 @@ class UserWebServiceTest extends IntegrationTestBase {
         assertThat(response.getEmail()).isEqualTo(registeredUser.getEmail());
         assertThat(response.getNickname()).isEqualTo(registeredUser.getUserInfo().getNickname());
         assertThat(response.getStatus()).isEqualTo(UserStatus.REGISTERED);
+        assertThat(response.getOnboardingCompleted()).isFalse();
     }
 
     @Test
@@ -82,7 +84,8 @@ class UserWebServiceTest extends IntegrationTestBase {
         assertThat(response.getUid()).isEqualTo(completedOnboardingUser.getUid());
         assertThat(response.getEmail()).isEqualTo(completedOnboardingUser.getEmail());
         assertThat(response.getNickname()).isEqualTo(completedOnboardingUser.getUserInfo().getNickname());
-        assertThat(response.getStatus()).isEqualTo(UserStatus.ONBOARDING_COMPLETED);
+        assertThat(response.getStatus()).isEqualTo(UserStatus.REGISTERED);
+        assertThat(response.getOnboardingCompleted()).isTrue();
     }
 
     @Test
@@ -103,6 +106,7 @@ class UserWebServiceTest extends IntegrationTestBase {
         // then
         User user = userService.findByUid(unregisteredUser.getUid()).orElseThrow();
         assertThat(user.getStatus()).isEqualTo(UserStatus.REGISTERED);
+        assertThat(user.getOnboardingCompleted()).isFalse();
         assertThat(user.getUserInfo()).isNotNull();
         assertThat(user.getUserInfo().getNickname()).isEqualTo(request.getNickname());
         assertThat(user.getUserInfo().getMarketingEmailOptIn()).isEqualTo(request.isMarketingEmailOptIn());
@@ -124,7 +128,8 @@ class UserWebServiceTest extends IntegrationTestBase {
 
         // then
         User user = userService.findByUid(registeredUser.getUid()).orElseThrow();
-        assertThat(user.getStatus()).isEqualTo(UserStatus.ONBOARDING_COMPLETED);
+        assertThat(user.getStatus()).isEqualTo(UserStatus.REGISTERED);
+        assertThat(user.getOnboardingCompleted()).isTrue();
         assertThat(user.getUserInfo()).isNotNull();
         assertThat(user.getUserInfo().getFunnel()).isEqualTo(request.getFunnel());
         assertThat(user.getUserInfo().getJob()).isEqualTo(request.getJob());
