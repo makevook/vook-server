@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import vook.server.api.app.user.data.OnboardingCommand;
 import vook.server.api.app.user.data.RegisterCommand;
 import vook.server.api.app.user.data.SignUpFromSocialCommand;
+import vook.server.api.app.user.exception.AlreadyOnboardingException;
 import vook.server.api.app.user.exception.AlreadyRegisteredException;
 import vook.server.api.app.user.exception.NotReadyToOnboardingException;
 import vook.server.api.app.user.repo.SocialUserRepository;
@@ -61,6 +62,9 @@ public class UserService {
         User user = repository.findByUid(command.getUserUid()).orElseThrow();
         if (!user.isReadyToOnboarding()) {
             throw new NotReadyToOnboardingException();
+        }
+        if (user.getOnboardingCompleted()) {
+            throw new AlreadyOnboardingException();
         }
 
         user.onboarding(command.getFunnel(), command.getJob());

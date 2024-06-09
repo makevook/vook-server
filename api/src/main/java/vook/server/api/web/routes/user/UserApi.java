@@ -70,7 +70,8 @@ public interface UserApi {
             },
             description = """
                     비즈니스 규칙 위반 내용
-                    - NotReadyToOnboarding: 회원 가입이 완료되지 않은 유저가 해당 API를 호출 할 경우"""
+                    - NotReadyToOnboarding: 회원 가입이 완료되지 않은 유저가 해당 API를 호출 할 경우
+                    - AlreadyOnboarding: 이미 온보딩이 완료된 유저가 해당 API를 호출 할 경우"""
     )
     @ApiResponses(value = {
             @ApiResponse(

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.user.UserService;
+import vook.server.api.app.user.exception.AlreadyOnboardingException;
 import vook.server.api.app.user.exception.AlreadyRegisteredException;
 import vook.server.api.app.user.exception.NotReadyToOnboardingException;
 import vook.server.api.model.user.Funnel;
@@ -167,5 +168,21 @@ class UserWebServiceTest extends IntegrationTestBase {
         // when
         assertThatThrownBy(() -> userWebService.onboarding(vookLoginUser, request))
                 .isInstanceOf(NotReadyToOnboardingException.class);
+    }
+
+    @Test
+    @DisplayName("온보딩 완료 - 에러; 이미 온보딩 완료된 유저")
+    void onboardingError2() {
+        // given
+        User completedOnboardingUser = testDataCreator.createCompletedOnboardingUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(completedOnboardingUser.getUid());
+
+        UserOnboardingRequest request = new UserOnboardingRequest();
+        request.setFunnel(Funnel.OTHER);
+        request.setJob(Job.OTHER);
+
+        // when
+        assertThatThrownBy(() -> userWebService.onboarding(vookLoginUser, request))
+                .isInstanceOf(AlreadyOnboardingException.class);
     }
 }
