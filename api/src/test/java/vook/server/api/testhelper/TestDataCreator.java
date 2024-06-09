@@ -7,6 +7,8 @@ import vook.server.api.app.user.UserService;
 import vook.server.api.app.user.data.CompleteOnboardingCommand;
 import vook.server.api.app.user.data.RegisterCommand;
 import vook.server.api.app.user.data.SignUpFromSocialCommand;
+import vook.server.api.model.user.Funnel;
+import vook.server.api.model.user.Job;
 import vook.server.api.model.user.SocialUser;
 import vook.server.api.model.user.User;
 import vook.server.api.web.auth.app.TokenService;
@@ -35,7 +37,7 @@ public class TestDataCreator {
 
     public User createCompletedOnboardingUser() {
         User user = createRegisteredUser();
-        userService.completeOnboarding(CompleteOnboardingCommand.of(user.getUid(), "testFunnel", "testJob"));
+        userService.completeOnboarding(CompleteOnboardingCommand.of(user.getUid(), Funnel.OTHER, Job.OTHER));
         return userService.findByUid(user.getUid()).orElseThrow();
     }
 

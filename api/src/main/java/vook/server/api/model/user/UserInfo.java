@@ -16,9 +16,11 @@ public class UserInfo {
 
     private Boolean marketingEmailOptIn;
 
-    private String funnel;
+    @Enumerated(EnumType.STRING)
+    private Funnel funnel;
 
-    private String job;
+    @Enumerated(EnumType.STRING)
+    private Job job;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -36,7 +38,7 @@ public class UserInfo {
         return result;
     }
 
-    public void addOnboardingInfo(String funnel, String job) {
+    public void addOnboardingInfo(Funnel funnel, Job job) {
         this.funnel = funnel;
         this.job = job;
     }

@@ -58,4 +58,8 @@ public class User {
     public void onboardingCompleted() {
         this.status = UserStatus.ONBOARDING_COMPLETED;
     }
+
+    public boolean isReadyToOnboarding() {
+        return status == UserStatus.REGISTERED;
+    }
 }

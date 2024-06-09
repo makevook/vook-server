@@ -1,51 +1,43 @@
 package vook.server.api.web.common;
 
-public class CommonApiException {
-    public static abstract class Exception extends RuntimeException {
+public class CommonApiException extends RuntimeException {
 
-        protected ApiResponseCode code;
+    private final ApiResponseCode code;
+    private final int statusCode;
+    private final String message;
 
-        public Exception(ApiResponseCode code, Throwable cause) {
-            super(code.code(), cause);
-            this.code = code;
-        }
-
-        abstract CommonApiResponse<?> response();
-
-        abstract int statusCode();
+    CommonApiException(ApiResponseCode code, int statusCode, Throwable cause) {
+        this(code, statusCode, cause, null);
     }
 
-    public static class BadRequest extends Exception {
+    CommonApiException(ApiResponseCode code, int statusCode, Throwable cause, String message) {
+        super(code.code(), cause);
+        this.code = code;
+        this.statusCode = statusCode;
+        this.message = message;
+    }
 
-        public BadRequest(ApiResponseCode code, Throwable cause) {
-            super(code, cause);
-        }
-
-        @Override
-        public CommonApiResponse<?> response() {
+    public CommonApiResponse<?> response() {
+        if (message == null) {
             return CommonApiResponse.noResult(code);
-        }
-
-        @Override
-        int statusCode() {
-            return 400;
+        } else {
+            return CommonApiResponse.withResult(code, message);
         }
     }
 
-    public static class ServerError extends Exception {
+    public int statusCode() {
+        return statusCode;
+    }
 
-        public ServerError(ApiResponseCode code, Throwable cause) {
-            super(code, cause);
-        }
+    public static CommonApiException badRequest(ApiResponseCode code, Throwable cause) {
+        return new CommonApiException(code, 400, cause);
+    }
 
-        @Override
-        public CommonApiResponse<?> response() {
-            return CommonApiResponse.noResult(code);
-        }
+    public static CommonApiException badRequest(ApiResponseCode code, Throwable cause, String message) {
+        return new CommonApiException(code, 400, cause, message);
+    }
 
-        @Override
-        int statusCode() {
-            return 500;
-        }
+    public static CommonApiException serverError(ApiResponseCode code, Throwable cause) {
+        return new CommonApiException(code, 500, cause);
     }
 }
