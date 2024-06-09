@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.user.UserService;
+import vook.server.api.app.user.exception.NotReadyToOnboardingException;
 import vook.server.api.model.user.Funnel;
 import vook.server.api.model.user.Job;
 import vook.server.api.model.user.User;
@@ -17,6 +18,7 @@ import vook.server.api.web.routes.user.reqres.UserOnboardingCompleteRequest;
 import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class UserWebServiceTest extends IntegrationTestBase {
@@ -126,5 +128,21 @@ class UserWebServiceTest extends IntegrationTestBase {
         assertThat(user.getUserInfo()).isNotNull();
         assertThat(user.getUserInfo().getFunnel()).isEqualTo(request.getFunnel());
         assertThat(user.getUserInfo().getJob()).isEqualTo(request.getJob());
+    }
+
+    @Test
+    @DisplayName("온보딩 완료 - 에러; 미 가입 유저")
+    void onboardingCompleteError1() {
+        // given
+        User unregisteredUser = testDataCreator.createUnregisteredUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(unregisteredUser.getUid());
+
+        UserOnboardingCompleteRequest request = new UserOnboardingCompleteRequest();
+        request.setFunnel(Funnel.OTHER);
+        request.setJob(Job.OTHER);
+
+        // when
+        assertThatThrownBy(() -> userWebService.onboardingComplete(vookLoginUser, request))
+                .isInstanceOf(NotReadyToOnboardingException.class);
     }
 }
