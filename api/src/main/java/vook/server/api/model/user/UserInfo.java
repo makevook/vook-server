@@ -29,7 +29,7 @@ public class UserInfo {
     public static UserInfo forRegisterOf(
             String nickname,
             User user,
-            boolean marketingEmailOptIn
+            Boolean marketingEmailOptIn
     ) {
         UserInfo result = new UserInfo();
         result.nickname = nickname;

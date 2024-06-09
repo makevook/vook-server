@@ -111,7 +111,7 @@ class UserWebServiceTest extends IntegrationTestBase {
         assertThat(user.getOnboardingCompleted()).isFalse();
         assertThat(user.getUserInfo()).isNotNull();
         assertThat(user.getUserInfo().getNickname()).isEqualTo(request.getNickname());
-        assertThat(user.getUserInfo().getMarketingEmailOptIn()).isEqualTo(request.isMarketingEmailOptIn());
+        assertThat(user.getUserInfo().getMarketingEmailOptIn()).isEqualTo(request.getMarketingEmailOptIn());
     }
 
     @Test

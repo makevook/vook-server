@@ -53,7 +53,7 @@ public class UserService {
         UserInfo userInfo = userInfoRepository.save(UserInfo.forRegisterOf(
                 command.getNickname(),
                 user,
-                command.isMarketingEmailOptIn()
+                command.getMarketingEmailOptIn()
         ));
         user.register(userInfo);
     }
