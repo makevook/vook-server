@@ -28,6 +28,12 @@ public class User {
     @Column(nullable = false)
     private Boolean onboardingCompleted;
 
+    private LocalDateTime registeredAt;
+
+    private LocalDateTime onboardingCompletedAt;
+
+    private LocalDateTime lastUpdatedAt;
+
     private LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -54,11 +60,13 @@ public class User {
     public void register(UserInfo userInfo) {
         this.status = UserStatus.REGISTERED;
         this.userInfo = userInfo;
+        this.registeredAt = LocalDateTime.now();
     }
 
     public void onboarding(Funnel funnel, Job job) {
         this.onboardingCompleted = true;
         this.userInfo.addOnboardingInfo(funnel, job);
+        this.onboardingCompletedAt = LocalDateTime.now();
     }
 
     public boolean isReadyToOnboarding() {

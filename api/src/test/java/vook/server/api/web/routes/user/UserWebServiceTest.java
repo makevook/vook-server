@@ -109,6 +109,7 @@ class UserWebServiceTest extends IntegrationTestBase {
         User user = userService.findByUid(unregisteredUser.getUid()).orElseThrow();
         assertThat(user.getStatus()).isEqualTo(UserStatus.REGISTERED);
         assertThat(user.getOnboardingCompleted()).isFalse();
+        assertThat(user.getRegisteredAt()).isNotNull();
         assertThat(user.getUserInfo()).isNotNull();
         assertThat(user.getUserInfo().getNickname()).isEqualTo(request.getNickname());
         assertThat(user.getUserInfo().getMarketingEmailOptIn()).isEqualTo(request.getMarketingEmailOptIn());
@@ -149,6 +150,7 @@ class UserWebServiceTest extends IntegrationTestBase {
         User user = userService.findByUid(registeredUser.getUid()).orElseThrow();
         assertThat(user.getStatus()).isEqualTo(UserStatus.REGISTERED);
         assertThat(user.getOnboardingCompleted()).isTrue();
+        assertThat(user.getOnboardingCompletedAt()).isNotNull();
         assertThat(user.getUserInfo()).isNotNull();
         assertThat(user.getUserInfo().getFunnel()).isEqualTo(request.getFunnel());
         assertThat(user.getUserInfo().getJob()).isEqualTo(request.getJob());

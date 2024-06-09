@@ -2,10 +2,15 @@ package vook.server.api.model.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @Table(name = "social_user")
+@EntityListeners(AuditingEntityListener.class)
 public class SocialUser {
 
     @Id
@@ -15,6 +20,10 @@ public class SocialUser {
     private String provider;
 
     private String providerUserId;
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
