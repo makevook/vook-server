@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.user.UserService;
+import vook.server.api.model.user.Funnel;
+import vook.server.api.model.user.Job;
 import vook.server.api.model.user.User;
 import vook.server.api.model.user.UserStatus;
 import vook.server.api.testhelper.IntegrationTestBase;
@@ -112,8 +114,8 @@ class UserWebServiceTest extends IntegrationTestBase {
         VookLoginUser vookLoginUser = VookLoginUser.of(registeredUser.getUid());
 
         UserOnboardingCompleteRequest request = new UserOnboardingCompleteRequest();
-        request.setFunnel("testFunnel");
-        request.setJob("testJob");
+        request.setFunnel(Funnel.OTHER);
+        request.setJob(Job.OTHER);
 
         // when
         userWebService.onboardingComplete(vookLoginUser, request);

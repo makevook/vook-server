@@ -1,18 +1,20 @@
 package vook.server.api.app.user.data;
 
 import lombok.Getter;
+import vook.server.api.model.user.Funnel;
+import vook.server.api.model.user.Job;
 
 @Getter
 public class CompleteOnboardingCommand {
 
     public String userUid;
-    public String funnel;
-    public String job;
+    public Funnel funnel;
+    public Job job;
 
     public static CompleteOnboardingCommand of(
             String userUid,
-            String funnel,
-            String job
+            Funnel funnel,
+            Job job
     ) {
         CompleteOnboardingCommand command = new CompleteOnboardingCommand();
         command.userUid = userUid;

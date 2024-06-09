@@ -2,6 +2,7 @@ package vook.server.api.web.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -18,6 +19,14 @@ public class GlobalRestControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.debug(e.getMessage(), e);
+        CommonApiException.BadRequest badRequest = new CommonApiException.BadRequest(ApiResponseCode.BadRequest.INVALID_PARAMETER, e);
+        return ResponseEntity.status(badRequest.statusCode()).body(badRequest.response());
+    }
+
+    @ExceptionHandler(HttpMessageConversionException.class)
+    public ResponseEntity<?> handleHttpMessageConversionException(HttpMessageConversionException e) {
+        log.debug(e.getMessage(), e);
         CommonApiException.BadRequest badRequest = new CommonApiException.BadRequest(ApiResponseCode.BadRequest.INVALID_PARAMETER, e);
         return ResponseEntity.status(badRequest.statusCode()).body(badRequest.response());
     }
