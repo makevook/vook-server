@@ -30,13 +30,13 @@ public interface UserApi {
                     responseCode = "200",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = UserApiUerInfoResponse.class)
+                            schema = @Schema(implementation = UserApiUserInfoResponse.class)
                     )
             ),
     })
     CommonApiResponse<UserInfoResponse> userInfo(VookLoginUser user);
 
-    class UserApiUerInfoResponse extends CommonApiResponse<UserInfoResponse> {
+    class UserApiUserInfoResponse extends CommonApiResponse<UserInfoResponse> {
     }
 
     @Operation(

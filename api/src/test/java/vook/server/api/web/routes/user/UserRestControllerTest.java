@@ -45,7 +45,7 @@ class UserRestControllerTest extends IntegrationTestBase {
                 new HttpEntityBuilder()
                         .header("Authorization", "Bearer " + token.getAccessToken())
                         .build(),
-                UserApi.UserApiUerInfoResponse.class
+                UserApi.UserApiUserInfoResponse.class
         );
 
         // then
