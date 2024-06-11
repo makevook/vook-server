@@ -1,4 +1,4 @@
-package vook.server.api.testhelper;
+package vook.server.api.testhelper.creator;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import vook.server.api.web.auth.data.GeneratedToken;
 @Component
 @Transactional
 @RequiredArgsConstructor
-public class TestDataCreator {
+public class TestUserCreator {
 
     private final UserService userService;
     private final TokenService tokenService;

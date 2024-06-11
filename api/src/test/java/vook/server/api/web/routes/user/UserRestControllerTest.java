@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.model.user.User;
 import vook.server.api.testhelper.HttpEntityBuilder;
 import vook.server.api.testhelper.IntegrationTestBase;
-import vook.server.api.testhelper.TestDataCreator;
+import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.web.auth.data.GeneratedToken;
 
 import java.util.Collection;
@@ -30,13 +30,13 @@ class UserRestControllerTest extends IntegrationTestBase {
     UserWebService webService;
 
     @Autowired
-    TestDataCreator testDataCreator;
+    TestUserCreator testUserCreator;
 
     @Test
     void userInfo() {
         // given
-        User unregisteredUser = testDataCreator.createUnregisteredUser();
-        GeneratedToken token = testDataCreator.createToken(unregisteredUser);
+        User unregisteredUser = testUserCreator.createUnregisteredUser();
+        GeneratedToken token = testUserCreator.createToken(unregisteredUser);
 
         // when
         var res = rest.exchange(
@@ -56,8 +56,8 @@ class UserRestControllerTest extends IntegrationTestBase {
     @DisplayName("회원 가입 - 정상")
     void register() {
         // given
-        User unregisteredUser = testDataCreator.createUnregisteredUser();
-        GeneratedToken token = testDataCreator.createToken(unregisteredUser);
+        User unregisteredUser = testUserCreator.createUnregisteredUser();
+        GeneratedToken token = testUserCreator.createToken(unregisteredUser);
 
         // when
         var res = rest.exchange(
@@ -82,8 +82,8 @@ class UserRestControllerTest extends IntegrationTestBase {
     @DisplayName("회원 가입 - 실패")
     Collection<DynamicTest> registerError() {
         // given
-        User unregisteredUser = testDataCreator.createUnregisteredUser();
-        GeneratedToken token = testDataCreator.createToken(unregisteredUser);
+        User unregisteredUser = testUserCreator.createUnregisteredUser();
+        GeneratedToken token = testUserCreator.createToken(unregisteredUser);
 
         Function<Map<String, Object>, ResponseEntity<String>> restExchange = body -> rest.exchange(
                 "/user/register",
@@ -140,8 +140,8 @@ class UserRestControllerTest extends IntegrationTestBase {
     @DisplayName("회원 정보 수정 - 정상")
     void updateInfo() {
         // given
-        User registeredUser = testDataCreator.createRegisteredUser();
-        GeneratedToken token = testDataCreator.createToken(registeredUser);
+        User registeredUser = testUserCreator.createRegisteredUser();
+        GeneratedToken token = testUserCreator.createToken(registeredUser);
 
         // when
         var res = rest.exchange(
@@ -164,8 +164,8 @@ class UserRestControllerTest extends IntegrationTestBase {
     @DisplayName("회원 정보 수정 - 실패")
     Collection<DynamicTest> updateInfoError() {
         // given
-        User registeredUser = testDataCreator.createRegisteredUser();
-        GeneratedToken token = testDataCreator.createToken(registeredUser);
+        User registeredUser = testUserCreator.createRegisteredUser();
+        GeneratedToken token = testUserCreator.createToken(registeredUser);
 
         Function<Map<String, Object>, ResponseEntity<String>> restExchange = body -> rest.exchange(
                 "/user/info",
