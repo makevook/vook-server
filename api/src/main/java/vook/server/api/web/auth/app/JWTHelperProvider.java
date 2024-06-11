@@ -21,7 +21,7 @@ public class JWTHelperProvider {
         jwtReaderBuilder = new JWTReader.Builder(jwtSecret);
     }
 
-    public JWTWriter builder() {
+    public JWTWriter writer() {
         return jwtWriterBuilder.build();
     }
 

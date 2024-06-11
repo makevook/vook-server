@@ -49,7 +49,7 @@ public class TokenService {
     }
 
     private String buildAccessToken(String uid) {
-        return jwtHelperProvider.builder()
+        return jwtHelperProvider.writer()
                 .withExpiredMs(1000L * 60 * accessTokenExpiredMinute)
                 .withClaim("category", "access")
                 .withClaim("uid", uid)
@@ -57,7 +57,7 @@ public class TokenService {
     }
 
     private String buildRefreshToken(String uid) {
-        return jwtHelperProvider.builder()
+        return jwtHelperProvider.writer()
                 .withExpiredMs(1000L * 60 * refreshTokenExpiredMinute)
                 .withClaim("category", "refresh")
                 .withClaim("uid", uid)
