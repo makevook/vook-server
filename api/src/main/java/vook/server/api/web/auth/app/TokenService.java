@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import vook.server.api.helper.jwt.JWTHelperProvider;
 import vook.server.api.helper.jwt.JWTReader;
 import vook.server.api.web.auth.data.GeneratedToken;
 
