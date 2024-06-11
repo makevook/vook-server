@@ -92,7 +92,10 @@ public interface UserApi {
             summary = "사용자 정보 수정",
             security = {
                     @SecurityRequirement(name = "AccessToken")
-            }
+            },
+            description = """
+                    비즈니스 규칙 위반 내용
+                    - NotRegistered: 가입하지 않은 유저가 해당 API를 호출 할 경우"""
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -102,6 +105,7 @@ public interface UserApi {
                             schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
                             examples = {
                                     @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
+                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
                             }
                     )
             ),

@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import vook.server.api.app.user.data.OnboardingCommand;
 import vook.server.api.app.user.data.RegisterCommand;
 import vook.server.api.app.user.data.SignUpFromSocialCommand;
-import vook.server.api.app.user.exception.AlreadyOnboardingException;
-import vook.server.api.app.user.exception.AlreadyRegisteredException;
-import vook.server.api.app.user.exception.NotReadyToOnboardingException;
-import vook.server.api.app.user.exception.WithdrawnUserException;
+import vook.server.api.app.user.exception.*;
 import vook.server.api.app.user.repo.SocialUserRepository;
 import vook.server.api.app.user.repo.UserInfoRepository;
 import vook.server.api.app.user.repo.UserRepository;
@@ -76,6 +73,9 @@ public class UserService {
 
     public void updateInfo(String uid, String nickname) {
         User user = repository.findByUid(uid).orElseThrow();
+        if (!user.isRegistered()) {
+            throw new NotRegisteredException();
+        }
         user.update(nickname);
     }
 

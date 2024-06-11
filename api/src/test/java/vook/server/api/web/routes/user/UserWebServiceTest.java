@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.user.UserService;
-import vook.server.api.app.user.exception.AlreadyOnboardingException;
-import vook.server.api.app.user.exception.AlreadyRegisteredException;
-import vook.server.api.app.user.exception.NotReadyToOnboardingException;
-import vook.server.api.app.user.exception.WithdrawnUserException;
+import vook.server.api.app.user.exception.*;
 import vook.server.api.model.user.Funnel;
 import vook.server.api.model.user.Job;
 import vook.server.api.model.user.User;
@@ -222,6 +219,20 @@ class UserWebServiceTest extends IntegrationTestBase {
         User user = userService.findByUid(registeredUser.getUid()).orElseThrow();
         assertThat(user.getUserInfo().getNickname()).isEqualTo("newNickname");
         assertThat(user.getLastUpdatedAt()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("사용자 정보 수정 - 에러; 미 가입 유저")
+    void updateInfoError1() {
+        // given
+        User unregisteredUser = testDataCreator.createUnregisteredUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(unregisteredUser.getUid());
+        UserUpdateInfoRequest request = new UserUpdateInfoRequest();
+        request.setNickname("newNickname");
+
+        // when
+        assertThatThrownBy(() -> userWebService.updateInfo(vookLoginUser, request))
+                .isInstanceOf(NotRegisteredException.class);
     }
 
     @Test
