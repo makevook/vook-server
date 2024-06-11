@@ -23,8 +23,6 @@ public abstract class MeilisearchService {
         Arrays.stream(indexes.getResults())
                 .map(Index::getUid)
                 .filter(uid -> uid.startsWith(uidPrefix))
-                .forEach(uid -> {
-                    client.deleteIndex(uid);
-                });
+                .forEach(client::deleteIndex);
     }
 }
