@@ -1,5 +1,6 @@
 package vook.server.api.web.routes.vocabulary.reqres;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import vook.server.api.model.vocabulary.Vocabulary;
 
@@ -12,6 +13,7 @@ public class VocabularyResponse {
     private String uid;
     private String name;
     private Integer termCount;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime createdAt;
 
     public static List<VocabularyResponse> from(List<Vocabulary> vocabularies) {
