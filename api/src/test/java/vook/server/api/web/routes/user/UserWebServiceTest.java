@@ -16,6 +16,7 @@ import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.routes.user.reqres.UserInfoResponse;
 import vook.server.api.web.routes.user.reqres.UserOnboardingRequest;
 import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
+import vook.server.api.web.routes.user.reqres.UserUpdateInfoRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

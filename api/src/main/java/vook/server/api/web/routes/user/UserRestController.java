@@ -10,6 +10,7 @@ import vook.server.api.web.common.CommonApiResponse;
 import vook.server.api.web.routes.user.reqres.UserInfoResponse;
 import vook.server.api.web.routes.user.reqres.UserOnboardingRequest;
 import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
+import vook.server.api.web.routes.user.reqres.UserUpdateInfoRequest;
 
 @Slf4j
 @RestController
