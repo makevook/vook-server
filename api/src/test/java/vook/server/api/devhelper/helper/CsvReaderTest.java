@@ -1,4 +1,4 @@
-package vook.server.api.devhelper;
+package vook.server.api.devhelper.helper;
 
 import lombok.Getter;
 import org.junit.jupiter.api.DisplayName;

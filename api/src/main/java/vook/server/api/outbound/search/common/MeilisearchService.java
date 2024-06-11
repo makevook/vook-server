@@ -1,4 +1,4 @@
-package vook.server.api.outbound.search;
+package vook.server.api.outbound.search.common;
 
 import com.meilisearch.sdk.Client;
 import com.meilisearch.sdk.Config;
@@ -23,8 +23,6 @@ public abstract class MeilisearchService {
         Arrays.stream(indexes.getResults())
                 .map(Index::getUid)
                 .filter(uid -> uid.startsWith(uidPrefix))
-                .forEach(uid -> {
-                    client.deleteIndex(uid);
-                });
+                .forEach(client::deleteIndex);
     }
 }

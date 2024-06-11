@@ -1,4 +1,4 @@
-package vook.server.api.devhelper;
+package vook.server.api.devhelper.init;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import vook.server.api.app.demo.repo.DemoTermRepository;
+import vook.server.api.devhelper.app.InitService;
 
 @Slf4j
 @Profile("local")

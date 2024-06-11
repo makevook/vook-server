@@ -1,11 +1,11 @@
-package vook.server.api.web.routes.init;
+package vook.server.api.devhelper.web.routes.init;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vook.server.api.devhelper.InitService;
+import vook.server.api.devhelper.app.InitService;
 import vook.server.api.web.common.CommonApiResponse;
 
 @Profile({"local", "dev", "stag"})

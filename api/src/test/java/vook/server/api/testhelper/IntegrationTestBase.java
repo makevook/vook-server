@@ -8,7 +8,7 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.testcontainers.containers.MariaDBContainer;
-import vook.server.api.outbound.search.MeilisearchProperties;
+import vook.server.api.outbound.search.common.MeilisearchProperties;
 
 import java.util.Map;
 import java.util.TimeZone;

@@ -1,8 +1,9 @@
-package vook.server.api.devhelper;
+package vook.server.api.devhelper.app;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+import vook.server.api.devhelper.helper.CsvReader;
 import vook.server.api.model.demo.DemoTerm;
 
 import java.io.IOException;
@@ -29,13 +30,13 @@ public class TestTermsLoader {
         }
     }
 
-    static List<DemoTerm> toTerms(List<RawTerm> rawTerms) {
+    private static List<DemoTerm> toTerms(List<RawTerm> rawTerms) {
         return rawTerms.stream()
                 .map(RawTerm::toTerm)
                 .toList();
     }
 
-    static class RawTerm {
+    public static class RawTerm {
         private String term;
         private String synonyms;
         private String meaning;

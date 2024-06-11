@@ -1,4 +1,4 @@
-package vook.server.api.outbound.search;
+package vook.server.api.outbound.search.common;
 
 import lombok.Getter;
 import lombok.Setter;
