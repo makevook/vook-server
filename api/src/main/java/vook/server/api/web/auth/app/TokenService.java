@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import vook.server.api.helper.jwt.JWTHelperProvider;
 import vook.server.api.helper.jwt.JWTReader;
 import vook.server.api.web.auth.data.GeneratedToken;
 
@@ -50,7 +49,7 @@ public class TokenService {
     }
 
     private String buildAccessToken(String uid) {
-        return jwtHelperProvider.builder()
+        return jwtHelperProvider.writer()
                 .withExpiredMs(1000L * 60 * accessTokenExpiredMinute)
                 .withClaim("category", "access")
                 .withClaim("uid", uid)
@@ -58,7 +57,7 @@ public class TokenService {
     }
 
     private String buildRefreshToken(String uid) {
-        return jwtHelperProvider.builder()
+        return jwtHelperProvider.writer()
                 .withExpiredMs(1000L * 60 * refreshTokenExpiredMinute)
                 .withClaim("category", "refresh")
                 .withClaim("uid", uid)

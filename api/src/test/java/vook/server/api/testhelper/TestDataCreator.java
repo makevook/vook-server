@@ -41,6 +41,12 @@ public class TestDataCreator {
         return userService.findByUid(user.getUid()).orElseThrow();
     }
 
+    public User createWithdrawnUser() {
+        User user = createCompletedOnboardingUser();
+        userService.withdraw(user.getUid());
+        return userService.findByUid(user.getUid()).orElseThrow();
+    }
+
     public GeneratedToken createToken(User user) {
         return tokenService.generateToken(user.getUid());
     }

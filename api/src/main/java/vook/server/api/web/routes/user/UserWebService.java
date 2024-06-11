@@ -29,4 +29,12 @@ public class UserWebService {
     public void onboarding(VookLoginUser loginUser, UserOnboardingRequest request) {
         userService.onboarding(request.toCommand(loginUser.getUid()));
     }
+
+    public void updateInfo(VookLoginUser loginUser, UserUpdateInfoRequest request) {
+        userService.updateInfo(loginUser.getUid(), request.getNickname());
+    }
+
+    public void withdraw(VookLoginUser loginUser) {
+        userService.withdraw(loginUser.getUid());
+    }
 }

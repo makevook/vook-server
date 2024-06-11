@@ -47,4 +47,23 @@ public class UserRestController implements UserApi {
         service.onboarding(user, request);
         return CommonApiResponse.ok();
     }
+
+    @Override
+    @PutMapping("/info")
+    public CommonApiResponse<Void> updateInfo(
+            @AuthenticationPrincipal VookLoginUser user,
+            @Validated @RequestBody UserUpdateInfoRequest request
+    ) {
+        service.updateInfo(user, request);
+        return CommonApiResponse.ok();
+    }
+
+    @Override
+    @PostMapping("/withdraw")
+    public CommonApiResponse<Void> withdraw(
+            @AuthenticationPrincipal VookLoginUser user
+    ) {
+        service.withdraw(user);
+        return CommonApiResponse.ok();
+    }
 }

@@ -5,9 +5,7 @@ import org.springframework.stereotype.Service;
 import vook.server.api.app.user.data.OnboardingCommand;
 import vook.server.api.app.user.data.RegisterCommand;
 import vook.server.api.app.user.data.SignUpFromSocialCommand;
-import vook.server.api.app.user.exception.AlreadyOnboardingException;
-import vook.server.api.app.user.exception.AlreadyRegisteredException;
-import vook.server.api.app.user.exception.NotReadyToOnboardingException;
+import vook.server.api.app.user.exception.*;
 import vook.server.api.app.user.repo.SocialUserRepository;
 import vook.server.api.app.user.repo.UserInfoRepository;
 import vook.server.api.app.user.repo.UserRepository;
@@ -49,6 +47,9 @@ public class UserService {
         if (user.isRegistered()) {
             throw new AlreadyRegisteredException();
         }
+        if (user.isWithdrawn()) {
+            throw new WithdrawnUserException();
+        }
 
         UserInfo userInfo = userInfoRepository.save(UserInfo.forRegisterOf(
                 command.getNickname(),
@@ -68,5 +69,21 @@ public class UserService {
         }
 
         user.onboarding(command.getFunnel(), command.getJob());
+    }
+
+    public void updateInfo(String uid, String nickname) {
+        User user = repository.findByUid(uid).orElseThrow();
+        if (!user.isRegistered()) {
+            throw new NotRegisteredException();
+        }
+        user.update(nickname);
+    }
+
+    public void withdraw(String uid) {
+        User user = repository.findByUid(uid).orElseThrow();
+        if (user.isWithdrawn()) {
+            return;
+        }
+        user.withdraw();
     }
 }

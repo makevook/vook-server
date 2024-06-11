@@ -34,7 +34,7 @@ public class User {
 
     private LocalDateTime lastUpdatedAt;
 
-    private LocalDateTime deletedAt;
+    private LocalDateTime withdrawnAt;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<SocialUser> socialUsers = new ArrayList<>();
@@ -75,5 +75,19 @@ public class User {
 
     public boolean isRegistered() {
         return status == UserStatus.REGISTERED;
+    }
+
+    public void update(String nickname) {
+        userInfo.update(nickname);
+        lastUpdatedAt = LocalDateTime.now();
+    }
+
+    public void withdraw() {
+        this.status = UserStatus.WITHDRAWN;
+        this.withdrawnAt = LocalDateTime.now();
+    }
+
+    public boolean isWithdrawn() {
+        return status == UserStatus.WITHDRAWN;
     }
 }

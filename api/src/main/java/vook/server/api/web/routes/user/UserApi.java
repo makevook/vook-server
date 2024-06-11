@@ -46,7 +46,7 @@ public interface UserApi {
             description = """
                     비즈니스 규칙 위반 내용
                     - AlreadyRegistered: 이미 회원가입이 완료된 유저가 해당 API를 호출 할 경우
-                    """
+                    - WithdrawnUser: 탈퇴한 유저가 해당 API를 호출 할 경우"""
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -87,4 +87,37 @@ public interface UserApi {
             ),
     })
     CommonApiResponse<Void> onboarding(VookLoginUser user, UserOnboardingRequest request);
+
+    @Operation(
+            summary = "사용자 정보 수정",
+            security = {
+                    @SecurityRequirement(name = "AccessToken")
+            },
+            description = """
+                    비즈니스 규칙 위반 내용
+                    - NotRegistered: 가입하지 않은 유저가 해당 API를 호출 할 경우"""
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
+                            examples = {
+                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
+                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
+                            }
+                    )
+            ),
+    })
+    CommonApiResponse<Void> updateInfo(VookLoginUser user, UserUpdateInfoRequest request);
+
+    @Operation(
+            summary = "회원 탈퇴",
+            security = {
+                    @SecurityRequirement(name = "AccessToken")
+            },
+            description = "탈퇴된 회원에 대한 요청은 무시됩니다."
+    )
+    CommonApiResponse<Void> withdraw(VookLoginUser user);
 }

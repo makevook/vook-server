@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.model.user.User;
 import vook.server.api.testhelper.HttpEntityBuilder;
 import vook.server.api.testhelper.IntegrationTestBase;
@@ -22,6 +23,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 class UserRestControllerTest extends IntegrationTestBase {
 
     @MockBean
@@ -128,6 +130,61 @@ class UserRestControllerTest extends IntegrationTestBase {
                     var res = restExchange.apply(Map.of(
                             "nickname", "testName",
                             "requiredTermsAgree", true
+                    ));
+                    assertThat(res.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+                })
+        );
+    }
+
+    @Test
+    @DisplayName("회원 정보 수정 - 정상")
+    void updateInfo() {
+        // given
+        User registeredUser = testDataCreator.createRegisteredUser();
+        GeneratedToken token = testDataCreator.createToken(registeredUser);
+
+        // when
+        var res = rest.exchange(
+                "/user/info",
+                HttpMethod.PUT,
+                new HttpEntityBuilder()
+                        .header("Authorization", "Bearer " + token.getAccessToken())
+                        .body(Map.of(
+                                "nickname", "newName"
+                        ))
+                        .build(),
+                String.class
+        );
+
+        // then
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @TestFactory
+    @DisplayName("회원 정보 수정 - 실패")
+    Collection<DynamicTest> updateInfoError() {
+        // given
+        User registeredUser = testDataCreator.createRegisteredUser();
+        GeneratedToken token = testDataCreator.createToken(registeredUser);
+
+        Function<Map<String, Object>, ResponseEntity<String>> restExchange = body -> rest.exchange(
+                "/user/info",
+                HttpMethod.PUT,
+                new HttpEntityBuilder()
+                        .header("Authorization", "Bearer " + token.getAccessToken())
+                        .body(body)
+                        .build(),
+                String.class
+        );
+
+        return List.of(
+                DynamicTest.dynamicTest("닉네임 누락", () -> {
+                    var res = restExchange.apply(Map.of());
+                    assertThat(res.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+                }),
+                DynamicTest.dynamicTest("닉네임 길이 제한 초과", () -> {
+                    var res = restExchange.apply(Map.of(
+                            "nickname", "12345678901"
                     ));
                     assertThat(res.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
                 })
