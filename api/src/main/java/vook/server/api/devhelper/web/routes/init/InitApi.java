@@ -1,4 +1,4 @@
-package vook.server.api.web.routes.init;
+package vook.server.api.devhelper.web.routes.init;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

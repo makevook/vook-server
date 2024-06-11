@@ -1,7 +1,6 @@
-package vook.server.api.devhelper;
+package vook.server.api.devhelper.app;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.demo.repo.DemoTermRepository;
@@ -18,8 +17,6 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class InitService {
-
-    private final ResourceLoader resourceLoader;
 
     private final DemoTermRepository demoTermRepository;
     private final DemoTermSynonymRepository demoTermSynonymRepository;
