@@ -8,6 +8,7 @@ import vook.server.api.app.user.UserService;
 import vook.server.api.app.user.exception.AlreadyOnboardingException;
 import vook.server.api.app.user.exception.AlreadyRegisteredException;
 import vook.server.api.app.user.exception.NotReadyToOnboardingException;
+import vook.server.api.app.user.exception.WithdrawnUserException;
 import vook.server.api.model.user.Funnel;
 import vook.server.api.model.user.Job;
 import vook.server.api.model.user.User;
@@ -130,6 +131,23 @@ class UserWebServiceTest extends IntegrationTestBase {
         // when
         assertThatThrownBy(() -> userWebService.register(vookLoginUser, request))
                 .isInstanceOf(AlreadyRegisteredException.class);
+    }
+
+    @Test
+    @DisplayName("회원 가입 - 에러; 탈퇴한 유저")
+    void registerError2() {
+        // given
+        User withdrawnUser = testDataCreator.createWithdrawnUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(withdrawnUser.getUid());
+
+        UserRegisterRequest request = new UserRegisterRequest();
+        request.setNickname("nickname");
+        request.setRequiredTermsAgree(true);
+        request.setMarketingEmailOptIn(true);
+
+        // when
+        assertThatThrownBy(() -> userWebService.register(vookLoginUser, request))
+                .isInstanceOf(WithdrawnUserException.class);
     }
 
     @Test

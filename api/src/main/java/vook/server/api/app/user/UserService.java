@@ -8,6 +8,7 @@ import vook.server.api.app.user.data.SignUpFromSocialCommand;
 import vook.server.api.app.user.exception.AlreadyOnboardingException;
 import vook.server.api.app.user.exception.AlreadyRegisteredException;
 import vook.server.api.app.user.exception.NotReadyToOnboardingException;
+import vook.server.api.app.user.exception.WithdrawnUserException;
 import vook.server.api.app.user.repo.SocialUserRepository;
 import vook.server.api.app.user.repo.UserInfoRepository;
 import vook.server.api.app.user.repo.UserRepository;
@@ -48,6 +49,9 @@ public class UserService {
         User user = repository.findByUid(command.getUserUid()).orElseThrow();
         if (user.isRegistered()) {
             throw new AlreadyRegisteredException();
+        }
+        if (user.isWithdrawn()) {
+            throw new WithdrawnUserException();
         }
 
         UserInfo userInfo = userInfoRepository.save(UserInfo.forRegisterOf(
