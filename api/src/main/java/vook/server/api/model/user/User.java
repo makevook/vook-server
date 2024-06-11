@@ -76,4 +76,9 @@ public class User {
     public boolean isRegistered() {
         return status == UserStatus.REGISTERED;
     }
+
+    public void update(String nickname) {
+        userInfo.update(nickname);
+        lastUpdatedAt = LocalDateTime.now();
+    }
 }

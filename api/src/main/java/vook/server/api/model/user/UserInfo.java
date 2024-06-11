@@ -42,4 +42,8 @@ public class UserInfo {
         this.funnel = funnel;
         this.job = job;
     }
+
+    public void update(String nickname) {
+        this.nickname = nickname;
+    }
 }

@@ -69,4 +69,9 @@ public class UserService {
 
         user.onboarding(command.getFunnel(), command.getJob());
     }
+
+    public void updateInfo(String uid, String nickname) {
+        User user = repository.findByUid(uid).orElseThrow();
+        user.update(nickname);
+    }
 }

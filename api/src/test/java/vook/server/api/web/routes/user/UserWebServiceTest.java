@@ -187,4 +187,22 @@ class UserWebServiceTest extends IntegrationTestBase {
         assertThatThrownBy(() -> userWebService.onboarding(vookLoginUser, request))
                 .isInstanceOf(AlreadyOnboardingException.class);
     }
+
+    @Test
+    @DisplayName("사용자 정보 수정 - 정상")
+    void updateInfo1() {
+        // given
+        User registeredUser = testDataCreator.createRegisteredUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(registeredUser.getUid());
+        UserUpdateInfoRequest request = new UserUpdateInfoRequest();
+        request.setNickname("newNickname");
+
+        // when
+        userWebService.updateInfo(vookLoginUser, request);
+
+        // then
+        User user = userService.findByUid(registeredUser.getUid()).orElseThrow();
+        assertThat(user.getUserInfo().getNickname()).isEqualTo("newNickname");
+        assertThat(user.getLastUpdatedAt()).isNotNull();
+    }
 }

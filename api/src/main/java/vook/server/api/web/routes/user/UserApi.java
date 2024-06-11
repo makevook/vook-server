@@ -87,4 +87,24 @@ public interface UserApi {
             ),
     })
     CommonApiResponse<Void> onboarding(VookLoginUser user, UserOnboardingRequest request);
+
+    @Operation(
+            summary = "사용자 정보 수정",
+            security = {
+                    @SecurityRequirement(name = "AccessToken")
+            }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
+                            examples = {
+                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
+                            }
+                    )
+            ),
+    })
+    CommonApiResponse<Void> updateInfo(VookLoginUser user, UserUpdateInfoRequest request);
 }
