@@ -1,4 +1,4 @@
-package vook.server.api.outbound.search;
+package vook.server.api.outbound.search.demo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +12,8 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 import vook.server.api.model.demo.DemoTerm;
 import vook.server.api.model.demo.DemoTermSynonym;
+import vook.server.api.outbound.search.common.MeilisearchProperties;
+import vook.server.api.outbound.search.common.MeilisearchService;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;

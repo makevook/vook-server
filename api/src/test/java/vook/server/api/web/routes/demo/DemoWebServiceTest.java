@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.demo.repo.DemoTermRepository;
 import vook.server.api.devhelper.app.TestTermsLoader;
 import vook.server.api.model.demo.DemoTerm;
-import vook.server.api.outbound.search.DemoTermSearchService;
+import vook.server.api.outbound.search.demo.DemoTermSearchService;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.web.routes.demo.reqres.SearchTermRequest;
 import vook.server.api.web.routes.demo.reqres.SearchTermResponse;

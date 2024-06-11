@@ -9,7 +9,7 @@ import vook.server.api.app.user.repo.SocialUserRepository;
 import vook.server.api.app.user.repo.UserInfoRepository;
 import vook.server.api.app.user.repo.UserRepository;
 import vook.server.api.model.demo.DemoTerm;
-import vook.server.api.outbound.search.DemoTermSearchService;
+import vook.server.api.outbound.search.demo.DemoTermSearchService;
 
 import java.util.List;
 

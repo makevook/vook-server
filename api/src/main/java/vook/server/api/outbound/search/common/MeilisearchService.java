@@ -1,4 +1,4 @@
-package vook.server.api.outbound.search;
+package vook.server.api.outbound.search.common;
 
 import com.meilisearch.sdk.Client;
 import com.meilisearch.sdk.Config;
