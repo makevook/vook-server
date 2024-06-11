@@ -107,4 +107,13 @@ public interface UserApi {
             ),
     })
     CommonApiResponse<Void> updateInfo(VookLoginUser user, UserUpdateInfoRequest request);
+
+    @Operation(
+            summary = "회원 탈퇴",
+            security = {
+                    @SecurityRequirement(name = "AccessToken")
+            },
+            description = "탈퇴된 회원에 대한 요청은 무시됩니다."
+    )
+    CommonApiResponse<Void> withdraw(VookLoginUser user);
 }

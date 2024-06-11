@@ -57,4 +57,13 @@ public class UserRestController implements UserApi {
         service.updateInfo(user, request);
         return CommonApiResponse.ok();
     }
+
+    @Override
+    @PostMapping("/withdraw")
+    public CommonApiResponse<Void> withdraw(
+            @AuthenticationPrincipal VookLoginUser user
+    ) {
+        service.withdraw(user);
+        return CommonApiResponse.ok();
+    }
 }

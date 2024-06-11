@@ -205,4 +205,20 @@ class UserWebServiceTest extends IntegrationTestBase {
         assertThat(user.getUserInfo().getNickname()).isEqualTo("newNickname");
         assertThat(user.getLastUpdatedAt()).isNotNull();
     }
+
+    @Test
+    @DisplayName("탈퇴 - 정상")
+    void withdraw1() {
+        // given
+        User registeredUser = testDataCreator.createRegisteredUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(registeredUser.getUid());
+
+        // when
+        userWebService.withdraw(vookLoginUser);
+
+        // then
+        User user = userService.findByUid(registeredUser.getUid()).orElseThrow();
+        assertThat(user.getStatus()).isEqualTo(UserStatus.WITHDRAWN);
+        assertThat(user.getWithdrawnAt()).isNotNull();
+    }
 }

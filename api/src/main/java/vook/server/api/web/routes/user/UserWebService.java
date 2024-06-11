@@ -33,4 +33,8 @@ public class UserWebService {
     public void updateInfo(VookLoginUser loginUser, UserUpdateInfoRequest request) {
         userService.updateInfo(loginUser.getUid(), request.getNickname());
     }
+
+    public void withdraw(VookLoginUser loginUser) {
+        userService.withdraw(loginUser.getUid());
+    }
 }

@@ -74,4 +74,12 @@ public class UserService {
         User user = repository.findByUid(uid).orElseThrow();
         user.update(nickname);
     }
+
+    public void withdraw(String uid) {
+        User user = repository.findByUid(uid).orElseThrow();
+        if (user.isWithdrawn()) {
+            return;
+        }
+        user.withdraw();
+    }
 }
