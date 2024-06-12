@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.user.UserService;
 import vook.server.api.app.vocabulary.VocabularyService;
 import vook.server.api.app.vocabulary.data.VocabularyCreateCommand;
+import vook.server.api.app.vocabulary.data.VocabularyDeleteCommand;
 import vook.server.api.app.vocabulary.data.VocabularyUpdateCommand;
 import vook.server.api.model.user.User;
 import vook.server.api.model.vocabulary.Vocabulary;
@@ -42,5 +43,10 @@ public class VocabularyWebService {
     ) {
         User user = userService.findByUid(loginUser.getUid()).orElseThrow();
         vocabularyService.update(VocabularyUpdateCommand.of(vocabularyUid, request.getName(), user));
+    }
+
+    public void deleteVocabulary(VookLoginUser loginUser, String vocabularyUid) {
+        User user = userService.findByUid(loginUser.getUid()).orElseThrow();
+        vocabularyService.delete(VocabularyDeleteCommand.of(vocabularyUid, user));
     }
 }

@@ -143,4 +143,46 @@ class VocabularyWebServiceTest extends IntegrationTestBase {
         assertThatThrownBy(() -> vocabularyWebService.updateVocabulary(vookLoginUser, vocabulary.getUid(), request))
                 .isInstanceOf(VocabularyNotFoundException.class);
     }
+
+    @Test
+    @DisplayName("단어장 삭제 - 정상")
+    void deleteVocabulary() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
+        Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
+
+        // when
+        vocabularyWebService.deleteVocabulary(vookLoginUser, vocabulary.getUid());
+
+        // then
+        assertThat(vocabularyRepository.findByUid(vocabulary.getUid())).isEmpty();
+    }
+
+    @Test
+    @DisplayName("단어장 삭제 - 실패; 해당 단어장이 존재하지 않는 경우")
+    void deleteVocabularyError1() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
+        testVocabularyCreator.createVocabulary(user);
+
+        // when
+        assertThatThrownBy(() -> vocabularyWebService.deleteVocabulary(vookLoginUser, "nonExistentUid"))
+                .isInstanceOf(VocabularyNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("단어장 삭제 - 실패; 해당 단어장이 다른 사용자의 것인 경우")
+    void deleteVocabularyError2() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        User otherUser = testUserCreator.createCompletedOnboardingUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
+        Vocabulary vocabulary = testVocabularyCreator.createVocabulary(otherUser);
+
+        // when
+        assertThatThrownBy(() -> vocabularyWebService.deleteVocabulary(vookLoginUser, vocabulary.getUid()))
+                .isInstanceOf(VocabularyNotFoundException.class);
+    }
 }

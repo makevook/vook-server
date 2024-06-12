@@ -91,4 +91,27 @@ public interface VocabularyApi {
             String vocabularyUid,
             VocabularyUpdateRequest request
     );
+
+    @Operation(
+            summary = "용어집 삭제",
+            security = {
+                    @SecurityRequirement(name = "AccessToken")
+            },
+            description = """
+                    비즈니스 규칙 위반 내용
+                    - VocabularyNotFound: 사용자의 용어집 중 해당 ID의 용어집이 존재하지 않는 경우"""
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
+                            examples = {
+                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
+                            }
+                    )
+            ),
+    })
+    CommonApiResponse<Void> deleteVocabulary(VookLoginUser user, String vocabularyUid);
 }

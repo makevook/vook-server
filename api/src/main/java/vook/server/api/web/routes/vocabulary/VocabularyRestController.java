@@ -48,4 +48,14 @@ public class VocabularyRestController implements VocabularyApi {
         service.updateVocabulary(user, vocabularyUid, request);
         return CommonApiResponse.ok();
     }
+
+    @Override
+    @DeleteMapping("/{vocabularyUid}")
+    public CommonApiResponse<Void> deleteVocabulary(
+            @AuthenticationPrincipal VookLoginUser user,
+            @PathVariable String vocabularyUid
+    ) {
+        service.deleteVocabulary(user, vocabularyUid);
+        return CommonApiResponse.ok();
+    }
 }

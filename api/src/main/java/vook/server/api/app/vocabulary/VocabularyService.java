@@ -3,6 +3,7 @@ package vook.server.api.app.vocabulary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vook.server.api.app.vocabulary.data.VocabularyCreateCommand;
+import vook.server.api.app.vocabulary.data.VocabularyDeleteCommand;
 import vook.server.api.app.vocabulary.data.VocabularyUpdateCommand;
 import vook.server.api.app.vocabulary.exception.VocabularyLimitExceededException;
 import vook.server.api.app.vocabulary.exception.VocabularyNotFoundException;
@@ -32,11 +33,20 @@ public class VocabularyService {
     }
 
     public void update(VocabularyUpdateCommand command) {
-        Vocabulary vocabulary = repository.findByUid(command.getVocabularyUid()).orElseThrow(VocabularyNotFoundException::new);
-        if (!vocabulary.isValidOwner(command.getUser())) {
+        Vocabulary vocabulary = validateAndGetVocabulary(command.getVocabularyUid(), command.getUser());
+        vocabulary.update(command.getName());
+    }
+
+    public void delete(VocabularyDeleteCommand command) {
+        Vocabulary vocabulary = validateAndGetVocabulary(command.getVocabularyUid(), command.getUser());
+        repository.delete(vocabulary);
+    }
+
+    private Vocabulary validateAndGetVocabulary(String vocabularyUid, User user) {
+        Vocabulary vocabulary = repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
+        if (!vocabulary.isValidOwner(user)) {
             throw new VocabularyNotFoundException();
         }
-
-        vocabulary.update(command.getName());
+        return vocabulary;
     }
 }
