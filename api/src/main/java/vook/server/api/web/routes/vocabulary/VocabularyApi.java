@@ -1,4 +1,4 @@
-package vook.server.api.web.routes.user;
+package vook.server.api.web.routes.vocabulary;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,17 +10,18 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.common.CommonApiResponse;
-import vook.server.api.web.routes.user.reqres.UserInfoResponse;
-import vook.server.api.web.routes.user.reqres.UserOnboardingRequest;
-import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
-import vook.server.api.web.routes.user.reqres.UserUpdateInfoRequest;
+import vook.server.api.web.routes.vocabulary.reqres.VocabularyCreateRequest;
+import vook.server.api.web.routes.vocabulary.reqres.VocabularyResponse;
+import vook.server.api.web.routes.vocabulary.reqres.VocabularyUpdateRequest;
 import vook.server.api.web.swagger.ComponentRefConsts;
 
-@Tag(name = "user", description = "사용자 관련 API")
-public interface UserApi {
+import java.util.List;
+
+@Tag(name = "vocabulary", description = "용어집 API")
+public interface VocabularyApi {
 
     @Operation(
-            summary = "사용자 정보",
+            summary = "용어집 조회",
             security = {
                     @SecurityRequirement(name = "AccessToken")
             }
@@ -30,24 +31,23 @@ public interface UserApi {
                     responseCode = "200",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = UserApiUserInfoResponse.class)
+                            schema = @Schema(implementation = VocabularyApiVocabulariesResponse.class)
                     )
             ),
     })
-    CommonApiResponse<UserInfoResponse> userInfo(VookLoginUser user);
+    CommonApiResponse<List<VocabularyResponse>> vocabularies(VookLoginUser user);
 
-    class UserApiUserInfoResponse extends CommonApiResponse<UserInfoResponse> {
+    class VocabularyApiVocabulariesResponse extends CommonApiResponse<List<VocabularyResponse>> {
     }
 
     @Operation(
-            summary = "회원가입",
+            summary = "용어집 생성",
             security = {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
                     비즈니스 규칙 위반 내용
-                    - AlreadyRegistered: 이미 회원가입이 완료된 유저가 해당 API를 호출 할 경우
-                    - WithdrawnUser: 탈퇴한 유저가 해당 API를 호출 할 경우"""
+                    - VocabularyLimitExceeded: 사용자의 용어집 생성 제한을 초과하여 용어집을 생성할 수 없는 경우 (3개 초과)"""
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -62,17 +62,16 @@ public interface UserApi {
                     )
             ),
     })
-    CommonApiResponse<Void> register(VookLoginUser user, UserRegisterRequest request);
+    CommonApiResponse<Void> createVocabulary(VookLoginUser user, VocabularyCreateRequest request);
 
     @Operation(
-            summary = "온보딩 완료",
+            summary = "용어집 수정",
             security = {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
                     비즈니스 규칙 위반 내용
-                    - NotReadyToOnboarding: 회원 가입이 완료되지 않은 유저가 해당 API를 호출 할 경우
-                    - AlreadyOnboarding: 이미 온보딩이 완료된 유저가 해당 API를 호출 할 경우"""
+                    - VocabularyNotFound: 사용자의 용어집 중 해당 ID의 용어집이 존재하지 않는 경우"""
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -87,16 +86,20 @@ public interface UserApi {
                     )
             ),
     })
-    CommonApiResponse<Void> onboarding(VookLoginUser user, UserOnboardingRequest request);
+    CommonApiResponse<Void> updateVocabulary(
+            VookLoginUser user,
+            String vocabularyUid,
+            VocabularyUpdateRequest request
+    );
 
     @Operation(
-            summary = "사용자 정보 수정",
+            summary = "용어집 삭제",
             security = {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
                     비즈니스 규칙 위반 내용
-                    - NotRegistered: 가입하지 않은 유저가 해당 API를 호출 할 경우"""
+                    - VocabularyNotFound: 사용자의 용어집 중 해당 ID의 용어집이 존재하지 않는 경우"""
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -105,20 +108,10 @@ public interface UserApi {
                             mediaType = "application/json",
                             schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
                             examples = {
-                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
                                     @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
                             }
                     )
             ),
     })
-    CommonApiResponse<Void> updateInfo(VookLoginUser user, UserUpdateInfoRequest request);
-
-    @Operation(
-            summary = "회원 탈퇴",
-            security = {
-                    @SecurityRequirement(name = "AccessToken")
-            },
-            description = "탈퇴된 회원에 대한 요청은 무시됩니다."
-    )
-    CommonApiResponse<Void> withdraw(VookLoginUser user);
+    CommonApiResponse<Void> deleteVocabulary(VookLoginUser user, String vocabularyUid);
 }

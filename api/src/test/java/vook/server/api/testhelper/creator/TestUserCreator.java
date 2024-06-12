@@ -1,4 +1,4 @@
-package vook.server.api.testhelper;
+package vook.server.api.testhelper.creator;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,17 +14,20 @@ import vook.server.api.model.user.User;
 import vook.server.api.web.auth.app.TokenService;
 import vook.server.api.web.auth.data.GeneratedToken;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 @Component
 @Transactional
 @RequiredArgsConstructor
-public class TestDataCreator {
+public class TestUserCreator {
 
     private final UserService userService;
     private final TokenService tokenService;
+    private final AtomicInteger userCounter = new AtomicInteger(0);
 
     public User createUnregisteredUser() {
         SocialUser user = userService.signUpFromSocial(
-                SignUpFromSocialCommand.of("testProvider", "testProviderUserId", "testEmail@test.com")
+                SignUpFromSocialCommand.of("testProvider", "testProviderUserId" + userCounter.getAndIncrement(), "testEmail" + userCounter.getAndIncrement() + "@test.com")
         );
         return user.getUser();
     }

@@ -1,4 +1,4 @@
-package vook.server.api.web.routes.user;
+package vook.server.api.web.routes.user.reqres;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

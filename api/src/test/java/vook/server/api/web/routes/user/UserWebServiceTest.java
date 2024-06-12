@@ -11,11 +11,12 @@ import vook.server.api.model.user.Job;
 import vook.server.api.model.user.User;
 import vook.server.api.model.user.UserStatus;
 import vook.server.api.testhelper.IntegrationTestBase;
-import vook.server.api.testhelper.TestDataCreator;
+import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.routes.user.reqres.UserInfoResponse;
 import vook.server.api.web.routes.user.reqres.UserOnboardingRequest;
 import vook.server.api.web.routes.user.reqres.UserRegisterRequest;
+import vook.server.api.web.routes.user.reqres.UserUpdateInfoRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,7 +28,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     UserWebService userWebService;
 
     @Autowired
-    TestDataCreator testDataCreator;
+    TestUserCreator testUserCreator;
     @Autowired
     UserService userService;
 
@@ -35,7 +36,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     @DisplayName("사용자 정보 조회 - 정상; 회원가입 전 사용자")
     void userInfo1() {
         // given
-        User unregisteredUser = testDataCreator.createUnregisteredUser();
+        User unregisteredUser = testUserCreator.createUnregisteredUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(unregisteredUser.getUid());
 
         // when
@@ -54,7 +55,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     @DisplayName("사용자 정보 조회 - 정상; 회원가입 후 사용자")
     void userInfo2() {
         // given
-        User registeredUser = testDataCreator.createRegisteredUser();
+        User registeredUser = testUserCreator.createRegisteredUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(registeredUser.getUid());
 
         // when
@@ -73,7 +74,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     @DisplayName("사용자 정보 조회 - 정상; 온보딩 완료 사용자")
     void userInfo3() {
         // given
-        User completedOnboardingUser = testDataCreator.createCompletedOnboardingUser();
+        User completedOnboardingUser = testUserCreator.createCompletedOnboardingUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(completedOnboardingUser.getUid());
 
         // when
@@ -92,7 +93,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     @DisplayName("회원 가입 - 정상")
     void register1() {
         // given
-        User unregisteredUser = testDataCreator.createUnregisteredUser();
+        User unregisteredUser = testUserCreator.createUnregisteredUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(unregisteredUser.getUid());
 
         UserRegisterRequest request = new UserRegisterRequest();
@@ -117,7 +118,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     @DisplayName("회원 가입 - 에러; 이미 가입된 유저")
     void registerError1() {
         // given
-        User registeredUser = testDataCreator.createRegisteredUser();
+        User registeredUser = testUserCreator.createRegisteredUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(registeredUser.getUid());
 
         UserRegisterRequest request = new UserRegisterRequest();
@@ -134,7 +135,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     @DisplayName("회원 가입 - 에러; 탈퇴한 유저")
     void registerError2() {
         // given
-        User withdrawnUser = testDataCreator.createWithdrawnUser();
+        User withdrawnUser = testUserCreator.createWithdrawnUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(withdrawnUser.getUid());
 
         UserRegisterRequest request = new UserRegisterRequest();
@@ -151,7 +152,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     @DisplayName("온보딩 완료 - 정상")
     void onboarding1() {
         // given
-        User registeredUser = testDataCreator.createRegisteredUser();
+        User registeredUser = testUserCreator.createRegisteredUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(registeredUser.getUid());
 
         UserOnboardingRequest request = new UserOnboardingRequest();
@@ -175,7 +176,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     @DisplayName("온보딩 완료 - 에러; 미 가입 유저")
     void onboardingError1() {
         // given
-        User unregisteredUser = testDataCreator.createUnregisteredUser();
+        User unregisteredUser = testUserCreator.createUnregisteredUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(unregisteredUser.getUid());
 
         UserOnboardingRequest request = new UserOnboardingRequest();
@@ -191,7 +192,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     @DisplayName("온보딩 완료 - 에러; 이미 온보딩 완료된 유저")
     void onboardingError2() {
         // given
-        User completedOnboardingUser = testDataCreator.createCompletedOnboardingUser();
+        User completedOnboardingUser = testUserCreator.createCompletedOnboardingUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(completedOnboardingUser.getUid());
 
         UserOnboardingRequest request = new UserOnboardingRequest();
@@ -207,7 +208,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     @DisplayName("사용자 정보 수정 - 정상")
     void updateInfo1() {
         // given
-        User registeredUser = testDataCreator.createRegisteredUser();
+        User registeredUser = testUserCreator.createRegisteredUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(registeredUser.getUid());
         UserUpdateInfoRequest request = new UserUpdateInfoRequest();
         request.setNickname("newNickname");
@@ -225,7 +226,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     @DisplayName("사용자 정보 수정 - 에러; 미 가입 유저")
     void updateInfoError1() {
         // given
-        User unregisteredUser = testDataCreator.createUnregisteredUser();
+        User unregisteredUser = testUserCreator.createUnregisteredUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(unregisteredUser.getUid());
         UserUpdateInfoRequest request = new UserUpdateInfoRequest();
         request.setNickname("newNickname");
@@ -239,7 +240,7 @@ class UserWebServiceTest extends IntegrationTestBase {
     @DisplayName("탈퇴 - 정상")
     void withdraw1() {
         // given
-        User registeredUser = testDataCreator.createRegisteredUser();
+        User registeredUser = testUserCreator.createRegisteredUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(registeredUser.getUid());
 
         // when
