@@ -51,4 +51,12 @@ public class Vocabulary extends BaseEntity {
     public int termCount() {
         return this.terms.size();
     }
+
+    public boolean isValidOwner(User user) {
+        return this.user.equals(user);
+    }
+
+    public void update(String name) {
+        this.name = name;
+    }
 }

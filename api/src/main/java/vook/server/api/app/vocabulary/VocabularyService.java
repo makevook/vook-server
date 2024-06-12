@@ -3,7 +3,9 @@ package vook.server.api.app.vocabulary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vook.server.api.app.vocabulary.data.VocabularyCreateCommand;
+import vook.server.api.app.vocabulary.data.VocabularyUpdateCommand;
 import vook.server.api.app.vocabulary.exception.VocabularyLimitExceededException;
+import vook.server.api.app.vocabulary.exception.VocabularyNotFoundException;
 import vook.server.api.app.vocabulary.repo.VocabularyRepository;
 import vook.server.api.model.user.User;
 import vook.server.api.model.vocabulary.Vocabulary;
@@ -27,5 +29,14 @@ public class VocabularyService {
         }
 
         return repository.save(Vocabulary.forCreateOf(command.getName(), user));
+    }
+
+    public void update(VocabularyUpdateCommand command) {
+        Vocabulary vocabulary = repository.findByUid(command.getVocabularyUid()).orElseThrow(VocabularyNotFoundException::new);
+        if (!vocabulary.isValidOwner(command.getUser())) {
+            throw new VocabularyNotFoundException();
+        }
+
+        vocabulary.update(command.getName());
     }
 }

@@ -12,6 +12,7 @@ import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.common.CommonApiResponse;
 import vook.server.api.web.routes.vocabulary.reqres.VocabularyCreateRequest;
 import vook.server.api.web.routes.vocabulary.reqres.VocabularyResponse;
+import vook.server.api.web.routes.vocabulary.reqres.VocabularyUpdateRequest;
 import vook.server.api.web.swagger.ComponentRefConsts;
 
 import java.util.List;
@@ -62,4 +63,32 @@ public interface VocabularyApi {
             ),
     })
     CommonApiResponse<Void> createVocabulary(VookLoginUser user, VocabularyCreateRequest request);
+
+    @Operation(
+            summary = "용어집 수정",
+            security = {
+                    @SecurityRequirement(name = "AccessToken")
+            },
+            description = """
+                    비즈니스 규칙 위반 내용
+                    - VocabularyNotFound: 사용자의 용어집 중 해당 ID의 용어집이 존재하지 않는 경우"""
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
+                            examples = {
+                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
+                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
+                            }
+                    )
+            ),
+    })
+    CommonApiResponse<Void> updateVocabulary(
+            VookLoginUser user,
+            String vocabularyUid,
+            VocabularyUpdateRequest request
+    );
 }

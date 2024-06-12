@@ -4,8 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.app.vocabulary.VocabularyService;
 import vook.server.api.app.vocabulary.exception.VocabularyLimitExceededException;
+import vook.server.api.app.vocabulary.exception.VocabularyNotFoundException;
+import vook.server.api.app.vocabulary.repo.VocabularyRepository;
 import vook.server.api.model.user.User;
 import vook.server.api.model.vocabulary.Vocabulary;
 import vook.server.api.testhelper.IntegrationTestBase;
@@ -14,6 +15,7 @@ import vook.server.api.testhelper.creator.TestVocabularyCreator;
 import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.routes.vocabulary.reqres.VocabularyCreateRequest;
 import vook.server.api.web.routes.vocabulary.reqres.VocabularyResponse;
+import vook.server.api.web.routes.vocabulary.reqres.VocabularyUpdateRequest;
 
 import java.util.List;
 
@@ -31,7 +33,7 @@ class VocabularyWebServiceTest extends IntegrationTestBase {
     @Autowired
     TestVocabularyCreator testVocabularyCreator;
     @Autowired
-    VocabularyService vocabularyService;
+    VocabularyRepository vocabularyRepository;
 
     @Test
     @DisplayName("단어장 조회 - 정상")
@@ -65,7 +67,7 @@ class VocabularyWebServiceTest extends IntegrationTestBase {
         vocabularyWebService.createVocabulary(vookLoginUser, request);
 
         // then
-        List<Vocabulary> vocabularies = vocabularyService.findAllBy(user);
+        List<Vocabulary> vocabularies = vocabularyRepository.findAllByUser(user);
         assertThat(vocabularies).hasSize(1);
         assertThat(vocabularies.getFirst().getName()).isEqualTo(request.getName());
     }
@@ -88,5 +90,57 @@ class VocabularyWebServiceTest extends IntegrationTestBase {
         // when
         assertThatThrownBy(() -> vocabularyWebService.createVocabulary(vookLoginUser, request))
                 .isInstanceOf(VocabularyLimitExceededException.class);
+    }
+
+    @Test
+    @DisplayName("단어장 수정 - 정상")
+    void updateVocabulary() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
+        Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
+
+        var request = new VocabularyUpdateRequest();
+        request.setName("updatedName");
+
+        // when
+        vocabularyWebService.updateVocabulary(vookLoginUser, vocabulary.getUid(), request);
+
+        // then
+        Vocabulary updatedVocabulary = vocabularyRepository.findByUid(vocabulary.getUid()).orElseThrow();
+        assertThat(updatedVocabulary.getName()).isEqualTo(request.getName());
+    }
+
+    @Test
+    @DisplayName("단어장 수정 - 실패; 해당 단어장이 존재하지 않는 경우")
+    void updateVocabularyError1() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
+        testVocabularyCreator.createVocabulary(user);
+
+        var request = new VocabularyUpdateRequest();
+        request.setName("updatedName");
+
+        // when
+        assertThatThrownBy(() -> vocabularyWebService.updateVocabulary(vookLoginUser, "nonExistentUid", request))
+                .isInstanceOf(VocabularyNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("단어장 수정 - 실패; 해당 단어장이 다른 사용자의 것인 경우")
+    void updateVocabularyError2() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        User otherUser = testUserCreator.createCompletedOnboardingUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
+        Vocabulary vocabulary = testVocabularyCreator.createVocabulary(otherUser);
+
+        var request = new VocabularyUpdateRequest();
+        request.setName("updatedName");
+
+        // when
+        assertThatThrownBy(() -> vocabularyWebService.updateVocabulary(vookLoginUser, vocabulary.getUid(), request))
+                .isInstanceOf(VocabularyNotFoundException.class);
     }
 }

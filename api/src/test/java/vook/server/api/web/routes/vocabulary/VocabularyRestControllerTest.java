@@ -83,4 +83,54 @@ class VocabularyRestControllerTest extends IntegrationTestBase {
         );
     }
 
+    @Test
+    @DisplayName("단어장 수정 - 정상")
+    void updateVocabulary() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        GeneratedToken token = testUserCreator.createToken(user);
+
+        // when
+        var res = rest.exchange(
+                "/vocabularies/1",
+                HttpMethod.PUT,
+                new HttpEntityBuilder()
+                        .header("Authorization", "Bearer " + token.getAccessToken())
+                        .body(Map.of("name", "단어장 이름"))
+                        .build(),
+                VocabularyApi.VocabularyApiVocabulariesResponse.class
+        );
+
+        // then
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @TestFactory
+    @DisplayName("단어장 수정 - 실패")
+    Collection<DynamicTest> updateVocabularyFail() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        GeneratedToken token = testUserCreator.createToken(user);
+
+        Function<Map<String, Object>, ResponseEntity<String>> restExchange = body -> rest.exchange(
+                "/vocabularies/1",
+                HttpMethod.PUT,
+                new HttpEntityBuilder()
+                        .header("Authorization", "Bearer " + token.getAccessToken())
+                        .body(body)
+                        .build(),
+                String.class
+        );
+
+        return List.of(
+                DynamicTest.dynamicTest("단어장 이름 누락", () -> {
+                    var res = restExchange.apply(Map.of());
+                    assertThat(res.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+                }),
+                DynamicTest.dynamicTest("단어장 이름 길이 제한 초과", () -> {
+                    var res = restExchange.apply(Map.of("name", "012345678901234567891"));
+                    assertThat(res.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+                })
+        );
+    }
 }

@@ -8,6 +8,7 @@ import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.common.CommonApiResponse;
 import vook.server.api.web.routes.vocabulary.reqres.VocabularyCreateRequest;
 import vook.server.api.web.routes.vocabulary.reqres.VocabularyResponse;
+import vook.server.api.web.routes.vocabulary.reqres.VocabularyUpdateRequest;
 
 import java.util.List;
 
@@ -34,6 +35,17 @@ public class VocabularyRestController implements VocabularyApi {
             @Validated @RequestBody VocabularyCreateRequest request
     ) {
         service.createVocabulary(user, request);
+        return CommonApiResponse.ok();
+    }
+
+    @Override
+    @PutMapping("/{vocabularyUid}")
+    public CommonApiResponse<Void> updateVocabulary(
+            @AuthenticationPrincipal VookLoginUser user,
+            @PathVariable String vocabularyUid,
+            @Validated @RequestBody VocabularyUpdateRequest request
+    ) {
+        service.updateVocabulary(user, vocabularyUid, request);
         return CommonApiResponse.ok();
     }
 }
