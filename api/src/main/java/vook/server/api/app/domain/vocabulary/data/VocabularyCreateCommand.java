@@ -1,4 +1,4 @@
-package vook.server.api.app.vocabulary.data;
+package vook.server.api.app.domain.vocabulary.data;
 
 import lombok.Getter;
 import vook.server.api.model.user.User;

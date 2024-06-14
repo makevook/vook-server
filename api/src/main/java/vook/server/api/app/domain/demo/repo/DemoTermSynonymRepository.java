@@ -1,4 +1,4 @@
-package vook.server.api.app.demo.repo;
+package vook.server.api.app.domain.demo.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import vook.server.api.model.demo.DemoTermSynonym;

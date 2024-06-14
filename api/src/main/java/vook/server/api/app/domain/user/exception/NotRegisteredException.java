@@ -1,4 +1,4 @@
-package vook.server.api.app.user.exception;
+package vook.server.api.app.domain.user.exception;
 
 import vook.server.api.app.common.AppException;
 

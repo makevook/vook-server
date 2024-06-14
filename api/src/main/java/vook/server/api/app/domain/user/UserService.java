@@ -1,14 +1,14 @@
-package vook.server.api.app.user;
+package vook.server.api.app.domain.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vook.server.api.app.user.data.OnboardingCommand;
-import vook.server.api.app.user.data.RegisterCommand;
-import vook.server.api.app.user.data.SignUpFromSocialCommand;
-import vook.server.api.app.user.exception.*;
-import vook.server.api.app.user.repo.SocialUserRepository;
-import vook.server.api.app.user.repo.UserInfoRepository;
-import vook.server.api.app.user.repo.UserRepository;
+import vook.server.api.app.domain.user.data.OnboardingCommand;
+import vook.server.api.app.domain.user.data.RegisterCommand;
+import vook.server.api.app.domain.user.data.SignUpFromSocialCommand;
+import vook.server.api.app.domain.user.exception.*;
+import vook.server.api.app.domain.user.repo.SocialUserRepository;
+import vook.server.api.app.domain.user.repo.UserInfoRepository;
+import vook.server.api.app.domain.user.repo.UserRepository;
 import vook.server.api.model.user.SocialUser;
 import vook.server.api.model.user.User;
 import vook.server.api.model.user.UserInfo;

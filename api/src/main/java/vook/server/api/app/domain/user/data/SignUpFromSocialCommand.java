@@ -1,4 +1,4 @@
-package vook.server.api.app.user.data;
+package vook.server.api.app.domain.user.data;
 
 import lombok.Getter;
 import vook.server.api.model.user.SocialUser;

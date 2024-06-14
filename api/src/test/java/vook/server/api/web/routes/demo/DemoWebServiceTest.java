@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.app.demo.repo.DemoTermRepository;
+import vook.server.api.app.domain.demo.repo.DemoTermRepository;
 import vook.server.api.devhelper.app.TestTermsLoader;
 import vook.server.api.model.demo.DemoTerm;
 import vook.server.api.outbound.search.demo.DemoTermSearchService;

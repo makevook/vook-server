@@ -1,4 +1,4 @@
-package vook.server.api.app.user.repo;
+package vook.server.api.app.domain.user.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
