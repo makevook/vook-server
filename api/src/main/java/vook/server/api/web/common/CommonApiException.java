@@ -1,50 +1,43 @@
 package vook.server.api.web.common;
 
-public class CommonApiException {
-    public static abstract class Exception extends RuntimeException {
-        protected String message;
+public class CommonApiException extends RuntimeException {
 
-        public Exception(Throwable cause) {
-            super(cause);
-            this.message = cause.getMessage();
-        }
+    private final ApiResponseCode code;
+    private final int statusCode;
+    private final String message;
 
-        public Exception(String message) {
-            super(message);
-            this.message = message;
-        }
-
-        public Exception(String message, Throwable cause) {
-            super(message, cause);
-            this.message = message;
-        }
-
-        abstract CommonApiResponse<?> response();
+    CommonApiException(ApiResponseCode code, int statusCode, Throwable cause) {
+        this(code, statusCode, cause, null);
     }
 
-    public static class BadRequest extends Exception {
-        public BadRequest(String message, Throwable cause) {
-            super(message, cause);
-        }
+    CommonApiException(ApiResponseCode code, int statusCode, Throwable cause, String message) {
+        super(code.code(), cause);
+        this.code = code;
+        this.statusCode = statusCode;
+        this.message = message;
+    }
 
-        public BadRequest(String message) {
-            super(message);
-        }
-
-        @Override
-        public CommonApiResponse<?> response() {
-            return CommonApiResponse.noResult(400, message);
+    public CommonApiResponse<?> response() {
+        if (message == null) {
+            return CommonApiResponse.noResult(code);
+        } else {
+            return CommonApiResponse.withResult(code, message);
         }
     }
 
-    public static class ServerError extends Exception {
-        public ServerError(Throwable cause) {
-            super(cause);
-        }
+    public int statusCode() {
+        return statusCode;
+    }
 
-        @Override
-        public CommonApiResponse<?> response() {
-            return CommonApiResponse.noResult(500, "처리되지 않은 서버 에러가 발생하였습니다.");
-        }
+    public static CommonApiException badRequest(ApiResponseCode code, Throwable cause) {
+        return new CommonApiException(code, 400, cause);
+    }
+
+    public static CommonApiException badRequest(ApiResponseCode code, Throwable cause, String message) {
+        return new CommonApiException(code, 400, cause, message);
+    }
+
+    public static CommonApiException serverError(ApiResponseCode code, Throwable cause) {
+        return new CommonApiException(code, 500, cause);
     }
 }

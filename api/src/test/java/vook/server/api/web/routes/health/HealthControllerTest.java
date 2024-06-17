@@ -4,11 +4,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import vook.server.api.testhelper.ApiTest;
+import vook.server.api.testhelper.IntegrationTestBase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class HealthControllerTest extends ApiTest {
+class HealthControllerTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("헬스체크")

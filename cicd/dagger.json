@@ -3,18 +3,26 @@
   "sdk": "go",
   "dependencies": [
     {
+      "name": "java",
+      "source": "github.com/seungyeop-lee/daggerverse/java@a5e511cb5adec1bf0b67ef8856d4191e61ab4711"
+    },
+    {
       "name": "docker",
       "source": "github.com/purpleclay/daggerverse/docker@43c1c55dadf15afc9ba401dc59e04baaa3802cca"
     },
     {
+      "name": "dockerService",
+      "source": "github.com/aweris/daggerverse/docker@980888a31696001fe024dc38ff104368f4a1931d"
+    },
+    {
       "name": "scp",
-      "source": "github.com/seungyeop-lee/daggerverse/scp@63e721cf63323ede8b1f11aeff00d41960699920"
+      "source": "github.com/seungyeop-lee/daggerverse/scp@63f0f2d385768aa435474a9eec552750500899f2"
     },
     {
       "name": "ssh",
-      "source": "github.com/seungyeop-lee/daggerverse/ssh@63e721cf63323ede8b1f11aeff00d41960699920"
+      "source": "github.com/seungyeop-lee/daggerverse/ssh@63f0f2d385768aa435474a9eec552750500899f2"
     }
   ],
   "source": "dagger",
-  "engineVersion": "v0.11.4"
+  "engineVersion": "v0.11.7"
 }
