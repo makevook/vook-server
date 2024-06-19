@@ -21,7 +21,7 @@ jobs:
           SSH_DEST: ${{ secrets.DEV_SSH_DEST }}
           SSH_KEY: ${{ secrets.DEV_SSH_KEY }}
         with:
-          version: 0.11.7
+          version: 0.11.8
           verb: call
           module: ./cicd
           args: >-
