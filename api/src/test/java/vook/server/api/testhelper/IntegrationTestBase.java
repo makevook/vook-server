@@ -26,7 +26,7 @@ public abstract class IntegrationTestBase {
             .withConfigurationOverride("db/conf")
             .withTmpFs(Map.of("/var/lib/mysql", "rw"));
 
-    protected static final MeilisearchContainer meilisearchContainer = new MeilisearchContainer("getmeili/meilisearch:v1.8.0");
+    protected static final MeilisearchContainer meilisearchContainer = new MeilisearchContainer("getmeili/meilisearch:v1.8.3");
 
     static {
         mariaDBContainer.start();
