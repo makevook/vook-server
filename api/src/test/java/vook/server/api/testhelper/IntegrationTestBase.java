@@ -19,14 +19,14 @@ import static vook.server.api.app.config.TimeZoneConfig.DEFAULT_TIME_ZONE;
 public abstract class IntegrationTestBase {
 
     @ServiceConnection
-    protected static final MariaDBContainer<?> mariaDBContainer = new MariaDBContainer<>("mariadb:10.11")
+    protected static final MariaDBContainer<?> mariaDBContainer = new MariaDBContainer<>("mariadb:10.11.8")
             .withDatabaseName("example")
             .withUsername("user")
             .withPassword("userPw")
             .withConfigurationOverride("db/conf")
             .withTmpFs(Map.of("/var/lib/mysql", "rw"));
 
-    protected static final MeilisearchContainer meilisearchContainer = new MeilisearchContainer("getmeili/meilisearch:v1.8.0");
+    protected static final MeilisearchContainer meilisearchContainer = new MeilisearchContainer("getmeili/meilisearch:v1.8.3");
 
     static {
         mariaDBContainer.start();
