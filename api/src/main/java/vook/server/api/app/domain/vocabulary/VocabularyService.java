@@ -42,6 +42,10 @@ public class VocabularyService {
         repository.delete(vocabulary);
     }
 
+    public Vocabulary findByUidAndUser(String vocabularyUid, User user) {
+        return validateAndGetVocabulary(vocabularyUid, user);
+    }
+
     private Vocabulary validateAndGetVocabulary(String vocabularyUid, User user) {
         Vocabulary vocabulary = repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
         if (!vocabulary.isValidOwner(user)) {

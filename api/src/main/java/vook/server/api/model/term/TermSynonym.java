@@ -1,4 +1,4 @@
-package vook.server.api.model.vocabulary;
+package vook.server.api.model.term;
 
 import jakarta.persistence.*;
 import lombok.Getter;

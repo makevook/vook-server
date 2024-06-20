@@ -3,6 +3,7 @@ package vook.server.api.model.vocabulary;
 import jakarta.persistence.*;
 import lombok.Getter;
 import vook.server.api.model.common.BaseEntity;
+import vook.server.api.model.term.Term;
 import vook.server.api.model.user.User;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class Vocabulary extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "vocabulary", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "vocabulary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Term> terms = new ArrayList<>();
 
     public static Vocabulary forCreateOf(
