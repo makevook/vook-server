@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.domain.term.exception.TermLimitExceededException;
 import vook.server.api.app.domain.term.repo.TermRepository;
 import vook.server.api.app.domain.vocabulary.exception.VocabularyNotFoundException;
+import vook.server.api.app.domain.vocabulary.repo.VocabularyRepository;
 import vook.server.api.model.term.Term;
 import vook.server.api.model.term.TermSynonym;
 import vook.server.api.model.user.User;
@@ -38,6 +39,8 @@ class TermWebServiceTest extends IntegrationTestBase {
     @Autowired
     TermRepository termRepository;
     @Autowired
+    VocabularyRepository vocabularyRepository;
+    @Autowired
     EntityManager em;
 
     @Test
@@ -65,6 +68,9 @@ class TermWebServiceTest extends IntegrationTestBase {
             assertThat(term.getMeaning()).isEqualTo(request.getMeaning());
             assertThat(term.getSynonyms().stream().map(TermSynonym::getSynonym))
                     .containsExactlyInAnyOrderElementsOf(request.getSynonyms());
+        });
+        vocabularyRepository.findByUid(vocabulary.getUid()).ifPresent(v -> {
+            assertThat(v.termCount()).isEqualTo(1);
         });
     }
 

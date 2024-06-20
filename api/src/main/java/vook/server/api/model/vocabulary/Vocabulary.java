@@ -2,6 +2,7 @@ package vook.server.api.model.vocabulary;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.Formula;
 import vook.server.api.model.common.BaseEntity;
 import vook.server.api.model.term.Term;
 import vook.server.api.model.user.User;
@@ -34,6 +35,9 @@ public class Vocabulary extends BaseEntity {
     @OneToMany(mappedBy = "vocabulary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Term> terms = new ArrayList<>();
 
+    @Formula("(SELECT COUNT(t.id) FROM term t WHERE t.vocabulary_id = id)")
+    private int termCount;
+
     public static Vocabulary forCreateOf(
             String name,
             User user
@@ -47,10 +51,11 @@ public class Vocabulary extends BaseEntity {
 
     public void addTerm(Term term) {
         this.terms.add(term);
+        this.termCount++;
     }
 
     public int termCount() {
-        return this.terms.size();
+        return this.termCount;
     }
 
     public boolean isValidOwner(User user) {
