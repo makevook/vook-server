@@ -15,7 +15,7 @@ public class ExceptionAdvisor {
         try {
             return joinPoint.proceed();
         } catch (ConstraintViolationException e) {
-            throw new ParameterValidateException(e);
+            throw new ParameterValidateException();
         }
     }
 }

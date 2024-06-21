@@ -16,9 +16,5 @@ public class VocabularyPolicy {
     }
 
     public static class NotValidOwnerException extends AppException {
-        @Override
-        public String contents() {
-            return "NotValidOwner";
-        }
     }
 }

@@ -69,16 +69,8 @@ public class CreateTermUseCase {
     }
 
     public static class TermLimitExceededException extends AppException {
-        @Override
-        public String contents() {
-            return "TermLimitExceeded";
-        }
     }
 
     public static class NotValidOwnerException extends AppException {
-        @Override
-        public String contents() {
-            return "NotValidOwnerException";
-        }
     }
 }
