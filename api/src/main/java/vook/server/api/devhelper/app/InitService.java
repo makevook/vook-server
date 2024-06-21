@@ -3,14 +3,14 @@ package vook.server.api.devhelper.app;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.app.domain.demo.repo.DemoTermRepository;
-import vook.server.api.app.domain.demo.repo.DemoTermSynonymRepository;
-import vook.server.api.app.domain.user.repo.SocialUserRepository;
-import vook.server.api.app.domain.user.repo.UserInfoRepository;
-import vook.server.api.app.domain.user.repo.UserRepository;
-import vook.server.api.app.domain.vocabulary.repo.VocabularyRepository;
-import vook.server.api.model.demo.DemoTerm;
-import vook.server.api.outbound.search.demo.DemoTermSearchService;
+import vook.server.api.app.contexts.demo.domain.DemoTerm;
+import vook.server.api.app.contexts.demo.domain.DemoTermRepository;
+import vook.server.api.app.contexts.demo.domain.DemoTermSynonymRepository;
+import vook.server.api.app.contexts.user.domain.SocialUserRepository;
+import vook.server.api.app.contexts.user.domain.UserInfoRepository;
+import vook.server.api.app.contexts.user.domain.UserRepository;
+import vook.server.api.app.contexts.vocabulary.domain.VocabularyRepository;
+import vook.server.api.app.infra.search.demo.MeilisearchDemoTermSearchService;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class InitService {
     private final UserInfoRepository userInfoRepository;
     private final SocialUserRepository socialUserRepository;
     private final UserRepository userRepository;
-    private final DemoTermSearchService searchService;
+    private final MeilisearchDemoTermSearchService searchService;
     private final TestTermsLoader testTermsLoader;
 
     public void init() {

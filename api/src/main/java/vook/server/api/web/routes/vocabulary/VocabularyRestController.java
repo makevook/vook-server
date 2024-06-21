@@ -4,6 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import vook.server.api.app.crosscontext.usecases.vocabulary.CreateVocabularyUseCase;
+import vook.server.api.app.crosscontext.usecases.vocabulary.DeleteVocabularyUseCase;
+import vook.server.api.app.crosscontext.usecases.vocabulary.RetrieveVocabularyUseCase;
+import vook.server.api.app.crosscontext.usecases.vocabulary.UpdateVocabularyUseCase;
 import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.common.CommonApiResponse;
 import vook.server.api.web.routes.vocabulary.reqres.VocabularyCreateRequest;
@@ -17,14 +21,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VocabularyRestController implements VocabularyApi {
 
-    private final VocabularyWebService service;
+    private final RetrieveVocabularyUseCase retrieveVocabulary;
+    private final CreateVocabularyUseCase createVocabulary;
+    private final UpdateVocabularyUseCase updateVocabulary;
+    private final DeleteVocabularyUseCase deleteVocabulary;
 
     @Override
     @GetMapping
     public CommonApiResponse<List<VocabularyResponse>> vocabularies(
             @AuthenticationPrincipal VookLoginUser user
     ) {
-        List<VocabularyResponse> response = service.vocabularies(user);
+        var command = new RetrieveVocabularyUseCase.Command(user.getUid());
+        var result = retrieveVocabulary.execute(command);
+        List<VocabularyResponse> response = VocabularyResponse.from(result);
         return CommonApiResponse.okWithResult(response);
     }
 
@@ -34,7 +43,8 @@ public class VocabularyRestController implements VocabularyApi {
             @AuthenticationPrincipal VookLoginUser user,
             @Validated @RequestBody VocabularyCreateRequest request
     ) {
-        service.createVocabulary(user, request);
+        var command = new CreateVocabularyUseCase.Command(user.getUid(), request.getName());
+        createVocabulary.execute(command);
         return CommonApiResponse.ok();
     }
 
@@ -45,7 +55,8 @@ public class VocabularyRestController implements VocabularyApi {
             @PathVariable String vocabularyUid,
             @Validated @RequestBody VocabularyUpdateRequest request
     ) {
-        service.updateVocabulary(user, vocabularyUid, request);
+        var command = new UpdateVocabularyUseCase.Command(user.getUid(), vocabularyUid, request.getName());
+        updateVocabulary.execute(command);
         return CommonApiResponse.ok();
     }
 
@@ -55,7 +66,8 @@ public class VocabularyRestController implements VocabularyApi {
             @AuthenticationPrincipal VookLoginUser user,
             @PathVariable String vocabularyUid
     ) {
-        service.deleteVocabulary(user, vocabularyUid);
+        var command = new DeleteVocabularyUseCase.Command(user.getUid(), vocabularyUid);
+        deleteVocabulary.execute(command);
         return CommonApiResponse.ok();
     }
 }

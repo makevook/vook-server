@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vook.server.api.app.contexts.demo.application.DemoService;
+import vook.server.api.app.contexts.demo.application.data.DemoTermSearchResult;
 import vook.server.api.web.common.CommonApiResponse;
 import vook.server.api.web.routes.demo.reqres.SearchTermRequest;
 import vook.server.api.web.routes.demo.reqres.SearchTermResponse;
@@ -14,14 +16,15 @@ import vook.server.api.web.routes.demo.reqres.SearchTermResponse;
 @RequiredArgsConstructor
 public class DemoRestController implements DemoApi {
 
-    private final DemoWebService service;
+    private final DemoService service;
 
     @Override
     @PostMapping("/terms/search")
     public CommonApiResponse<SearchTermResponse> searchTerm(
             @RequestBody SearchTermRequest request
     ) {
-        SearchTermResponse result = service.searchTerm(request);
+        DemoTermSearchResult searchResult = service.searchTerm(request.toSearchParam());
+        SearchTermResponse result = SearchTermResponse.from(searchResult);
         return CommonApiResponse.okWithResult(result);
     }
 }

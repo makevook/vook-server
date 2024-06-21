@@ -29,7 +29,7 @@ public class TokenService {
     public String validateAndGetUid(String token) {
         JWTReader reader = jwtHelperProvider.reader(token);
         reader.validate();
-        return reader.getClaim("uid");
+        return reader.getClaim("userUid");
     }
 
     public GeneratedToken refreshToken(String refreshToken) {
@@ -40,7 +40,7 @@ public class TokenService {
             throw new IllegalArgumentException("유효하지 않은 리프레시 토큰입니다.");
         }
 
-        String uid = jwtReader.getClaim("uid");
+        String uid = jwtReader.getClaim("userUid");
 
         String access = buildAccessToken(uid);
         String refresh = buildRefreshToken(uid);
@@ -52,7 +52,7 @@ public class TokenService {
         return jwtHelperProvider.writer()
                 .withExpiredMs(1000L * 60 * accessTokenExpiredMinute)
                 .withClaim("category", "access")
-                .withClaim("uid", uid)
+                .withClaim("userUid", uid)
                 .jwtString();
     }
 
@@ -60,7 +60,7 @@ public class TokenService {
         return jwtHelperProvider.writer()
                 .withExpiredMs(1000L * 60 * refreshTokenExpiredMinute)
                 .withClaim("category", "refresh")
-                .withClaim("uid", uid)
+                .withClaim("userUid", uid)
                 .jwtString();
     }
 }

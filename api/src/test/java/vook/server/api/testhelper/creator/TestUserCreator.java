@@ -3,14 +3,14 @@ package vook.server.api.testhelper.creator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.app.domain.user.UserService;
-import vook.server.api.app.domain.user.data.OnboardingCommand;
-import vook.server.api.app.domain.user.data.RegisterCommand;
-import vook.server.api.app.domain.user.data.SignUpFromSocialCommand;
-import vook.server.api.model.user.Funnel;
-import vook.server.api.model.user.Job;
-import vook.server.api.model.user.SocialUser;
-import vook.server.api.model.user.User;
+import vook.server.api.app.contexts.user.application.UserService;
+import vook.server.api.app.contexts.user.application.data.OnboardingCommand;
+import vook.server.api.app.contexts.user.application.data.RegisterCommand;
+import vook.server.api.app.contexts.user.application.data.SignUpFromSocialCommand;
+import vook.server.api.app.contexts.user.domain.Funnel;
+import vook.server.api.app.contexts.user.domain.Job;
+import vook.server.api.app.contexts.user.domain.SocialUser;
+import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.web.auth.app.TokenService;
 import vook.server.api.web.auth.data.GeneratedToken;
 
@@ -34,20 +34,20 @@ public class TestUserCreator {
 
     public User createRegisteredUser() {
         User user = createUnregisteredUser();
-        userService.register(RegisterCommand.of(user.getUid(), "testNickname", true));
-        return userService.findByUid(user.getUid()).orElseThrow();
+        userService.register(RegisterCommand.of(user.getUid(), "testNick", true));
+        return userService.getByUid(user.getUid());
     }
 
     public User createCompletedOnboardingUser() {
         User user = createRegisteredUser();
         userService.onboarding(OnboardingCommand.of(user.getUid(), Funnel.OTHER, Job.OTHER));
-        return userService.findByUid(user.getUid()).orElseThrow();
+        return userService.getByUid(user.getUid());
     }
 
     public User createWithdrawnUser() {
         User user = createCompletedOnboardingUser();
         userService.withdraw(user.getUid());
-        return userService.findByUid(user.getUid()).orElseThrow();
+        return userService.getByUid(user.getUid());
     }
 
     public GeneratedToken createToken(User user) {

@@ -8,12 +8,12 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.testcontainers.containers.MariaDBContainer;
-import vook.server.api.outbound.search.common.MeilisearchProperties;
+import vook.server.api.app.infra.search.common.MeilisearchProperties;
 
 import java.util.Map;
 import java.util.TimeZone;
 
-import static vook.server.api.app.config.TimeZoneConfig.DEFAULT_TIME_ZONE;
+import static vook.server.api.config.TimeZoneConfig.DEFAULT_TIME_ZONE;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class IntegrationTestBase {

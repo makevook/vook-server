@@ -1,5 +1,8 @@
 package vook.server.api.web.common;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class CommonApiException extends RuntimeException {
 
     private final ApiResponseCode code;
