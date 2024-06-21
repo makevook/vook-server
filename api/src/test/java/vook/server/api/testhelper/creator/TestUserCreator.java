@@ -3,14 +3,14 @@ package vook.server.api.testhelper.creator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.app.contexts.user.application.UserService;
-import vook.server.api.app.contexts.user.application.data.OnboardingCommand;
-import vook.server.api.app.contexts.user.application.data.RegisterCommand;
-import vook.server.api.app.contexts.user.application.data.SignUpFromSocialCommand;
 import vook.server.api.app.contexts.user.domain.Funnel;
 import vook.server.api.app.contexts.user.domain.Job;
 import vook.server.api.app.contexts.user.domain.SocialUser;
 import vook.server.api.app.contexts.user.domain.User;
+import vook.server.api.app.contexts.user.application.UserService;
+import vook.server.api.app.contexts.user.application.data.OnboardingCommand;
+import vook.server.api.app.contexts.user.application.data.RegisterCommand;
+import vook.server.api.app.contexts.user.application.data.SignUpFromSocialCommand;
 import vook.server.api.web.auth.app.TokenService;
 import vook.server.api.web.auth.data.GeneratedToken;
 
