@@ -10,6 +10,9 @@ import com.meilisearch.sdk.model.TypoTolerance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
+import vook.server.api.app.contexts.demo.application.DemoTermSearchParams;
+import vook.server.api.app.contexts.demo.application.DemoTermSearchResult;
+import vook.server.api.app.contexts.demo.application.DemoTermSearchService;
 import vook.server.api.app.contexts.demo.domain.DemoTerm;
 import vook.server.api.app.contexts.demo.domain.DemoTermSynonym;
 import vook.server.api.app.infra.search.common.MeilisearchProperties;
@@ -20,13 +23,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class DemoTermSearchService extends MeilisearchService {
+public class MeilisearchDemoTermSearchService extends MeilisearchService implements DemoTermSearchService {
 
     private static final String DEMO_TERMS_INDEX_UID = "demo-terms";
 
     private final ObjectMapper objectMapper;
 
-    public DemoTermSearchService(MeilisearchProperties properties, ObjectMapper objectMapper) {
+    public MeilisearchDemoTermSearchService(MeilisearchProperties properties, ObjectMapper objectMapper) {
         super(properties);
         this.objectMapper = objectMapper;
     }

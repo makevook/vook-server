@@ -10,7 +10,7 @@ import vook.server.api.app.contexts.user.domain.SocialUserRepository;
 import vook.server.api.app.contexts.user.domain.UserInfoRepository;
 import vook.server.api.app.contexts.user.domain.UserRepository;
 import vook.server.api.app.contexts.vocabulary.domain.VocabularyRepository;
-import vook.server.api.app.infra.search.demo.DemoTermSearchService;
+import vook.server.api.app.infra.search.demo.MeilisearchDemoTermSearchService;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class InitService {
     private final UserInfoRepository userInfoRepository;
     private final SocialUserRepository socialUserRepository;
     private final UserRepository userRepository;
-    private final DemoTermSearchService searchService;
+    private final MeilisearchDemoTermSearchService searchService;
     private final TestTermsLoader testTermsLoader;
 
     public void init() {
