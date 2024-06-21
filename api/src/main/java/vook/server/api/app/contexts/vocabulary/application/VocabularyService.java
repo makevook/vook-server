@@ -2,18 +2,20 @@ package vook.server.api.app.contexts.vocabulary.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.contexts.user.domain.User;
+import vook.server.api.app.contexts.vocabulary.application.data.VocabularyCreateCommand;
+import vook.server.api.app.contexts.vocabulary.application.data.VocabularyDeleteCommand;
+import vook.server.api.app.contexts.vocabulary.application.data.VocabularyUpdateCommand;
 import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
 import vook.server.api.app.contexts.vocabulary.domain.VocabularyRepository;
 import vook.server.api.app.contexts.vocabulary.exception.VocabularyLimitExceededException;
 import vook.server.api.app.contexts.vocabulary.exception.VocabularyNotFoundException;
-import vook.server.api.app.contexts.vocabulary.application.data.VocabularyCreateCommand;
-import vook.server.api.app.contexts.vocabulary.application.data.VocabularyDeleteCommand;
-import vook.server.api.app.contexts.vocabulary.application.data.VocabularyUpdateCommand;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class VocabularyService {
 

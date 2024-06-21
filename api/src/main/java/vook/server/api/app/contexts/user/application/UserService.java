@@ -2,15 +2,17 @@ package vook.server.api.app.contexts.user.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vook.server.api.app.contexts.user.domain.*;
-import vook.server.api.app.contexts.user.exception.*;
+import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.contexts.user.application.data.OnboardingCommand;
 import vook.server.api.app.contexts.user.application.data.RegisterCommand;
 import vook.server.api.app.contexts.user.application.data.SignUpFromSocialCommand;
+import vook.server.api.app.contexts.user.domain.*;
+import vook.server.api.app.contexts.user.exception.*;
 
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
 

@@ -2,12 +2,14 @@ package vook.server.api.app.contexts.term.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.app.contexts.term.application.data.TermCreateCommand;
 import vook.server.api.app.contexts.term.domain.Term;
 import vook.server.api.app.contexts.term.domain.TermRepository;
 import vook.server.api.app.contexts.term.exception.TermLimitExceededException;
-import vook.server.api.app.contexts.term.application.data.TermCreateCommand;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class TermService {
 
