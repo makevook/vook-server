@@ -2,7 +2,7 @@ package vook.server.api.web.routes.vocabulary.reqres;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
-import vook.server.api.app.context.vocabulary.model.Vocabulary;
+import vook.server.api.app.context.vocabulary.domain.Vocabulary;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,8 +1,8 @@
-package vook.server.api.app.context.term.model;
+package vook.server.api.app.context.term.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import vook.server.api.app.context.vocabulary.model.Vocabulary;
+import vook.server.api.app.context.vocabulary.domain.Vocabulary;
 import vook.server.api.common.entity.BaseEntity;
 
 import java.util.ArrayList;

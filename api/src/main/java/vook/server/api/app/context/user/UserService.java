@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import vook.server.api.app.context.user.data.OnboardingCommand;
 import vook.server.api.app.context.user.data.RegisterCommand;
 import vook.server.api.app.context.user.data.SignUpFromSocialCommand;
+import vook.server.api.app.context.user.domain.*;
 import vook.server.api.app.context.user.exception.*;
-import vook.server.api.app.context.user.model.*;
 
 import java.util.Optional;
 

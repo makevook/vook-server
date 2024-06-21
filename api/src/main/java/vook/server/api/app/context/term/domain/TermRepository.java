@@ -1,4 +1,4 @@
-package vook.server.api.app.context.term.model;
+package vook.server.api.app.context.term.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

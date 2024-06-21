@@ -2,8 +2,8 @@ package vook.server.api.web.routes.user.reqres;
 
 import lombok.Data;
 import vook.server.api.app.context.user.data.OnboardingCommand;
-import vook.server.api.app.context.user.model.Funnel;
-import vook.server.api.app.context.user.model.Job;
+import vook.server.api.app.context.user.domain.Funnel;
+import vook.server.api.app.context.user.domain.Job;
 
 @Data
 public class UserOnboardingRequest {

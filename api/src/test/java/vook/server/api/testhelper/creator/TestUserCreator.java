@@ -7,10 +7,10 @@ import vook.server.api.app.context.user.UserService;
 import vook.server.api.app.context.user.data.OnboardingCommand;
 import vook.server.api.app.context.user.data.RegisterCommand;
 import vook.server.api.app.context.user.data.SignUpFromSocialCommand;
-import vook.server.api.app.context.user.model.Funnel;
-import vook.server.api.app.context.user.model.Job;
-import vook.server.api.app.context.user.model.SocialUser;
-import vook.server.api.app.context.user.model.User;
+import vook.server.api.app.context.user.domain.Funnel;
+import vook.server.api.app.context.user.domain.Job;
+import vook.server.api.app.context.user.domain.SocialUser;
+import vook.server.api.app.context.user.domain.User;
 import vook.server.api.web.auth.app.TokenService;
 import vook.server.api.web.auth.data.GeneratedToken;
 

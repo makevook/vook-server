@@ -10,8 +10,8 @@ import com.meilisearch.sdk.model.TypoTolerance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
-import vook.server.api.app.context.demo.model.DemoTerm;
-import vook.server.api.app.context.demo.model.DemoTermSynonym;
+import vook.server.api.app.context.demo.domain.DemoTerm;
+import vook.server.api.app.context.demo.domain.DemoTermSynonym;
 import vook.server.api.app.infra.search.common.MeilisearchProperties;
 import vook.server.api.app.infra.search.common.MeilisearchService;
 

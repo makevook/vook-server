@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.context.user.UserService;
-import vook.server.api.app.context.user.model.User;
+import vook.server.api.app.context.user.domain.User;
 import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.routes.user.reqres.UserInfoResponse;
 import vook.server.api.web.routes.user.reqres.UserOnboardingRequest;

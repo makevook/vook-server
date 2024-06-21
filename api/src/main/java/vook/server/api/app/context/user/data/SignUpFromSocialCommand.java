@@ -1,8 +1,8 @@
 package vook.server.api.app.context.user.data;
 
 import lombok.Getter;
-import vook.server.api.app.context.user.model.SocialUser;
-import vook.server.api.app.context.user.model.User;
+import vook.server.api.app.context.user.domain.SocialUser;
+import vook.server.api.app.context.user.domain.User;
 
 @Getter
 public class SignUpFromSocialCommand {

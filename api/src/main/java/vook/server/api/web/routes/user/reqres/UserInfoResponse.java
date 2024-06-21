@@ -1,9 +1,9 @@
 package vook.server.api.web.routes.user.reqres;
 
 import lombok.Getter;
-import vook.server.api.app.context.user.model.User;
-import vook.server.api.app.context.user.model.UserInfo;
-import vook.server.api.app.context.user.model.UserStatus;
+import vook.server.api.app.context.user.domain.User;
+import vook.server.api.app.context.user.domain.UserInfo;
+import vook.server.api.app.context.user.domain.UserStatus;
 
 @Getter
 public class UserInfoResponse {

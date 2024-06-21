@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.context.user.UserService;
 import vook.server.api.app.context.user.data.SignUpFromSocialCommand;
-import vook.server.api.app.context.user.model.SocialUser;
+import vook.server.api.app.context.user.domain.SocialUser;
 import vook.server.api.web.auth.data.VookLoginUser;
 
 @Slf4j

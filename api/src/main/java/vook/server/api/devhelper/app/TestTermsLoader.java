@@ -3,7 +3,7 @@ package vook.server.api.devhelper.app;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
-import vook.server.api.app.context.demo.model.DemoTerm;
+import vook.server.api.app.context.demo.domain.DemoTerm;
 import vook.server.api.devhelper.helper.CsvReader;
 
 import java.io.IOException;

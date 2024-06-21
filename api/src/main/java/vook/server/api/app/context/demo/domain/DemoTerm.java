@@ -1,4 +1,4 @@
-package vook.server.api.app.context.demo.model;
+package vook.server.api.app.context.demo.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
