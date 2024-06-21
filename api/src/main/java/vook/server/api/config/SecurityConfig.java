@@ -39,6 +39,8 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(c -> c
                 .requestMatchers("/user/**").authenticated()
+                .requestMatchers("/vocabularies/**").authenticated()
+                .requestMatchers("/terms/**").authenticated()
                 .anyRequest().permitAll()
         );
 
