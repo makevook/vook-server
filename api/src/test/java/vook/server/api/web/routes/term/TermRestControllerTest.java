@@ -24,6 +24,8 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @Transactional
 class TermRestControllerTest extends IntegrationTestBase {
@@ -40,6 +42,7 @@ class TermRestControllerTest extends IntegrationTestBase {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
         GeneratedToken token = testUserCreator.createToken(user);
+        when(createTermUseCase.execute(any())).thenReturn(new CreateTermUseCase.Result("termUid"));
 
         // when
         var res = rest.exchange(

@@ -22,7 +22,7 @@ public class CreateTermUseCase {
     private final VocabularyService vocabularyService;
     private final TermService termService;
 
-    public Result create(Command command) {
+    public Result execute(Command command) {
         User user = userService.findByUid(command.userUid()).orElseThrow();
         Vocabulary vocabulary = vocabularyService.findByUidAndUser(command.vocabularyUid(), user);
         Term term = termService.create(command.toServiceCommand(vocabulary));

@@ -11,6 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.contexts.user.domain.User;
+import vook.server.api.app.usecases.vocabulary.CreateVocabularyUseCase;
+import vook.server.api.app.usecases.vocabulary.DeleteVocabularyUseCase;
+import vook.server.api.app.usecases.vocabulary.RetrieveVocabularyUseCase;
+import vook.server.api.app.usecases.vocabulary.UpdateVocabularyUseCase;
 import vook.server.api.testhelper.HttpEntityBuilder;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
@@ -27,7 +31,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class VocabularyRestControllerTest extends IntegrationTestBase {
 
     @MockBean
-    VocabularyWebService webService;
+    CreateVocabularyUseCase createVocabulary;
+    @MockBean
+    UpdateVocabularyUseCase updateVocabulary;
+    @MockBean
+    DeleteVocabularyUseCase deleteVocabulary;
+    @MockBean
+    RetrieveVocabularyUseCase retrieveVocabulary;
 
     @Autowired
     TestUserCreator testUserCreator;

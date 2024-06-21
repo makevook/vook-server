@@ -29,7 +29,7 @@ public class TermRestController implements TermApi {
             @Validated @RequestBody TermCreateRequest request
     ) {
         var command = request.toCommand(user);
-        var result = createTermUseCase.create(command);
+        var result = createTermUseCase.execute(command);
         var response = TermCreateResponse.from(result);
         return CommonApiResponse.okWithResult(response);
     }

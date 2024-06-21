@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class CreateTermUseCaseTest extends IntegrationTestBase {
+
     @Autowired
     CreateTermUseCase useCase;
 
@@ -42,7 +43,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("용어 생성 - 정상")
-    void create() {
+    void execute() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
@@ -57,7 +58,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         );
 
         // when
-        var result = useCase.create(command);
+        var result = useCase.execute(command);
 
         // then
         assertThat(result.uid()).isNotNull();
@@ -75,7 +76,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("용어 생성 - 실패; 용어집이 존재하지 않는 경우")
-    void createError1() {
+    void executeError1() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
@@ -89,13 +90,13 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         );
 
         // when
-        assertThatThrownBy(() -> useCase.create(command))
+        assertThatThrownBy(() -> useCase.execute(command))
                 .isInstanceOf(VocabularyNotFoundException.class);
     }
 
     @Test
     @DisplayName("용어 생성 - 실패; 용어집에 용어를 추가할 수 있는 제한을 초과한 경우 (100개)")
-    void createError2() {
+    void executeError2() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
@@ -121,7 +122,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         );
 
         // when
-        assertThatThrownBy(() -> useCase.create(command))
+        assertThatThrownBy(() -> useCase.execute(command))
                 .isInstanceOf(TermLimitExceededException.class);
     }
 }
