@@ -34,7 +34,7 @@ public class TestUserCreator {
 
     public User createRegisteredUser() {
         User user = createUnregisteredUser();
-        userService.register(RegisterCommand.of(user.getUid(), "testNickname", true));
+        userService.register(RegisterCommand.of(user.getUid(), "testNick", true));
         return userService.findByUid(user.getUid()).orElseThrow();
     }
 

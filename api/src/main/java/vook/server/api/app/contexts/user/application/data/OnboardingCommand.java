@@ -1,5 +1,7 @@
 package vook.server.api.app.contexts.user.application.data;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import vook.server.api.app.contexts.user.domain.Funnel;
 import vook.server.api.app.contexts.user.domain.Job;
@@ -7,8 +9,13 @@ import vook.server.api.app.contexts.user.domain.Job;
 @Getter
 public class OnboardingCommand {
 
+    @NotBlank
     public String userUid;
+
+    @NotNull
     public Funnel funnel;
+
+    @NotNull
     public Job job;
 
     public static OnboardingCommand of(

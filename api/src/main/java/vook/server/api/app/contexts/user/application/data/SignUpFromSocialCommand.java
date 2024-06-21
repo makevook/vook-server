@@ -1,5 +1,7 @@
 package vook.server.api.app.contexts.user.application.data;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import vook.server.api.app.contexts.user.domain.SocialUser;
 import vook.server.api.app.contexts.user.domain.User;
@@ -7,8 +9,14 @@ import vook.server.api.app.contexts.user.domain.User;
 @Getter
 public class SignUpFromSocialCommand {
 
+    @NotBlank
     private String provider;
+
+    @NotBlank
     private String providerUserId;
+
+    @Email
+    @NotBlank
     private String email;
 
     public static SignUpFromSocialCommand of(

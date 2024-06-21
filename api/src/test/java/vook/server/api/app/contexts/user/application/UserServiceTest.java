@@ -1,11 +1,15 @@
 package vook.server.api.app.contexts.user.application;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.app.common.exception.ParameterValidateException;
 import vook.server.api.app.contexts.user.application.data.OnboardingCommand;
 import vook.server.api.app.contexts.user.application.data.RegisterCommand;
+import vook.server.api.app.contexts.user.application.data.SignUpFromSocialCommand;
 import vook.server.api.app.contexts.user.domain.Funnel;
 import vook.server.api.app.contexts.user.domain.Job;
 import vook.server.api.app.contexts.user.domain.User;
@@ -13,6 +17,9 @@ import vook.server.api.app.contexts.user.domain.UserStatus;
 import vook.server.api.app.contexts.user.exception.*;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
+
+import java.util.Collection;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,8 +33,66 @@ class UserServiceTest extends IntegrationTestBase {
     @Autowired
     TestUserCreator testUserCreator;
 
+    @TestFactory
+    @DisplayName("사용자 정보 조회(provider) - 실패; 파라미터 룰 위반")
+    Collection<DynamicTest> findByProvider_ParameterError() {
+        return List.of(
+                DynamicTest.dynamicTest("provider가 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.findByProvider(null, "providerUserId"))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("provider가 빈 문자열인 경우", () -> {
+                    assertThatThrownBy(() -> service.findByProvider("", "providerUserId"))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("providerUserId가 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.findByProvider("provider", null))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("providerUserId가 빈 문자열인 경우", () -> {
+                    assertThatThrownBy(() -> service.findByProvider("provider", ""))
+                            .isInstanceOf(ParameterValidateException.class);
+                })
+        );
+    }
+
+    @TestFactory
+    @DisplayName("소셜에서 회원가입 - 실패; 파라미터 룰 위반")
+    Collection<DynamicTest> signUpFromSocial_ParameterError() {
+        return List.of(
+                DynamicTest.dynamicTest("provider가 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.signUpFromSocial(SignUpFromSocialCommand.of(null, "providerUserId", "email")))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("provider가 빈 문자인 경우", () -> {
+                    assertThatThrownBy(() -> service.signUpFromSocial(SignUpFromSocialCommand.of("", "providerUserId", "email")))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("providerUserId가 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.signUpFromSocial(SignUpFromSocialCommand.of("provider", null, "email")))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("providerUserId가 빈 문자열인 경우", () -> {
+                    assertThatThrownBy(() -> service.signUpFromSocial(SignUpFromSocialCommand.of("provider", "", "email")))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("email이 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.signUpFromSocial(SignUpFromSocialCommand.of("provider", "providerUserId", null)))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("email이 빈 문자열인 경우", () -> {
+                    assertThatThrownBy(() -> service.signUpFromSocial(SignUpFromSocialCommand.of("provider", "providerUserId", "")))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("email이 이메일 형식이 아닌 경우", () -> {
+                    assertThatThrownBy(() -> service.signUpFromSocial(SignUpFromSocialCommand.of("provider", "providerUserId", "email")))
+                            .isInstanceOf(ParameterValidateException.class);
+                })
+        );
+    }
+
     @Test
-    @DisplayName("사용자 정보 조회 - 정상; 회원가입 전 사용자")
+    @DisplayName("사용자 정보 조회(uid) - 정상; 회원가입 전 사용자")
     void findByUid1() {
         // given
         User unregisteredUser = testUserCreator.createUnregisteredUser();
@@ -45,7 +110,7 @@ class UserServiceTest extends IntegrationTestBase {
     }
 
     @Test
-    @DisplayName("사용자 정보 조회 - 정상; 회원가입 후 사용자")
+    @DisplayName("사용자 정보 조회(uid) - 정상; 회원가입 후 사용자")
     void findByUid2() {
         // given
         User registeredUser = testUserCreator.createRegisteredUser();
@@ -63,7 +128,7 @@ class UserServiceTest extends IntegrationTestBase {
     }
 
     @Test
-    @DisplayName("사용자 정보 조회 - 정상; 온보딩 완료 사용자")
+    @DisplayName("사용자 정보 조회(uid) - 정상; 온보딩 완료 사용자")
     void findByUid3() {
         // given
         User completedOnboardingUser = testUserCreator.createCompletedOnboardingUser();
@@ -78,6 +143,21 @@ class UserServiceTest extends IntegrationTestBase {
         assertThat(user.getUserInfo().getNickname()).isEqualTo(completedOnboardingUser.getUserInfo().getNickname());
         assertThat(user.getStatus()).isEqualTo(UserStatus.REGISTERED);
         assertThat(user.getOnboardingCompleted()).isTrue();
+    }
+
+    @TestFactory
+    @DisplayName("사용자 정보 조회(uid) - 실패; 파라미터 룰 위반")
+    Collection<DynamicTest> findByUid_ParameterError() {
+        return List.of(
+                DynamicTest.dynamicTest("유저 UID가 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.findByUid(null))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("유저 UID가 빈 문자열인 경우", () -> {
+                    assertThatThrownBy(() -> service.findByUid(""))
+                            .isInstanceOf(ParameterValidateException.class);
+                })
+        );
     }
 
     @Test
@@ -139,6 +219,37 @@ class UserServiceTest extends IntegrationTestBase {
                 .isInstanceOf(WithdrawnUserException.class);
     }
 
+    @TestFactory
+    @DisplayName("회원 가입 - 에러; 파라미터 룰 위반")
+    Collection<DynamicTest> register_ParameterError() {
+        return List.of(
+                DynamicTest.dynamicTest("유저 UID가 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.register(RegisterCommand.of(null, "nickname", true)))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("유저 UID가 빈 문자열인 경우", () -> {
+                    assertThatThrownBy(() -> service.register(RegisterCommand.of("", "nickname", true)))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("닉네임이 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.register(RegisterCommand.of("uid", null, true)))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("닉네임이 빈 문자열인 경우", () -> {
+                    assertThatThrownBy(() -> service.register(RegisterCommand.of("uid", "", true)))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("닉네임 길이가 제한을 넘긴 경우", () -> {
+                    assertThatThrownBy(() -> service.register(RegisterCommand.of("uid", "12345678901", true)))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("마케팅 이메일 수신 동의가 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.register(RegisterCommand.of("uid", "nickname", null)))
+                            .isInstanceOf(ParameterValidateException.class);
+                })
+        );
+    }
+
     @Test
     @DisplayName("온보딩 완료 - 정상")
     void onboarding1() {
@@ -198,6 +309,29 @@ class UserServiceTest extends IntegrationTestBase {
                 .isInstanceOf(AlreadyOnboardingException.class);
     }
 
+    @TestFactory
+    @DisplayName("온보딩 완료 - 에러; 파라미터 룰 위반")
+    Collection<DynamicTest> onboarding_ParameterError() {
+        return List.of(
+                DynamicTest.dynamicTest("유저 UID가 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.onboarding(OnboardingCommand.of(null, Funnel.OTHER, Job.OTHER)))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("유저 UID가 빈 문자열인 경우", () -> {
+                    assertThatThrownBy(() -> service.onboarding(OnboardingCommand.of("", Funnel.OTHER, Job.OTHER)))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("퍼널이 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.onboarding(OnboardingCommand.of("uid", null, Job.OTHER)))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("직업이 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.onboarding(OnboardingCommand.of("uid", Funnel.OTHER, null)))
+                            .isInstanceOf(ParameterValidateException.class);
+                })
+        );
+    }
+
     @Test
     @DisplayName("사용자 정보 수정 - 정상")
     void updateInfo1() {
@@ -205,11 +339,11 @@ class UserServiceTest extends IntegrationTestBase {
         User registeredUser = testUserCreator.createRegisteredUser();
 
         // when
-        service.updateInfo(registeredUser.getUid(), "newNickname");
+        service.updateInfo(registeredUser.getUid(), "newNick");
 
         // then
         User user = service.findByUid(registeredUser.getUid()).orElseThrow();
-        assertThat(user.getUserInfo().getNickname()).isEqualTo("newNickname");
+        assertThat(user.getUserInfo().getNickname()).isEqualTo("newNick");
         assertThat(user.getLastUpdatedAt()).isNotNull();
     }
 
@@ -220,8 +354,35 @@ class UserServiceTest extends IntegrationTestBase {
         User unregisteredUser = testUserCreator.createUnregisteredUser();
 
         // when
-        assertThatThrownBy(() -> service.updateInfo(unregisteredUser.getUid(), "newNickname"))
+        assertThatThrownBy(() -> service.updateInfo(unregisteredUser.getUid(), "newNick"))
                 .isInstanceOf(NotRegisteredException.class);
+    }
+
+    @TestFactory
+    @DisplayName("사용자 정보 수정 - 에러; 파라미터 룰 위반")
+    Collection<DynamicTest> updateInfo_ParameterError() {
+        return List.of(
+                DynamicTest.dynamicTest("유저 UID가 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.updateInfo(null, "newNickname"))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("유저 UID가 빈 문자열인 경우", () -> {
+                    assertThatThrownBy(() -> service.updateInfo("", "newNickname"))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("닉네임이 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.updateInfo("uid", null))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("닉네임이 빈 문자열인 경우", () -> {
+                    assertThatThrownBy(() -> service.updateInfo("uid", ""))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("닉네임 길이가 제한을 넘긴 경우", () -> {
+                    assertThatThrownBy(() -> service.updateInfo("uid", "12345678901"))
+                            .isInstanceOf(ParameterValidateException.class);
+                })
+        );
     }
 
     @Test
@@ -237,5 +398,20 @@ class UserServiceTest extends IntegrationTestBase {
         User user = service.findByUid(registeredUser.getUid()).orElseThrow();
         assertThat(user.getStatus()).isEqualTo(UserStatus.WITHDRAWN);
         assertThat(user.getWithdrawnAt()).isNotNull();
+    }
+
+    @TestFactory
+    @DisplayName("탈퇴 - 에러; 파라미터 룰 위반")
+    Collection<DynamicTest> withdraw_ParameterError() {
+        return List.of(
+                DynamicTest.dynamicTest("유저 UID가 누락된 경우", () -> {
+                    assertThatThrownBy(() -> service.withdraw(null))
+                            .isInstanceOf(ParameterValidateException.class);
+                }),
+                DynamicTest.dynamicTest("유저 UID가 빈 문자열인 경우", () -> {
+                    assertThatThrownBy(() -> service.withdraw(""))
+                            .isInstanceOf(ParameterValidateException.class);
+                })
+        );
     }
 }
