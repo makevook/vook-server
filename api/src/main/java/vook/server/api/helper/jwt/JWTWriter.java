@@ -1,4 +1,4 @@
-package vook.server.api.common.helper.jwt;
+package vook.server.api.helper.jwt;
 
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;

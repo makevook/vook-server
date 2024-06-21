@@ -1,4 +1,4 @@
-package vook.server.api.common.entity;
+package vook.server.api.app.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

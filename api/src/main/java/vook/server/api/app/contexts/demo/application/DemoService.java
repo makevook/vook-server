@@ -2,6 +2,8 @@ package vook.server.api.app.contexts.demo.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import vook.server.api.app.contexts.demo.application.data.DemoTermSearchParams;
+import vook.server.api.app.contexts.demo.application.data.DemoTermSearchResult;
 
 @Service
 @RequiredArgsConstructor

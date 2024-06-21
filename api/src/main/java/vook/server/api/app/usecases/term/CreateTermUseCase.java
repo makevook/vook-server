@@ -37,7 +37,12 @@ public class CreateTermUseCase {
             List<String> synonyms
     ) {
         public TermCreateCommand toServiceCommand(Vocabulary vocabulary) {
-            return TermCreateCommand.of(vocabulary, term, meaning, synonyms);
+            return TermCreateCommand.builder()
+                    .vocabulary(vocabulary)
+                    .term(term)
+                    .meaning(meaning)
+                    .synonyms(synonyms)
+                    .build();
         }
     }
 

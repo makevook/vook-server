@@ -3,9 +3,9 @@ package vook.server.api.app.contexts.vocabulary.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Formula;
+import vook.server.api.app.common.entity.BaseEntity;
 import vook.server.api.app.contexts.term.domain.Term;
 import vook.server.api.app.contexts.user.domain.User;
-import vook.server.api.common.entity.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;

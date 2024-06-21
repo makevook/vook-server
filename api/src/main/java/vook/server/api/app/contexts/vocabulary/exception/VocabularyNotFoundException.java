@@ -1,6 +1,6 @@
 package vook.server.api.app.contexts.vocabulary.exception;
 
-import vook.server.api.common.exception.AppException;
+import vook.server.api.app.common.exception.AppException;
 
 public class VocabularyNotFoundException extends AppException {
     @Override

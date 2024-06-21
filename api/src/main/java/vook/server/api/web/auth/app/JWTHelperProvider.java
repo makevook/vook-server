@@ -3,8 +3,8 @@ package vook.server.api.web.auth.app;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import vook.server.api.common.helper.jwt.JWTReader;
-import vook.server.api.common.helper.jwt.JWTWriter;
+import vook.server.api.helper.jwt.JWTReader;
+import vook.server.api.helper.jwt.JWTWriter;
 
 @Component
 public class JWTHelperProvider {

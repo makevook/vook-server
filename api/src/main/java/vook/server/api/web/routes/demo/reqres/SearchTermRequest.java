@@ -2,7 +2,7 @@ package vook.server.api.web.routes.demo.reqres;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import vook.server.api.app.contexts.demo.application.DemoTermSearchParams;
+import vook.server.api.app.contexts.demo.application.data.DemoTermSearchParams;
 
 import java.util.List;
 

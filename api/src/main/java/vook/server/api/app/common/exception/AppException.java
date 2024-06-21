@@ -1,4 +1,4 @@
-package vook.server.api.common.exception;
+package vook.server.api.app.common.exception;
 
 import lombok.Getter;
 

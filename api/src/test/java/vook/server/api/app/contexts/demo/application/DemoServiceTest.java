@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.app.contexts.demo.application.data.DemoTermSearchParams;
+import vook.server.api.app.contexts.demo.application.data.DemoTermSearchResult;
 import vook.server.api.app.contexts.demo.domain.DemoTerm;
 import vook.server.api.app.contexts.demo.domain.DemoTermRepository;
 import vook.server.api.app.infra.search.demo.MeilisearchDemoTermSearchService;
