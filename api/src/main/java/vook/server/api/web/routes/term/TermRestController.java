@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vook.server.api.app.usecases.term.CreateTermUseCase;
 import vook.server.api.web.auth.data.VookLoginUser;
 import vook.server.api.web.common.CommonApiResponse;
 import vook.server.api.web.routes.term.reqres.TermCreateRequest;
@@ -19,7 +20,7 @@ import vook.server.api.web.routes.term.reqres.TermCreateResponse;
 @RequiredArgsConstructor
 public class TermRestController implements TermApi {
 
-    private final TermWebService service;
+    private final CreateTermUseCase createTermUseCase;
 
     @Override
     @PostMapping
@@ -27,7 +28,9 @@ public class TermRestController implements TermApi {
             @AuthenticationPrincipal VookLoginUser user,
             @Validated @RequestBody TermCreateRequest request
     ) {
-        TermCreateResponse response = service.create(user, request);
+        var command = request.toCommand(user);
+        var result = createTermUseCase.create(command);
+        var response = TermCreateResponse.from(result);
         return CommonApiResponse.okWithResult(response);
     }
 }

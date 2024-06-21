@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.contexts.user.domain.User;
+import vook.server.api.app.usecases.term.CreateTermUseCase;
 import vook.server.api.testhelper.HttpEntityBuilder;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
@@ -28,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TermRestControllerTest extends IntegrationTestBase {
 
     @MockBean
-    TermWebService webService;
+    CreateTermUseCase createTermUseCase;
 
     @Autowired
     TestUserCreator testUserCreator;

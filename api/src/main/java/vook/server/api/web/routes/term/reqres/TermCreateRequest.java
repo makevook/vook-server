@@ -3,8 +3,8 @@ package vook.server.api.web.routes.term.reqres;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import vook.server.api.app.contexts.term.application.data.TermCreateCommand;
-import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
+import vook.server.api.app.usecases.term.CreateTermUseCase;
+import vook.server.api.web.auth.data.VookLoginUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,13 @@ public class TermCreateRequest {
 
     private List<String> synonyms = new ArrayList<>();
 
-    public TermCreateCommand toCommand(Vocabulary vocabulary) {
-        return TermCreateCommand.of(vocabulary, term, meaning, synonyms);
+    public CreateTermUseCase.Command toCommand(VookLoginUser loginUser) {
+        return new CreateTermUseCase.Command(
+                loginUser.getUid(),
+                vocabularyUid,
+                term,
+                meaning,
+                synonyms
+        );
     }
 }

@@ -1,4 +1,4 @@
-package vook.server.api.web.routes.term;
+package vook.server.api.app.usecases.term;
 
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
@@ -17,8 +17,6 @@ import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
 import vook.server.api.web.auth.data.VookLoginUser;
-import vook.server.api.web.routes.term.reqres.TermCreateRequest;
-import vook.server.api.web.routes.term.reqres.TermCreateResponse;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -27,10 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
-class TermWebServiceTest extends IntegrationTestBase {
-
+class CreateTermUseCaseTest extends IntegrationTestBase {
     @Autowired
-    TermWebService termWebService;
+    CreateTermUseCase useCase;
 
     @Autowired
     TestUserCreator testUserCreator;
@@ -51,23 +48,25 @@ class TermWebServiceTest extends IntegrationTestBase {
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
         Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
 
-        TermCreateRequest request = new TermCreateRequest();
-        request.setVocabularyUid(vocabulary.getUid());
-        request.setTerm("테스트 단어");
-        request.setMeaning("테스트 뜻");
-        request.setSynonyms(List.of("동의어1", "동의어2"));
+        var command = new CreateTermUseCase.Command(
+                vookLoginUser.getUid(),
+                vocabulary.getUid(),
+                "테스트 단어",
+                "테스트 뜻",
+                List.of("동의어1", "동의어2")
+        );
 
         // when
-        TermCreateResponse response = termWebService.create(vookLoginUser, request);
+        var result = useCase.create(command);
 
         // then
-        assertThat(response.getUid()).isNotNull();
-        termRepository.findByUid(response.getUid()).ifPresent(term -> {
+        assertThat(result.uid()).isNotNull();
+        termRepository.findByUid(result.uid()).ifPresent(term -> {
             assertThat(term.getVocabulary().getUid()).isEqualTo(vocabulary.getUid());
-            assertThat(term.getTerm()).isEqualTo(request.getTerm());
-            assertThat(term.getMeaning()).isEqualTo(request.getMeaning());
+            assertThat(term.getTerm()).isEqualTo(command.term());
+            assertThat(term.getMeaning()).isEqualTo(command.meaning());
             assertThat(term.getSynonyms().stream().map(TermSynonym::getSynonym))
-                    .containsExactlyInAnyOrderElementsOf(request.getSynonyms());
+                    .containsExactlyInAnyOrderElementsOf(command.synonyms());
         });
         vocabularyRepository.findByUid(vocabulary.getUid()).ifPresent(v -> {
             assertThat(v.termCount()).isEqualTo(1);
@@ -81,14 +80,16 @@ class TermWebServiceTest extends IntegrationTestBase {
         User user = testUserCreator.createCompletedOnboardingUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
 
-        TermCreateRequest request = new TermCreateRequest();
-        request.setVocabularyUid("not-exist");
-        request.setTerm("테스트 단어");
-        request.setMeaning("테스트 뜻");
-        request.setSynonyms(List.of("동의어1", "동의어2"));
+        var command = new CreateTermUseCase.Command(
+                vookLoginUser.getUid(),
+                "not-exist",
+                "테스트 단어",
+                "테스트 뜻",
+                List.of("동의어1", "동의어2")
+        );
 
         // when
-        assertThatThrownBy(() -> termWebService.create(vookLoginUser, request))
+        assertThatThrownBy(() -> useCase.create(command))
                 .isInstanceOf(VocabularyNotFoundException.class);
     }
 
@@ -111,14 +112,16 @@ class TermWebServiceTest extends IntegrationTestBase {
         );
         em.clear();
 
-        TermCreateRequest request = new TermCreateRequest();
-        request.setVocabularyUid(vocabulary.getUid());
-        request.setTerm("테스트 단어");
-        request.setMeaning("테스트 뜻");
-        request.setSynonyms(List.of("동의어1", "동의어2"));
+        var command = new CreateTermUseCase.Command(
+                vookLoginUser.getUid(),
+                vocabulary.getUid(),
+                "테스트 단어",
+                "테스트 뜻",
+                List.of("동의어1", "동의어2")
+        );
 
         // when
-        assertThatThrownBy(() -> termWebService.create(vookLoginUser, request))
+        assertThatThrownBy(() -> useCase.create(command))
                 .isInstanceOf(TermLimitExceededException.class);
     }
 }
