@@ -1,4 +1,4 @@
-package vook.server.api.helper.jwt;
+package vook.server.api.common.helper.jwt;
 
 public abstract class JWTHelper {
     protected static <T> T run(CheckedSupplier<T> supplier) {

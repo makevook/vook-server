@@ -1,4 +1,4 @@
-package vook.server.api.helper;
+package vook.server.api.common.helper;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
