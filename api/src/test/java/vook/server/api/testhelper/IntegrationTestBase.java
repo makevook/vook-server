@@ -13,7 +13,7 @@ import vook.server.api.outbound.search.common.MeilisearchProperties;
 import java.util.Map;
 import java.util.TimeZone;
 
-import static vook.server.api.app.config.TimeZoneConfig.DEFAULT_TIME_ZONE;
+import static vook.server.api.config.TimeZoneConfig.DEFAULT_TIME_ZONE;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class IntegrationTestBase {

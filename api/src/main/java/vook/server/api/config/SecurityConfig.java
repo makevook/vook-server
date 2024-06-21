@@ -1,4 +1,4 @@
-package vook.server.api.web.config;
+package vook.server.api.config;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

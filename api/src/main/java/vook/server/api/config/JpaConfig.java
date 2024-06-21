@@ -1,4 +1,4 @@
-package vook.server.api.app.config;
+package vook.server.api.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

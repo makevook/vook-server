@@ -1,4 +1,4 @@
-package vook.server.api.app.config;
+package vook.server.api.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
