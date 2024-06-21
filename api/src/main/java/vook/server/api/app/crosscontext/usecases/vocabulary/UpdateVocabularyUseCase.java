@@ -1,4 +1,4 @@
-package vook.server.api.app.usecases.vocabulary;
+package vook.server.api.app.crosscontext.usecases.vocabulary;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.application.VocabularyService;
 import vook.server.api.app.contexts.vocabulary.application.data.VocabularyUpdateCommand;
 import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
-import vook.server.api.app.polices.VocabularyPolicy;
+import vook.server.api.app.crosscontext.polices.VocabularyPolicy;
 
 @Service
 @Transactional

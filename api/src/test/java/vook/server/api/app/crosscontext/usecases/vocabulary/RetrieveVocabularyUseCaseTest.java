@@ -1,4 +1,4 @@
-package vook.server.api.app.usecases.vocabulary;
+package vook.server.api.app.crosscontext.usecases.vocabulary;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

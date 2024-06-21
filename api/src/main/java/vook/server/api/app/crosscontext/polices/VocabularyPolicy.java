@@ -1,4 +1,4 @@
-package vook.server.api.app.polices;
+package vook.server.api.app.crosscontext.polices;
 
 import org.springframework.stereotype.Component;
 import vook.server.api.app.common.exception.AppException;

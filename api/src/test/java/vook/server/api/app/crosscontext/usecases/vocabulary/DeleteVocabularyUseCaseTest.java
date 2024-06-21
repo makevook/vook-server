@@ -1,4 +1,4 @@
-package vook.server.api.app.usecases.vocabulary;
+package vook.server.api.app.crosscontext.usecases.vocabulary;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,21 +8,20 @@ import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
 import vook.server.api.app.contexts.vocabulary.domain.VocabularyRepository;
 import vook.server.api.app.contexts.vocabulary.exception.VocabularyNotFoundException;
-import vook.server.api.app.polices.VocabularyPolicy;
+import vook.server.api.app.crosscontext.polices.VocabularyPolicy;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
 import vook.server.api.web.auth.data.VookLoginUser;
-import vook.server.api.web.routes.vocabulary.reqres.VocabularyUpdateRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
-class UpdateVocabularyUseCaseTest extends IntegrationTestBase {
+class DeleteVocabularyUseCaseTest extends IntegrationTestBase {
 
     @Autowired
-    UpdateVocabularyUseCase useCase;
+    DeleteVocabularyUseCase useCase;
 
     @Autowired
     TestUserCreator testUserCreator;
@@ -32,58 +31,48 @@ class UpdateVocabularyUseCaseTest extends IntegrationTestBase {
     VocabularyRepository vocabularyRepository;
 
     @Test
-    @DisplayName("용어집 수정 - 정상")
-    void updateVocabulary() {
+    @DisplayName("용어집 삭제 - 정상")
+    void deleteVocabulary() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
         Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
 
-        var request = new VocabularyUpdateRequest();
-        request.setName("updatedName");
-
         // when
-        var command = new UpdateVocabularyUseCase.Command(vookLoginUser.getUid(), vocabulary.getUid(), request.getName());
+        var command = new DeleteVocabularyUseCase.Command(vookLoginUser.getUid(), vocabulary.getUid());
         useCase.execute(command);
 
         // then
-        Vocabulary updatedVocabulary = vocabularyRepository.findByUid(vocabulary.getUid()).orElseThrow();
-        assertThat(updatedVocabulary.getName()).isEqualTo(request.getName());
+        assertThat(vocabularyRepository.findByUid(vocabulary.getUid())).isEmpty();
     }
 
     @Test
-    @DisplayName("용어집 수정 - 실패; 해당 용어집이 존재하지 않는 경우")
-    void updateVocabularyError1() {
+    @DisplayName("용어집 삭제 - 실패; 해당 용어집이 존재하지 않는 경우")
+    void deleteVocabularyError1() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
         testVocabularyCreator.createVocabulary(user);
 
-        var request = new VocabularyUpdateRequest();
-        request.setName("updatedName");
-
         // when
         assertThatThrownBy(() -> {
-            var command = new UpdateVocabularyUseCase.Command(vookLoginUser.getUid(), "nonExistentUid", request.getName());
+            var command = new DeleteVocabularyUseCase.Command(vookLoginUser.getUid(), "nonExistentUid");
             useCase.execute(command);
         }).isInstanceOf(VocabularyNotFoundException.class);
     }
 
     @Test
-    @DisplayName("용어집 수정 - 실패; 해당 용어집이 다른 사용자의 것인 경우")
-    void updateVocabularyError2() {
+    @DisplayName("용어집 삭제 - 실패; 해당 용어집이 다른 사용자의 것인 경우")
+    void deleteVocabularyError2() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
         User otherUser = testUserCreator.createCompletedOnboardingUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
         Vocabulary vocabulary = testVocabularyCreator.createVocabulary(otherUser);
 
-        var request = new VocabularyUpdateRequest();
-        request.setName("updatedName");
-
         // when
         assertThatThrownBy(() -> {
-            var command = new UpdateVocabularyUseCase.Command(vookLoginUser.getUid(), vocabulary.getUid(), request.getName());
+            var command = new DeleteVocabularyUseCase.Command(vookLoginUser.getUid(), vocabulary.getUid());
             useCase.execute(command);
         }).isInstanceOf(VocabularyPolicy.NotValidOwnerException.class);
     }

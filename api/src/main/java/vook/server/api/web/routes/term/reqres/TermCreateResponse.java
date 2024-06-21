@@ -1,7 +1,7 @@
 package vook.server.api.web.routes.term.reqres;
 
 import lombok.Getter;
-import vook.server.api.app.usecases.term.CreateTermUseCase;
+import vook.server.api.app.crosscontext.usecases.term.CreateTermUseCase;
 
 @Getter
 public class TermCreateResponse {

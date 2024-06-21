@@ -1,4 +1,4 @@
-package vook.server.api.app.usecases.term;
+package vook.server.api.app.crosscontext.usecases.term;
 
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;

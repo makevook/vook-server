@@ -3,7 +3,7 @@ package vook.server.api.web.routes.term.reqres;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import vook.server.api.app.usecases.term.CreateTermUseCase;
+import vook.server.api.app.crosscontext.usecases.term.CreateTermUseCase;
 import vook.server.api.web.auth.data.VookLoginUser;
 
 import java.util.ArrayList;
