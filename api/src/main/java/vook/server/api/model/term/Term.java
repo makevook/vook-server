@@ -1,11 +1,13 @@
-package vook.server.api.model.vocabulary;
+package vook.server.api.model.term;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import vook.server.api.model.common.BaseEntity;
+import vook.server.api.model.vocabulary.Vocabulary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -15,6 +17,8 @@ public class Term extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String uid;
 
     /**
      * 용어 이름
@@ -41,13 +45,15 @@ public class Term extends BaseEntity {
             Vocabulary vocabulary
     ) {
         Term result = new Term();
+        result.uid = UUID.randomUUID().toString();
         result.term = term;
         result.meaning = meaning;
         result.vocabulary = vocabulary;
+        vocabulary.addTerm(result);
         return result;
     }
 
-    public void addSynonym(String synonym) {
-        this.synonyms.add(TermSynonym.forCreateOf(synonym, this));
+    public void addAllSynonym(List<String> synonyms) {
+        synonyms.forEach(s -> this.synonyms.add(TermSynonym.forCreateOf(s, this)));
     }
 }
