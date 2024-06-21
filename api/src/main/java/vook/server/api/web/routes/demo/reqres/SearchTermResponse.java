@@ -1,7 +1,7 @@
 package vook.server.api.web.routes.demo.reqres;
 
 import lombok.Getter;
-import vook.server.api.outbound.search.demo.DemoTermSearchResult;
+import vook.server.api.app.infra.search.demo.DemoTermSearchResult;
 
 import java.util.List;
 import java.util.Map;

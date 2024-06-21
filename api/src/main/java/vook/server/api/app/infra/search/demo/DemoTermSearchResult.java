@@ -1,4 +1,4 @@
-package vook.server.api.outbound.search.demo;
+package vook.server.api.app.infra.search.demo;
 
 import com.meilisearch.sdk.model.Searchable;
 import lombok.Getter;
