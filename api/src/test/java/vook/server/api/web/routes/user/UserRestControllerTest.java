@@ -2,14 +2,12 @@ package vook.server.api.web.routes.user;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.app.contexts.user.application.UserService;
 import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.testhelper.HttpEntityBuilder;
 import vook.server.api.testhelper.IntegrationTestBase;
@@ -26,13 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 class UserRestControllerTest extends IntegrationTestBase {
 
-    @MockBean
-    UserWebService webService;
+    @Autowired
+    UserService userService;
 
     @Autowired
     TestUserCreator testUserCreator;
 
-    @Test
     void userInfo() {
         // given
         User unregisteredUser = testUserCreator.createUnregisteredUser();
@@ -52,7 +49,6 @@ class UserRestControllerTest extends IntegrationTestBase {
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    @Test
     @DisplayName("회원 가입 - 정상")
     void register() {
         // given
@@ -78,7 +74,6 @@ class UserRestControllerTest extends IntegrationTestBase {
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    @TestFactory
     @DisplayName("회원 가입 - 실패")
     Collection<DynamicTest> registerError() {
         // given
@@ -136,7 +131,6 @@ class UserRestControllerTest extends IntegrationTestBase {
         );
     }
 
-    @Test
     @DisplayName("회원 정보 수정 - 정상")
     void updateInfo() {
         // given
@@ -160,7 +154,6 @@ class UserRestControllerTest extends IntegrationTestBase {
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    @TestFactory
     @DisplayName("회원 정보 수정 - 실패")
     Collection<DynamicTest> updateInfoError() {
         // given
