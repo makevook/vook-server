@@ -66,27 +66,26 @@ style: |
 └── vook
     └── server
         └── api
-            ├── app         # 앱 파트
-            │   ├── common  # 앱 파트 공통
-            │   ├── config  # 앱 파트 설정 (@Configuration)
-            │   └── domain  # 도메인 별 비즈니스 로직
-            ├── devhelper   # 개발 편의성에 사용되는 로직
-            ├── helper      # 헬퍼 함수
-            ├── model       # 엔티티 모델
-            ├── outbound    # 외부 연동 어뎁터
-            └── web         # 웹 파트
-                ├── auth    # 인증, 인가
-                ├── common  # 웹 파트 공통
-                ├── config  # 웹 파트 설정 (@Configuration)
-                ├── routes  # 웹 라우터 (@RestController)
-                └── swagger # Swagger 공통 설정
+            ├── app              # 앱 파트
+            │   ├── common       # 앱 파트 공통
+            │   ├── contexts     # 도메인 별 비즈니스 로직
+            │   ├── crosscontext # 2개 이상의 도메인이 협력하는 비즈니스 로직
+            │   └── infra        # 외부 연동 어뎁터
+            ├── config           # 서버 설정 (@Configuration)
+            ├── devhelper        # 개발 편의성을 위한 컴포넌트 모음 (운영에서는 미사용 될 로직)
+            ├── helper           # 헬퍼 함수
+            └── web              # 웹 파트
+                ├── auth         # 인증, 인가
+                ├── common       # 웹 파트 공통
+                ├── routes       # 웹 라우터 (@RestController)
+                └── swagger      # Swagger 공통 설정
 ```
 
 ---
 
 # 프로젝트 구조 - api main package (layout)
 
-![w:850](./assets/dep.png)
+![w:700](./assets/dep.png)
 
 ---
 
