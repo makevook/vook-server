@@ -3,7 +3,7 @@ package vook.server.api.web.routes.term.reqres;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import vook.server.api.app.context.term.data.TermCreateCommand;
+import vook.server.api.app.context.term.application.data.TermCreateCommand;
 import vook.server.api.app.context.vocabulary.domain.Vocabulary;
 
 import java.util.ArrayList;

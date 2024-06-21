@@ -1,4 +1,4 @@
-package vook.server.api.app.context.term.data;
+package vook.server.api.app.context.term.application.data;
 
 import lombok.Getter;
 import vook.server.api.app.context.term.domain.Term;

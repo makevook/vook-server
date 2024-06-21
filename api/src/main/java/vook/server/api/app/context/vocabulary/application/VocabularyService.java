@@ -1,11 +1,11 @@
-package vook.server.api.app.context.vocabulary;
+package vook.server.api.app.context.vocabulary.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vook.server.api.app.context.user.domain.User;
-import vook.server.api.app.context.vocabulary.data.VocabularyCreateCommand;
-import vook.server.api.app.context.vocabulary.data.VocabularyDeleteCommand;
-import vook.server.api.app.context.vocabulary.data.VocabularyUpdateCommand;
+import vook.server.api.app.context.vocabulary.application.data.VocabularyCreateCommand;
+import vook.server.api.app.context.vocabulary.application.data.VocabularyDeleteCommand;
+import vook.server.api.app.context.vocabulary.application.data.VocabularyUpdateCommand;
 import vook.server.api.app.context.vocabulary.domain.Vocabulary;
 import vook.server.api.app.context.vocabulary.domain.VocabularyRepository;
 import vook.server.api.app.context.vocabulary.exception.VocabularyLimitExceededException;

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import vook.server.api.app.context.user.data.RegisterCommand;
+import vook.server.api.app.context.user.application.data.RegisterCommand;
 
 @Data
 public class UserRegisterRequest {

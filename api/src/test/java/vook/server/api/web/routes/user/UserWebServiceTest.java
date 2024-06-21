@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.app.context.user.UserService;
+import vook.server.api.app.context.user.application.UserService;
 import vook.server.api.app.context.user.domain.Funnel;
 import vook.server.api.app.context.user.domain.Job;
 import vook.server.api.app.context.user.domain.User;

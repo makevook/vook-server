@@ -1,11 +1,11 @@
-package vook.server.api.app.context.term;
+package vook.server.api.app.context.term.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vook.server.api.app.context.term.data.TermCreateCommand;
-import vook.server.api.app.context.term.exception.TermLimitExceededException;
+import vook.server.api.app.context.term.application.data.TermCreateCommand;
 import vook.server.api.app.context.term.domain.Term;
 import vook.server.api.app.context.term.domain.TermRepository;
+import vook.server.api.app.context.term.exception.TermLimitExceededException;
 
 @Service
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package vook.server.api.app.context.user.data;
+package vook.server.api.app.context.user.application.data;
 
 import lombok.Getter;
 
