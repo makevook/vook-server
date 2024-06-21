@@ -52,7 +52,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         var command = new CreateTermUseCase.Command(
                 vookLoginUser.getUid(),
                 vocabulary.getUid(),
-                "테스트 단어",
+                "테스트 용어",
                 "테스트 뜻",
                 List.of("동의어1", "동의어2")
         );
@@ -83,7 +83,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         var command = new CreateTermUseCase.Command(
                 vookLoginUser.getUid(),
                 "not-exist",
-                "테스트 단어",
+                "테스트 용어",
                 "테스트 뜻",
                 List.of("동의어1", "동의어2")
         );
@@ -104,7 +104,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         termRepository.saveAllAndFlush(
                 IntStream.range(0, 100)
                         .mapToObj(i -> Term.forCreateOf(
-                                "테스트 단어" + i,
+                                "테스트 용어" + i,
                                 "테스트 뜻" + i,
                                 new VocabularyId(vocabulary.getId())
                         ))
@@ -115,7 +115,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         var command = new CreateTermUseCase.Command(
                 vookLoginUser.getUid(),
                 vocabulary.getUid(),
-                "테스트 단어",
+                "테스트 용어",
                 "테스트 뜻",
                 List.of("동의어1", "동의어2")
         );

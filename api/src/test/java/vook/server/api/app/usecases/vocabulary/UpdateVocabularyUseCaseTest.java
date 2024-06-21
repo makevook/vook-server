@@ -32,7 +32,7 @@ class UpdateVocabularyUseCaseTest extends IntegrationTestBase {
     VocabularyRepository vocabularyRepository;
 
     @Test
-    @DisplayName("단어장 수정 - 정상")
+    @DisplayName("용어집 수정 - 정상")
     void updateVocabulary() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
@@ -52,7 +52,7 @@ class UpdateVocabularyUseCaseTest extends IntegrationTestBase {
     }
 
     @Test
-    @DisplayName("단어장 수정 - 실패; 해당 단어장이 존재하지 않는 경우")
+    @DisplayName("용어집 수정 - 실패; 해당 용어집이 존재하지 않는 경우")
     void updateVocabularyError1() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
@@ -70,7 +70,7 @@ class UpdateVocabularyUseCaseTest extends IntegrationTestBase {
     }
 
     @Test
-    @DisplayName("단어장 수정 - 실패; 해당 단어장이 다른 사용자의 것인 경우")
+    @DisplayName("용어집 수정 - 실패; 해당 용어집이 다른 사용자의 것인 경우")
     void updateVocabularyError2() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();

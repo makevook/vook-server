@@ -34,7 +34,7 @@ class CreateVocabularyUseCaseTest extends IntegrationTestBase {
     VocabularyRepository vocabularyRepository;
 
     @Test
-    @DisplayName("단어장 생성 - 정상")
+    @DisplayName("용어집 생성 - 정상")
     void createVocabulary() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
@@ -53,13 +53,13 @@ class CreateVocabularyUseCaseTest extends IntegrationTestBase {
     }
 
     @Test
-    @DisplayName("단어장 생성 - 실패; 단어장이 이미 3개 존재하는 경우")
+    @DisplayName("용어집 생성 - 실패; 용어집이 이미 3개 존재하는 경우")
     void createVocabularyError1() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
 
-        // 단어장 3개 생성
+        // 용어집 3개 생성
         testVocabularyCreator.createVocabulary(user);
         testVocabularyCreator.createVocabulary(user);
         testVocabularyCreator.createVocabulary(user);

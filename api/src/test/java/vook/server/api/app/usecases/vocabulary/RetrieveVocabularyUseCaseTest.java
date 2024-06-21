@@ -31,7 +31,7 @@ class RetrieveVocabularyUseCaseTest extends IntegrationTestBase {
     VocabularyRepository vocabularyRepository;
 
     @Test
-    @DisplayName("단어장 조회 - 정상")
+    @DisplayName("용어집 조회 - 정상")
     void vocabularies() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();

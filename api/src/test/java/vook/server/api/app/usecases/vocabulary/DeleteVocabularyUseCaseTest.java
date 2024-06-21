@@ -31,7 +31,7 @@ class DeleteVocabularyUseCaseTest extends IntegrationTestBase {
     VocabularyRepository vocabularyRepository;
 
     @Test
-    @DisplayName("단어장 삭제 - 정상")
+    @DisplayName("용어집 삭제 - 정상")
     void deleteVocabulary() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
@@ -47,7 +47,7 @@ class DeleteVocabularyUseCaseTest extends IntegrationTestBase {
     }
 
     @Test
-    @DisplayName("단어장 삭제 - 실패; 해당 단어장이 존재하지 않는 경우")
+    @DisplayName("용어집 삭제 - 실패; 해당 용어집이 존재하지 않는 경우")
     void deleteVocabularyError1() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
@@ -62,7 +62,7 @@ class DeleteVocabularyUseCaseTest extends IntegrationTestBase {
     }
 
     @Test
-    @DisplayName("단어장 삭제 - 실패; 해당 단어장이 다른 사용자의 것인 경우")
+    @DisplayName("용어집 삭제 - 실패; 해당 용어집이 다른 사용자의 것인 경우")
     void deleteVocabularyError2() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
