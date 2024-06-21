@@ -2,7 +2,7 @@ package vook.server.api.model.demo;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import vook.server.api.model.common.BaseEntity;
+import vook.server.api.common.entity.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;

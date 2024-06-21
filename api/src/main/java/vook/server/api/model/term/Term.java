@@ -2,7 +2,7 @@ package vook.server.api.model.term;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import vook.server.api.model.common.BaseEntity;
+import vook.server.api.common.entity.BaseEntity;
 import vook.server.api.model.vocabulary.Vocabulary;
 
 import java.util.ArrayList;

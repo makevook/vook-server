@@ -3,7 +3,7 @@ package vook.server.api.model.vocabulary;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Formula;
-import vook.server.api.model.common.BaseEntity;
+import vook.server.api.common.entity.BaseEntity;
 import vook.server.api.model.term.Term;
 import vook.server.api.model.user.User;
 
