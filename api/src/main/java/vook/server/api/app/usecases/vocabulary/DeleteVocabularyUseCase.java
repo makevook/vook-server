@@ -7,6 +7,7 @@ import vook.server.api.app.contexts.user.application.UserService;
 import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.application.VocabularyService;
 import vook.server.api.app.contexts.vocabulary.application.data.VocabularyDeleteCommand;
+import vook.server.api.app.contexts.vocabulary.domain.UserId;
 
 @Service
 @Transactional
@@ -18,7 +19,7 @@ public class DeleteVocabularyUseCase {
 
     public void execute(Command command) {
         User user = userService.findByUid(command.userUid()).orElseThrow();
-        vocabularyService.delete(VocabularyDeleteCommand.of(command.vocabularyUid(), user));
+        vocabularyService.delete(VocabularyDeleteCommand.of(command.vocabularyUid(), new UserId(user.getId())));
     }
 
     public record Command(

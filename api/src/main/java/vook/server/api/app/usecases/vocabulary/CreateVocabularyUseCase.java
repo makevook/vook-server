@@ -7,6 +7,7 @@ import vook.server.api.app.contexts.user.application.UserService;
 import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.application.VocabularyService;
 import vook.server.api.app.contexts.vocabulary.application.data.VocabularyCreateCommand;
+import vook.server.api.app.contexts.vocabulary.domain.UserId;
 
 @Service
 @Transactional
@@ -18,7 +19,7 @@ public class CreateVocabularyUseCase {
 
     public void execute(Command command) {
         User user = userService.findByUid(command.userUid()).orElseThrow();
-        vocabularyService.create(VocabularyCreateCommand.of(command.name(), user));
+        vocabularyService.create(VocabularyCreateCommand.of(command.name(), new UserId(user.getId())));
     }
 
     public record Command(

@@ -10,6 +10,7 @@ import vook.server.api.app.contexts.term.domain.VocabularyId;
 import vook.server.api.app.contexts.user.application.UserService;
 import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.application.VocabularyService;
+import vook.server.api.app.contexts.vocabulary.domain.UserId;
 import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
 import vook.server.api.app.usecases.term.exception.TermLimitExceededException;
 
@@ -27,7 +28,7 @@ public class CreateTermUseCase {
     public Result execute(Command command) {
         User user = userService.findByUid(command.userUid()).orElseThrow();
 
-        Vocabulary vocabulary = vocabularyService.findByUidAndUser(command.vocabularyUid(), user);
+        Vocabulary vocabulary = vocabularyService.findByUidAndUser(command.vocabularyUid(), new UserId(user.getId()));
         int termCount = vocabulary.termCount();
         if (termCount >= 100) {
             throw new TermLimitExceededException();

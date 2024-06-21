@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Formula;
 import vook.server.api.app.common.entity.BaseEntity;
-import vook.server.api.app.contexts.user.domain.User;
 
 import java.util.UUID;
 
@@ -25,21 +24,21 @@ public class Vocabulary extends BaseEntity {
     @Column(length = 20, nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
+    private UserId userId;
 
     @Formula("(SELECT COUNT(t.id) FROM term t WHERE t.vocabulary_id = id)")
     private int termCount;
 
     public static Vocabulary forCreateOf(
             String name,
-            User user
+            UserId userId
     ) {
         Vocabulary result = new Vocabulary();
         result.uid = UUID.randomUUID().toString();
         result.name = name;
-        result.user = user;
+        result.userId = userId;
         return result;
     }
 
@@ -47,8 +46,8 @@ public class Vocabulary extends BaseEntity {
         return this.termCount;
     }
 
-    public boolean isValidOwner(User user) {
-        return this.user.equals(user);
+    public boolean isValidOwner(UserId userId) {
+        return this.userId.equals(userId);
     }
 
     public void update(String name) {

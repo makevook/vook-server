@@ -3,7 +3,7 @@ package vook.server.api.app.contexts.vocabulary.application.data;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import vook.server.api.app.contexts.user.domain.User;
+import vook.server.api.app.contexts.vocabulary.domain.UserId;
 
 @Getter
 public class VocabularyDeleteCommand {
@@ -12,12 +12,12 @@ public class VocabularyDeleteCommand {
     private String vocabularyUid;
 
     @NotNull
-    private User user;
+    private UserId userId;
 
-    public static VocabularyDeleteCommand of(String vocabularyUid, User user) {
+    public static VocabularyDeleteCommand of(String vocabularyUid, UserId userId) {
         VocabularyDeleteCommand command = new VocabularyDeleteCommand();
         command.vocabularyUid = vocabularyUid;
-        command.user = user;
+        command.userId = userId;
         return command;
     }
 }

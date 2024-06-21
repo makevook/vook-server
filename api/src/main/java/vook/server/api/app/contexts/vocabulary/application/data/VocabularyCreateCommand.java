@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import vook.server.api.app.contexts.user.domain.User;
+import vook.server.api.app.contexts.vocabulary.domain.UserId;
 
 @Getter
 public class VocabularyCreateCommand {
@@ -14,12 +14,12 @@ public class VocabularyCreateCommand {
     private String name;
 
     @NotNull
-    private User user;
+    private UserId userId;
 
-    public static VocabularyCreateCommand of(String name, User user) {
+    public static VocabularyCreateCommand of(String name, UserId userId) {
         VocabularyCreateCommand command = new VocabularyCreateCommand();
         command.name = name;
-        command.user = user;
+        command.userId = userId;
         return command;
     }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.contexts.user.domain.User;
+import vook.server.api.app.contexts.vocabulary.domain.UserId;
 import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
 import vook.server.api.app.contexts.vocabulary.domain.VocabularyRepository;
 import vook.server.api.app.contexts.vocabulary.exception.VocabularyLimitExceededException;
@@ -46,7 +47,7 @@ class CreateVocabularyUseCaseTest extends IntegrationTestBase {
         useCase.execute(command);
 
         // then
-        List<Vocabulary> vocabularies = vocabularyRepository.findAllByUser(user);
+        List<Vocabulary> vocabularies = vocabularyRepository.findAllByUserId(new UserId(user.getId()));
         assertThat(vocabularies).hasSize(1);
         assertThat(vocabularies.getFirst().getName()).isEqualTo(request.getName());
     }

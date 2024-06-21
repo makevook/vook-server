@@ -32,7 +32,7 @@ public class Term extends BaseEntity {
     private String meaning;
 
     @Embedded
-    @AttributeOverride(name = "id", column = @Column(name = "vocabulary_id"))
+    @AttributeOverride(name = "id", column = @Column(name = "vocabulary_id", nullable = false))
     private VocabularyId vocabularyId;
 
     @OneToMany(mappedBy = "term", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)

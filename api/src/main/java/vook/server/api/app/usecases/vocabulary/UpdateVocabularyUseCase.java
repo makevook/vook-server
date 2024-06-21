@@ -7,6 +7,7 @@ import vook.server.api.app.contexts.user.application.UserService;
 import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.application.VocabularyService;
 import vook.server.api.app.contexts.vocabulary.application.data.VocabularyUpdateCommand;
+import vook.server.api.app.contexts.vocabulary.domain.UserId;
 
 @Service
 @Transactional
@@ -27,7 +28,7 @@ public class UpdateVocabularyUseCase {
             String name
     ) {
         public VocabularyUpdateCommand toServiceCommand(User user) {
-            return VocabularyUpdateCommand.of(vocabularyUid(), name(), user);
+            return VocabularyUpdateCommand.of(vocabularyUid(), name(), new UserId(user.getId()));
         }
     }
 }

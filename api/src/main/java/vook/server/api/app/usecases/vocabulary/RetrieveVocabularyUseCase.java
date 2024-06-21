@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.contexts.user.application.UserService;
 import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.application.VocabularyService;
+import vook.server.api.app.contexts.vocabulary.domain.UserId;
 import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
 
 import java.time.LocalDateTime;
@@ -21,10 +22,9 @@ public class RetrieveVocabularyUseCase {
 
     public Result execute(Command command) {
         User user = userService.findByUid(command.userUid()).orElseThrow();
-        List<Vocabulary> vocabularies = vocabularyService.findAllBy(user);
+        List<Vocabulary> vocabularies = vocabularyService.findAllBy(new UserId(user.getId()));
         return Result.from(vocabularies);
     }
-
 
     public record Command(
             String userUid
