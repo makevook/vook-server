@@ -1,4 +1,4 @@
-package vook.server.api.web.common;
+package vook.server.api.common.web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -6,7 +6,7 @@ import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import vook.server.api.app.common.AppException;
+import vook.server.api.common.exception.AppException;
 
 @Slf4j
 @RestControllerAdvice

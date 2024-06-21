@@ -1,4 +1,4 @@
-package vook.server.api.web.common;
+package vook.server.api.common.web;
 
 public class CommonApiException extends RuntimeException {
 

@@ -5,7 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import vook.server.api.web.auth.data.VookLoginUser;
-import vook.server.api.web.common.CommonApiResponse;
+import vook.server.api.common.web.CommonApiResponse;
 import vook.server.api.web.routes.vocabulary.reqres.VocabularyCreateRequest;
 import vook.server.api.web.routes.vocabulary.reqres.VocabularyResponse;
 import vook.server.api.web.routes.vocabulary.reqres.VocabularyUpdateRequest;

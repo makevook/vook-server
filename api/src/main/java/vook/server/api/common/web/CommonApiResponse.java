@@ -1,4 +1,4 @@
-package vook.server.api.web.common;
+package vook.server.api.common.web;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;

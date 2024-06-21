@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import vook.server.api.web.common.CommonApiResponse;
+import vook.server.api.common.web.CommonApiResponse;
 import vook.server.api.web.routes.demo.reqres.SearchTermRequest;
 import vook.server.api.web.routes.demo.reqres.SearchTermResponse;
 
