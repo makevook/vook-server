@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.common.exception.ParameterValidateException;
 import vook.server.api.app.contexts.term.application.data.TermCreateCommand;
 import vook.server.api.app.contexts.term.domain.Term;
+import vook.server.api.app.contexts.term.domain.VocabularyId;
 import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
 import vook.server.api.testhelper.IntegrationTestBase;
@@ -41,7 +42,7 @@ class TermServiceTest extends IntegrationTestBase {
         Vocabulary vocabulary = vocabularyCreator.createVocabulary(user);
 
         TermCreateCommand command = TermCreateCommand.builder()
-                .vocabulary(vocabulary)
+                .vocabularyId(new VocabularyId(vocabulary.getId()))
                 .term("용어")
                 .meaning("용어 설명")
                 .synonyms(List.of("동의어1", "동의어2"))
@@ -67,7 +68,7 @@ class TermServiceTest extends IntegrationTestBase {
         return List.of(
                 DynamicTest.dynamicTest("용어 이름이 누락 된 경우", () -> {
                     TermCreateCommand command = TermCreateCommand.builder()
-                            .vocabulary(vocabulary)
+                            .vocabularyId(new VocabularyId(vocabulary.getId()))
                             .meaning("용어 설명")
                             .synonyms(List.of("동의어1", "동의어2"))
                             .build();
@@ -76,7 +77,7 @@ class TermServiceTest extends IntegrationTestBase {
                 }),
                 DynamicTest.dynamicTest("용어 이름이 제한을 넘는 경우", () -> {
                     TermCreateCommand command = TermCreateCommand.builder()
-                            .vocabulary(vocabulary)
+                            .vocabularyId(new VocabularyId(vocabulary.getId()))
                             .term("a".repeat(101))
                             .meaning("용어 설명")
                             .synonyms(List.of("동의어1", "동의어2"))
@@ -86,7 +87,7 @@ class TermServiceTest extends IntegrationTestBase {
                 }),
                 DynamicTest.dynamicTest("용어 뜻이 누락 된 경우", () -> {
                     TermCreateCommand command = TermCreateCommand.builder()
-                            .vocabulary(vocabulary)
+                            .vocabularyId(new VocabularyId(vocabulary.getId()))
                             .term("용어")
                             .synonyms(List.of("동의어1", "동의어2"))
                             .build();
@@ -95,7 +96,7 @@ class TermServiceTest extends IntegrationTestBase {
                 }),
                 DynamicTest.dynamicTest("용어 뜻이 제한을 넘는 경우", () -> {
                     TermCreateCommand command = TermCreateCommand.builder()
-                            .vocabulary(vocabulary)
+                            .vocabularyId(new VocabularyId(vocabulary.getId()))
                             .term("용어")
                             .meaning("a".repeat(2001))
                             .synonyms(List.of("동의어1", "동의어2"))
@@ -105,7 +106,7 @@ class TermServiceTest extends IntegrationTestBase {
                 }),
                 DynamicTest.dynamicTest("동의어가 누락 된 경우", () -> {
                     TermCreateCommand command = TermCreateCommand.builder()
-                            .vocabulary(vocabulary)
+                            .vocabularyId(new VocabularyId(vocabulary.getId()))
                             .term("용어")
                             .meaning("용어 설명")
                             .build();

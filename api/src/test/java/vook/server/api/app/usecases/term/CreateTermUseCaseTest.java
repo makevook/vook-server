@@ -8,11 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.contexts.term.domain.Term;
 import vook.server.api.app.contexts.term.domain.TermRepository;
 import vook.server.api.app.contexts.term.domain.TermSynonym;
-import vook.server.api.app.contexts.term.exception.TermLimitExceededException;
+import vook.server.api.app.contexts.term.domain.VocabularyId;
 import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
 import vook.server.api.app.contexts.vocabulary.domain.VocabularyRepository;
 import vook.server.api.app.contexts.vocabulary.exception.VocabularyNotFoundException;
+import vook.server.api.app.usecases.term.exception.TermLimitExceededException;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
@@ -63,7 +64,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         // then
         assertThat(result.uid()).isNotNull();
         termRepository.findByUid(result.uid()).ifPresent(term -> {
-            assertThat(term.getVocabulary().getUid()).isEqualTo(vocabulary.getUid());
+            assertThat(term.getVocabularyId().getId()).isEqualTo(vocabulary.getId());
             assertThat(term.getTerm()).isEqualTo(command.term());
             assertThat(term.getMeaning()).isEqualTo(command.meaning());
             assertThat(term.getSynonyms().stream().map(TermSynonym::getSynonym))
@@ -107,7 +108,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
                         .mapToObj(i -> Term.forCreateOf(
                                 "테스트 단어" + i,
                                 "테스트 뜻" + i,
-                                vocabulary
+                                new VocabularyId(vocabulary.getId())
                         ))
                         .toList()
         );

@@ -4,11 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Formula;
 import vook.server.api.app.common.entity.BaseEntity;
-import vook.server.api.app.contexts.term.domain.Term;
 import vook.server.api.app.contexts.user.domain.User;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -32,9 +29,6 @@ public class Vocabulary extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "vocabulary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Term> terms = new ArrayList<>();
-
     @Formula("(SELECT COUNT(t.id) FROM term t WHERE t.vocabulary_id = id)")
     private int termCount;
 
@@ -47,11 +41,6 @@ public class Vocabulary extends BaseEntity {
         result.name = name;
         result.user = user;
         return result;
-    }
-
-    public void addTerm(Term term) {
-        this.terms.add(term);
-        this.termCount++;
     }
 
     public int termCount() {

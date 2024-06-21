@@ -3,7 +3,6 @@ package vook.server.api.app.contexts.term.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import vook.server.api.app.common.entity.BaseEntity;
-import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +31,9 @@ public class Term extends BaseEntity {
     @Column(length = 2000, nullable = false)
     private String meaning;
 
-    @ManyToOne
-    @JoinColumn(name = "vocabulary_id", nullable = false)
-    private Vocabulary vocabulary;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "vocabulary_id"))
+    private VocabularyId vocabularyId;
 
     @OneToMany(mappedBy = "term", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TermSynonym> synonyms = new ArrayList<>();
@@ -42,14 +41,13 @@ public class Term extends BaseEntity {
     public static Term forCreateOf(
             String term,
             String meaning,
-            Vocabulary vocabulary
+            VocabularyId vocabularyId
     ) {
         Term result = new Term();
         result.uid = UUID.randomUUID().toString();
         result.term = term;
         result.meaning = meaning;
-        result.vocabulary = vocabulary;
-        vocabulary.addTerm(result);
+        result.vocabularyId = vocabularyId;
         return result;
     }
 

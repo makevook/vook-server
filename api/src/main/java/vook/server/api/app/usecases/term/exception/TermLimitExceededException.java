@@ -1,4 +1,4 @@
-package vook.server.api.app.contexts.term.exception;
+package vook.server.api.app.usecases.term.exception;
 
 import vook.server.api.app.common.exception.AppException;
 
