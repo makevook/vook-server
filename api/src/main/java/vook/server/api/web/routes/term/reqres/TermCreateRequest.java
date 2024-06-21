@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import vook.server.api.app.domain.term.data.TermCreateCommand;
-import vook.server.api.model.vocabulary.Vocabulary;
+import vook.server.api.app.domain.vocabulary.model.Vocabulary;
 
 import java.util.ArrayList;
 import java.util.List;

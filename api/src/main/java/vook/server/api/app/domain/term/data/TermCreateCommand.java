@@ -1,8 +1,8 @@
 package vook.server.api.app.domain.term.data;
 
 import lombok.Getter;
-import vook.server.api.model.term.Term;
-import vook.server.api.model.vocabulary.Vocabulary;
+import vook.server.api.app.domain.term.model.Term;
+import vook.server.api.app.domain.vocabulary.model.Vocabulary;
 
 import java.util.List;
 

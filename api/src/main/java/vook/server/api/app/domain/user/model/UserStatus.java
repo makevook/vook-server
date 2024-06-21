@@ -1,4 +1,4 @@
-package vook.server.api.model.user;
+package vook.server.api.app.domain.user.model;
 
 public enum UserStatus {
     SOCIAL_LOGIN_COMPLETED,  // 소셜로그인 완료됨

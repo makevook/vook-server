@@ -1,8 +1,7 @@
-package vook.server.api.app.domain.vocabulary.repo;
+package vook.server.api.app.domain.vocabulary.model;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import vook.server.api.model.user.User;
-import vook.server.api.model.vocabulary.Vocabulary;
+import vook.server.api.app.domain.user.model.User;
 
 import java.util.List;
 import java.util.Optional;

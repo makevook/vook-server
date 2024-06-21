@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import vook.server.api.devhelper.helper.CsvReader;
-import vook.server.api.model.demo.DemoTerm;
+import vook.server.api.app.domain.demo.model.DemoTerm;
 
 import java.io.IOException;
 import java.io.InputStream;

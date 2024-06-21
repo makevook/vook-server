@@ -1,7 +1,7 @@
 package vook.server.api.app.domain.vocabulary.data;
 
 import lombok.Getter;
-import vook.server.api.model.user.User;
+import vook.server.api.app.domain.user.model.User;
 
 @Getter
 public class VocabularyUpdateCommand {

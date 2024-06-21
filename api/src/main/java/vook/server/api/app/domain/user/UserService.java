@@ -6,12 +6,12 @@ import vook.server.api.app.domain.user.data.OnboardingCommand;
 import vook.server.api.app.domain.user.data.RegisterCommand;
 import vook.server.api.app.domain.user.data.SignUpFromSocialCommand;
 import vook.server.api.app.domain.user.exception.*;
-import vook.server.api.app.domain.user.repo.SocialUserRepository;
-import vook.server.api.app.domain.user.repo.UserInfoRepository;
-import vook.server.api.app.domain.user.repo.UserRepository;
-import vook.server.api.model.user.SocialUser;
-import vook.server.api.model.user.User;
-import vook.server.api.model.user.UserInfo;
+import vook.server.api.app.domain.user.model.SocialUserRepository;
+import vook.server.api.app.domain.user.model.UserInfoRepository;
+import vook.server.api.app.domain.user.model.UserRepository;
+import vook.server.api.app.domain.user.model.SocialUser;
+import vook.server.api.app.domain.user.model.User;
+import vook.server.api.app.domain.user.model.UserInfo;
 
 import java.util.Optional;
 

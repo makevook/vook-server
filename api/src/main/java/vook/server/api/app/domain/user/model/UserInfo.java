@@ -1,4 +1,4 @@
-package vook.server.api.model.user;
+package vook.server.api.app.domain.user.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

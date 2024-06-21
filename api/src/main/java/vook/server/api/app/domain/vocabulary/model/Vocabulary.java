@@ -1,11 +1,11 @@
-package vook.server.api.model.vocabulary;
+package vook.server.api.app.domain.vocabulary.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Formula;
 import vook.server.api.common.entity.BaseEntity;
-import vook.server.api.model.term.Term;
-import vook.server.api.model.user.User;
+import vook.server.api.app.domain.term.model.Term;
+import vook.server.api.app.domain.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;

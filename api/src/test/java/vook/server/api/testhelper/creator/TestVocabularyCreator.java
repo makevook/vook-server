@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.app.domain.vocabulary.VocabularyService;
 import vook.server.api.app.domain.vocabulary.data.VocabularyCreateCommand;
-import vook.server.api.model.user.User;
-import vook.server.api.model.vocabulary.Vocabulary;
+import vook.server.api.app.domain.user.model.User;
+import vook.server.api.app.domain.vocabulary.model.Vocabulary;
 
 @Component
 @Transactional

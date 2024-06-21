@@ -1,8 +1,8 @@
 package vook.server.api.app.domain.user.data;
 
 import lombok.Getter;
-import vook.server.api.model.user.Funnel;
-import vook.server.api.model.user.Job;
+import vook.server.api.app.domain.user.model.Funnel;
+import vook.server.api.app.domain.user.model.Job;
 
 @Getter
 public class OnboardingCommand {
