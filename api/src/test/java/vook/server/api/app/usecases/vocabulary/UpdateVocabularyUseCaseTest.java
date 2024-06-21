@@ -8,6 +8,7 @@ import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
 import vook.server.api.app.contexts.vocabulary.domain.VocabularyRepository;
 import vook.server.api.app.contexts.vocabulary.exception.VocabularyNotFoundException;
+import vook.server.api.app.polices.VocabularyPolicy;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
@@ -84,6 +85,6 @@ class UpdateVocabularyUseCaseTest extends IntegrationTestBase {
         assertThatThrownBy(() -> {
             var command = new UpdateVocabularyUseCase.Command(vookLoginUser.getUid(), vocabulary.getUid(), request.getName());
             useCase.execute(command);
-        }).isInstanceOf(VocabularyNotFoundException.class);
+        }).isInstanceOf(VocabularyPolicy.NotValidOwnerException.class);
     }
 }

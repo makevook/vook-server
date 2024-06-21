@@ -93,12 +93,12 @@ class UserServiceTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("사용자 정보 조회(uid) - 정상; 회원가입 전 사용자")
-    void findByUid1() {
+    void getByUid1() {
         // given
         User unregisteredUser = testUserCreator.createUnregisteredUser();
 
         // when
-        var user = service.findByUid(unregisteredUser.getUid()).orElseThrow();
+        var user = service.getByUid(unregisteredUser.getUid());
 
         // then
         assertThat(user).isNotNull();
@@ -111,12 +111,12 @@ class UserServiceTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("사용자 정보 조회(uid) - 정상; 회원가입 후 사용자")
-    void findByUid2() {
+    void getByUid2() {
         // given
         User registeredUser = testUserCreator.createRegisteredUser();
 
         // when
-        var user = service.findByUid(registeredUser.getUid()).orElseThrow();
+        var user = service.getByUid(registeredUser.getUid());
 
         // then
         assertThat(user).isNotNull();
@@ -129,12 +129,12 @@ class UserServiceTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("사용자 정보 조회(uid) - 정상; 온보딩 완료 사용자")
-    void findByUid3() {
+    void getByUid3() {
         // given
         User completedOnboardingUser = testUserCreator.createCompletedOnboardingUser();
 
         // when
-        var user = service.findByUid(completedOnboardingUser.getUid()).orElseThrow();
+        var user = service.getByUid(completedOnboardingUser.getUid());
 
         // then
         assertThat(user).isNotNull();
@@ -147,14 +147,14 @@ class UserServiceTest extends IntegrationTestBase {
 
     @TestFactory
     @DisplayName("사용자 정보 조회(uid) - 실패; 파라미터 룰 위반")
-    Collection<DynamicTest> findByUid_ParameterError() {
+    Collection<DynamicTest> getByUid_ParameterError() {
         return List.of(
                 DynamicTest.dynamicTest("유저 UID가 누락된 경우", () -> {
-                    assertThatThrownBy(() -> service.findByUid(null))
+                    assertThatThrownBy(() -> service.getByUid(null))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("유저 UID가 빈 문자열인 경우", () -> {
-                    assertThatThrownBy(() -> service.findByUid(""))
+                    assertThatThrownBy(() -> service.getByUid(""))
                             .isInstanceOf(ParameterValidateException.class);
                 })
         );
@@ -176,7 +176,7 @@ class UserServiceTest extends IntegrationTestBase {
         service.register(command);
 
         // then
-        User user = service.findByUid(unregisteredUser.getUid()).orElseThrow();
+        User user = service.getByUid(unregisteredUser.getUid());
         assertThat(user.getStatus()).isEqualTo(UserStatus.REGISTERED);
         assertThat(user.getOnboardingCompleted()).isFalse();
         assertThat(user.getRegisteredAt()).isNotNull();
@@ -266,7 +266,7 @@ class UserServiceTest extends IntegrationTestBase {
         service.onboarding(command);
 
         // then
-        User user = service.findByUid(registeredUser.getUid()).orElseThrow();
+        User user = service.getByUid(registeredUser.getUid());
         assertThat(user.getStatus()).isEqualTo(UserStatus.REGISTERED);
         assertThat(user.getOnboardingCompleted()).isTrue();
         assertThat(user.getOnboardingCompletedAt()).isNotNull();
@@ -342,7 +342,7 @@ class UserServiceTest extends IntegrationTestBase {
         service.updateInfo(registeredUser.getUid(), "newNick");
 
         // then
-        User user = service.findByUid(registeredUser.getUid()).orElseThrow();
+        User user = service.getByUid(registeredUser.getUid());
         assertThat(user.getUserInfo().getNickname()).isEqualTo("newNick");
         assertThat(user.getLastUpdatedAt()).isNotNull();
     }
@@ -395,7 +395,7 @@ class UserServiceTest extends IntegrationTestBase {
         service.withdraw(registeredUser.getUid());
 
         // then
-        User user = service.findByUid(registeredUser.getUid()).orElseThrow();
+        User user = service.getByUid(registeredUser.getUid());
         assertThat(user.getStatus()).isEqualTo(UserStatus.WITHDRAWN);
         assertThat(user.getWithdrawnAt()).isNotNull();
     }

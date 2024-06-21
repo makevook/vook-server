@@ -27,7 +27,7 @@ public class UserRestController implements UserApi {
     public CommonApiResponse<UserInfoResponse> userInfo(
             @AuthenticationPrincipal VookLoginUser loginUser
     ) {
-        User user = userService.findByUid(loginUser.getUid()).orElseThrow();
+        User user = userService.getByUid(loginUser.getUid());
         UserInfoResponse response = UserInfoResponse.from(user);
         return CommonApiResponse.okWithResult(response);
     }

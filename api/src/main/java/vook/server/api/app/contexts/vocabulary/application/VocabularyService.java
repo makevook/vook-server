@@ -40,24 +40,16 @@ public class VocabularyService {
     }
 
     public void update(@Valid VocabularyUpdateCommand command) {
-        Vocabulary vocabulary = validateAndGetVocabulary(command.getVocabularyUid(), command.getUserId());
+        Vocabulary vocabulary = repository.findByUid(command.getVocabularyUid()).orElseThrow(VocabularyNotFoundException::new);
         vocabulary.update(command.getName());
     }
 
     public void delete(@Valid VocabularyDeleteCommand command) {
-        Vocabulary vocabulary = validateAndGetVocabulary(command.getVocabularyUid(), command.getUserId());
+        Vocabulary vocabulary = repository.findByUid(command.getVocabularyUid()).orElseThrow(VocabularyNotFoundException::new);
         repository.delete(vocabulary);
     }
 
-    public Vocabulary findByUidAndUser(@NotBlank String vocabularyUid, @NotNull UserId userId) {
-        return validateAndGetVocabulary(vocabularyUid, userId);
-    }
-
-    private Vocabulary validateAndGetVocabulary(@NotBlank String vocabularyUid, @NotNull UserId userId) {
-        Vocabulary vocabulary = repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
-        if (!vocabulary.isValidOwner(userId)) {
-            throw new VocabularyNotFoundException();
-        }
-        return vocabulary;
+    public Vocabulary getByUid(@NotBlank String vocabularyUid) {
+        return repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
     }
 }

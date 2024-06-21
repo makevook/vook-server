@@ -40,8 +40,8 @@ public class UserService {
         return savedSocialUser;
     }
 
-    public Optional<User> findByUid(@NotBlank String uid) {
-        return repository.findByUid(uid);
+    public User getByUid(@NotBlank String uid) {
+        return repository.findByUid(uid).orElseThrow(UserNotFoundException::new);
     }
 
     public void register(@Valid RegisterCommand command) {

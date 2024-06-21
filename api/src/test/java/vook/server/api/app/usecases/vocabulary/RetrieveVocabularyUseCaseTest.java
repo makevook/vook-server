@@ -47,7 +47,6 @@ class RetrieveVocabularyUseCaseTest extends IntegrationTestBase {
         assertThat(vocabularies).hasSize(1);
         assertThat(vocabularies.getFirst().getUid()).isEqualTo(vocabulary.getUid());
         assertThat(vocabularies.getFirst().getName()).isEqualTo(vocabulary.getName());
-        assertThat(vocabularies.getFirst().getTermCount()).isEqualTo(vocabulary.termCount());
         assertThat(vocabularies.getFirst().getCreatedAt()).isEqualTo(vocabulary.getCreatedAt());
     }
 }

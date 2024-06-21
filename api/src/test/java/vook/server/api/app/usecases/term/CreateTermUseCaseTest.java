@@ -13,7 +13,6 @@ import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
 import vook.server.api.app.contexts.vocabulary.domain.VocabularyRepository;
 import vook.server.api.app.contexts.vocabulary.exception.VocabularyNotFoundException;
-import vook.server.api.app.usecases.term.exception.TermLimitExceededException;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
@@ -70,9 +69,8 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
             assertThat(term.getSynonyms().stream().map(TermSynonym::getSynonym))
                     .containsExactlyInAnyOrderElementsOf(command.synonyms());
         });
-        vocabularyRepository.findByUid(vocabulary.getUid()).ifPresent(v -> {
-            assertThat(v.termCount()).isEqualTo(1);
-        });
+        int termCount = termRepository.countByVocabularyId(new VocabularyId(vocabulary.getId()));
+        assertThat(termCount).isEqualTo(1);
     }
 
     @Test
@@ -124,6 +122,6 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
 
         // when
         assertThatThrownBy(() -> useCase.execute(command))
-                .isInstanceOf(TermLimitExceededException.class);
+                .isInstanceOf(CreateTermUseCase.TermLimitExceededException.class);
     }
 }

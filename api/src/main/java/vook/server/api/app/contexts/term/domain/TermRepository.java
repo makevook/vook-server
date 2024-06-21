@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface TermRepository extends JpaRepository<Term, Long> {
     Optional<Term> findByUid(String uid);
+
+    int countByVocabularyId(VocabularyId vocabularyId);
 }

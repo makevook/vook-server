@@ -35,19 +35,19 @@ public class TestUserCreator {
     public User createRegisteredUser() {
         User user = createUnregisteredUser();
         userService.register(RegisterCommand.of(user.getUid(), "testNick", true));
-        return userService.findByUid(user.getUid()).orElseThrow();
+        return userService.getByUid(user.getUid());
     }
 
     public User createCompletedOnboardingUser() {
         User user = createRegisteredUser();
         userService.onboarding(OnboardingCommand.of(user.getUid(), Funnel.OTHER, Job.OTHER));
-        return userService.findByUid(user.getUid()).orElseThrow();
+        return userService.getByUid(user.getUid());
     }
 
     public User createWithdrawnUser() {
         User user = createCompletedOnboardingUser();
         userService.withdraw(user.getUid());
-        return userService.findByUid(user.getUid()).orElseThrow();
+        return userService.getByUid(user.getUid());
     }
 
     public GeneratedToken createToken(User user) {

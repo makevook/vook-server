@@ -3,6 +3,8 @@ package vook.server.api.app.usecases.vocabulary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.app.contexts.term.application.TermService;
+import vook.server.api.app.contexts.term.domain.VocabularyId;
 import vook.server.api.app.contexts.user.application.UserService;
 import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.application.VocabularyService;
@@ -19,11 +21,18 @@ public class RetrieveVocabularyUseCase {
 
     private final UserService userService;
     private final VocabularyService vocabularyService;
+    private final TermService termService;
 
     public Result execute(Command command) {
-        User user = userService.findByUid(command.userUid()).orElseThrow();
+        User user = userService.getByUid(command.userUid());
         List<Vocabulary> vocabularies = vocabularyService.findAllBy(new UserId(user.getId()));
-        return Result.from(vocabularies);
+        List<Result.Tuple> tupleList = vocabularies
+                .stream()
+                .map(vocabulary -> {
+                    int termCount = termService.countByVocabularyId(new VocabularyId(vocabulary.getId()));
+                    return Result.Tuple.from(vocabulary, termCount);
+                }).toList();
+        return new Result(tupleList);
     }
 
     public record Command(
@@ -34,11 +43,6 @@ public class RetrieveVocabularyUseCase {
     public record Result(
             List<Tuple> vocabularies
     ) {
-        public static Result from(List<Vocabulary> vocabularies) {
-            return new Result(vocabularies.stream().map(Tuple::from).toList());
-
-        }
-
         public record Tuple(
                 String uid,
                 String name,
@@ -46,11 +50,11 @@ public class RetrieveVocabularyUseCase {
                 LocalDateTime createdAt
         ) {
 
-            public static Tuple from(Vocabulary vocabulary) {
+            public static Tuple from(Vocabulary vocabulary, int termCount) {
                 return new Tuple(
                         vocabulary.getUid(),
                         vocabulary.getName(),
-                        vocabulary.termCount(),
+                        termCount,
                         vocabulary.getCreatedAt()
                 );
             }

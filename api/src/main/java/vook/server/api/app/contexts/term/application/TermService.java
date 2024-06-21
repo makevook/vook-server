@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import vook.server.api.app.contexts.term.application.data.TermCreateCommand;
 import vook.server.api.app.contexts.term.domain.Term;
 import vook.server.api.app.contexts.term.domain.TermRepository;
+import vook.server.api.app.contexts.term.domain.VocabularyId;
 
 @Service
 @Validated
@@ -21,5 +22,9 @@ public class TermService {
         Term saved = termRepository.save(command.toEntity());
         saved.addAllSynonym(command.getSynonyms());
         return saved;
+    }
+
+    public int countByVocabularyId(VocabularyId vocabularyId) {
+        return termRepository.countByVocabularyId(vocabularyId);
     }
 }
