@@ -9,6 +9,7 @@ import vook.server.api.app.contexts.term.domain.Term;
 import vook.server.api.app.contexts.term.domain.TermRepository;
 import vook.server.api.app.contexts.term.domain.TermSynonym;
 import vook.server.api.app.contexts.term.domain.VocabularyId;
+import vook.server.api.app.contexts.term.exception.TermLimitExceededException;
 import vook.server.api.app.contexts.user.domain.User;
 import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
 import vook.server.api.app.contexts.vocabulary.domain.VocabularyRepository;
@@ -122,6 +123,6 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
 
         // when
         assertThatThrownBy(() -> useCase.execute(command))
-                .isInstanceOf(CreateTermUseCase.TermLimitExceededException.class);
+                .isInstanceOf(TermLimitExceededException.class);
     }
 }
