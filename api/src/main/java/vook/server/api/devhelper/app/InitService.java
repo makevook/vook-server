@@ -3,14 +3,14 @@ package vook.server.api.devhelper.app;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.app.domain.demo.model.DemoTermRepository;
-import vook.server.api.app.domain.demo.model.DemoTermSynonymRepository;
-import vook.server.api.app.domain.user.model.SocialUserRepository;
-import vook.server.api.app.domain.user.model.UserInfoRepository;
-import vook.server.api.app.domain.user.model.UserRepository;
-import vook.server.api.app.domain.vocabulary.model.VocabularyRepository;
+import vook.server.api.app.context.demo.model.DemoTerm;
+import vook.server.api.app.context.demo.model.DemoTermRepository;
+import vook.server.api.app.context.demo.model.DemoTermSynonymRepository;
+import vook.server.api.app.context.user.model.SocialUserRepository;
+import vook.server.api.app.context.user.model.UserInfoRepository;
+import vook.server.api.app.context.user.model.UserRepository;
+import vook.server.api.app.context.vocabulary.model.VocabularyRepository;
 import vook.server.api.app.infra.search.demo.DemoTermSearchService;
-import vook.server.api.app.domain.demo.model.DemoTerm;
 
 import java.util.List;
 

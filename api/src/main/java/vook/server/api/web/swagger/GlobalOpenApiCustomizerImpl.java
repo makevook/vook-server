@@ -5,7 +5,7 @@ import io.swagger.v3.oas.models.examples.Example;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
-import vook.server.api.common.web.ApiResponseCode;
+import vook.server.api.web.common.ApiResponseCode;
 
 import java.util.Map;
 

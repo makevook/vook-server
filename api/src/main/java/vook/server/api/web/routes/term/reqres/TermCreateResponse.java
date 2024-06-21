@@ -1,7 +1,7 @@
 package vook.server.api.web.routes.term.reqres;
 
 import lombok.Getter;
-import vook.server.api.app.domain.term.model.Term;
+import vook.server.api.app.context.term.model.Term;
 
 @Getter
 public class TermCreateResponse {

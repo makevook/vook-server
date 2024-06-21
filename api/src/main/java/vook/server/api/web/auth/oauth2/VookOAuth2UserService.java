@@ -8,9 +8,9 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.app.domain.user.UserService;
-import vook.server.api.app.domain.user.data.SignUpFromSocialCommand;
-import vook.server.api.app.domain.user.model.SocialUser;
+import vook.server.api.app.context.user.UserService;
+import vook.server.api.app.context.user.data.SignUpFromSocialCommand;
+import vook.server.api.app.context.user.model.SocialUser;
 import vook.server.api.web.auth.data.VookLoginUser;
 
 @Slf4j

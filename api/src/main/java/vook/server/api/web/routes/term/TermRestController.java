@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vook.server.api.web.auth.data.VookLoginUser;
-import vook.server.api.common.web.CommonApiResponse;
+import vook.server.api.web.common.CommonApiResponse;
 import vook.server.api.web.routes.term.reqres.TermCreateRequest;
 import vook.server.api.web.routes.term.reqres.TermCreateResponse;
 

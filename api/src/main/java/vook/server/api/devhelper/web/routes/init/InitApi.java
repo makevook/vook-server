@@ -2,7 +2,7 @@ package vook.server.api.devhelper.web.routes.init;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import vook.server.api.common.web.CommonApiResponse;
+import vook.server.api.web.common.CommonApiResponse;
 
 @Tag(name = "init", description = "초기화 API")
 public interface InitApi {
