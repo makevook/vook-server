@@ -7,13 +7,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import vook.server.api.domain.vocabulary.exception.TermLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.VocabularyLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
-import vook.server.api.domain.vocabulary.model.UserId;
-import vook.server.api.domain.vocabulary.model.Vocabulary;
-import vook.server.api.domain.vocabulary.model.VocabularyRepository;
+import vook.server.api.domain.vocabulary.exception.VocabularyTermNotFoundException;
+import vook.server.api.domain.vocabulary.model.*;
 import vook.server.api.domain.vocabulary.service.data.VocabularyCreateCommand;
 import vook.server.api.domain.vocabulary.service.data.VocabularyDeleteCommand;
+import vook.server.api.domain.vocabulary.service.data.VocabularyTermAddCommand;
 import vook.server.api.domain.vocabulary.service.data.VocabularyUpdateCommand;
 
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
 public class VocabularyService {
 
     private final VocabularyRepository repository;
+    private final VocabularyTermRepository termsRepository;
 
     public List<Vocabulary> findAllBy(@NotNull UserId userId) {
         return repository.findAllByUserId(userId);
@@ -53,7 +55,18 @@ public class VocabularyService {
         return repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
     }
 
-    public Vocabulary getById(@NotNull Long id) {
-        return repository.findById(id).orElseThrow(VocabularyNotFoundException::new);
+    public void addTerm(@Valid VocabularyTermAddCommand command) {
+        Vocabulary vocabulary = repository.findByUid(command.getVocabularyUid()).orElseThrow(VocabularyNotFoundException::new);
+        int termCount = vocabulary.termCount();
+        if (termCount >= 100) {
+            throw new TermLimitExceededException();
+        }
+
+        vocabulary.addTerm(command.getTermId());
+    }
+
+    public Vocabulary getByTermId(@NotNull TermId termId) {
+        VocabularyTerm vocabularyTerm = termsRepository.findByTermId(termId).orElseThrow(VocabularyTermNotFoundException::new);
+        return vocabularyTerm.getVocabulary();
     }
 }

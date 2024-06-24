@@ -4,13 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.term.model.Term;
-import vook.server.api.domain.term.model.VocabularyId;
 import vook.server.api.domain.term.service.TermService;
 import vook.server.api.domain.term.service.data.TermCreateCommand;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
+import vook.server.api.domain.vocabulary.model.TermId;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
+import vook.server.api.domain.vocabulary.service.data.VocabularyTermAddCommand;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
 
 import java.util.List;
@@ -31,7 +32,8 @@ public class CreateTermUseCase {
         Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
         vocabularyPolicy.validateOwner(user, vocabulary);
 
-        Term term = termService.create(command.toServiceCommand(vocabulary));
+        Term term = termService.create(command.toTermCreateCommand());
+        vocabularyService.addTerm(command.toTermAddCommand(term));
 
         return Result.from(term);
     }
@@ -43,12 +45,18 @@ public class CreateTermUseCase {
             String meaning,
             List<String> synonyms
     ) {
-        public TermCreateCommand toServiceCommand(Vocabulary vocabulary) {
+        public TermCreateCommand toTermCreateCommand() {
             return TermCreateCommand.builder()
-                    .vocabularyId(new VocabularyId(vocabulary.getId()))
                     .term(term)
                     .meaning(meaning)
                     .synonyms(synonyms)
+                    .build();
+        }
+
+        public VocabularyTermAddCommand toTermAddCommand(Term term) {
+            return VocabularyTermAddCommand.builder()
+                    .vocabularyUid(vocabularyUid)
+                    .termId(new TermId(term.getId()))
                     .build();
         }
     }

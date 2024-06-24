@@ -14,7 +14,6 @@ import vook.server.api.testhelper.creator.TestTermCreator;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
-import vook.server.api.web.common.auth.data.VookLoginUser;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -45,12 +44,12 @@ class UpdateTermUseCaseTest extends IntegrationTestBase {
     void execute() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
-        VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
-        Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
-        var term = testTermCreator.createTerm(vocabulary);
+        var term = testTermCreator.createTerm();
+        var vocabulary = testVocabularyCreator.createVocabulary(user);
+        testVocabularyCreator.addTerm(vocabulary, term);
 
         UpdateTermUseCase.Command command = new UpdateTermUseCase.Command(
-                vookLoginUser.getUid(),
+                user.getUid(),
                 term.getUid(),
                 "수정된 용어",
                 "수정된 뜻",
@@ -72,10 +71,9 @@ class UpdateTermUseCaseTest extends IntegrationTestBase {
     void executeError1() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
-        VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
 
         UpdateTermUseCase.Command command = new UpdateTermUseCase.Command(
-                vookLoginUser.getUid(),
+                user.getUid(),
                 UUID.randomUUID().toString(),
                 "수정된 용어",
                 "수정된 뜻",
@@ -93,7 +91,8 @@ class UpdateTermUseCaseTest extends IntegrationTestBase {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
         Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
-        var term = testTermCreator.createTerm(vocabulary);
+        var term = testTermCreator.createTerm();
+        testVocabularyCreator.addTerm(vocabulary, term);
 
         User anotherUser = testUserCreator.createCompletedOnboardingUser();
 

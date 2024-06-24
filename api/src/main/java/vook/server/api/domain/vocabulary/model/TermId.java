@@ -1,4 +1,4 @@
-package vook.server.api.domain.term.model;
+package vook.server.api.domain.vocabulary.model;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class VocabularyId {
+public class TermId {
     private Long id;
 }

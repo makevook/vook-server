@@ -8,6 +8,7 @@ import vook.server.api.domain.term.service.TermService;
 import vook.server.api.domain.term.service.data.TermUpdateCommand;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
+import vook.server.api.domain.vocabulary.model.TermId;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
@@ -27,7 +28,7 @@ public class UpdateTermUseCase {
     public void execute(Command command) {
         User user = userService.getByUid(command.userUid());
         Term term = termService.getByUid(command.termUid());
-        Vocabulary vocabulary = vocabularyService.getById(term.getVocabularyId().getId());
+        Vocabulary vocabulary = vocabularyService.getByTermId(new TermId(term.getId()));
         vocabularyPolicy.validateOwner(user, vocabulary);
 
         termService.update(command.toServiceCommand());

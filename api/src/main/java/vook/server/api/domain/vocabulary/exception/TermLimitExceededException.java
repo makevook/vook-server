@@ -1,4 +1,4 @@
-package vook.server.api.domain.term.exception;
+package vook.server.api.domain.vocabulary.exception;
 
 import vook.server.api.domain.common.exception.DomainException;
 

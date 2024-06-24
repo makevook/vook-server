@@ -31,23 +31,17 @@ public class Term extends BaseEntity {
     @Column(length = 2000, nullable = false)
     private String meaning;
 
-    @Embedded
-    @AttributeOverride(name = "id", column = @Column(name = "vocabulary_id", nullable = false))
-    private VocabularyId vocabularyId;
-
     @OneToMany(mappedBy = "term", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TermSynonym> synonyms = new ArrayList<>();
 
     public static Term forCreateOf(
             String term,
-            String meaning,
-            VocabularyId vocabularyId
+            String meaning
     ) {
         Term result = new Term();
         result.uid = UUID.randomUUID().toString();
         result.term = term;
         result.meaning = meaning;
-        result.vocabularyId = vocabularyId;
         return result;
     }
 

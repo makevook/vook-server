@@ -7,10 +7,7 @@ import org.junit.jupiter.api.TestFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.term.model.Term;
-import vook.server.api.domain.term.model.VocabularyId;
 import vook.server.api.domain.term.service.data.TermCreateCommand;
-import vook.server.api.domain.user.model.User;
-import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.globalcommon.exception.ParameterValidateException;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
@@ -38,11 +35,7 @@ class TermServiceTest extends IntegrationTestBase {
     @DisplayName("용어 생성 - 성공")
     void create() {
         // given
-        User user = userCreator.createCompletedOnboardingUser();
-        Vocabulary vocabulary = vocabularyCreator.createVocabulary(user);
-
         TermCreateCommand command = TermCreateCommand.builder()
-                .vocabularyId(new VocabularyId(vocabulary.getId()))
                 .term("용어")
                 .meaning("용어 설명")
                 .synonyms(List.of("동의어1", "동의어2"))
@@ -61,14 +54,9 @@ class TermServiceTest extends IntegrationTestBase {
     @TestFactory
     @DisplayName("용어 생성 - 실패; 파라미터 룰 위반")
     Collection<DynamicTest> create_ParameterError() {
-        // given
-        User user = userCreator.createCompletedOnboardingUser();
-        Vocabulary vocabulary = vocabularyCreator.createVocabulary(user);
-
         return List.of(
                 DynamicTest.dynamicTest("용어 이름이 누락 된 경우", () -> {
                     TermCreateCommand command = TermCreateCommand.builder()
-                            .vocabularyId(new VocabularyId(vocabulary.getId()))
                             .meaning("용어 설명")
                             .synonyms(List.of("동의어1", "동의어2"))
                             .build();
@@ -77,7 +65,6 @@ class TermServiceTest extends IntegrationTestBase {
                 }),
                 DynamicTest.dynamicTest("용어 이름이 제한을 넘는 경우", () -> {
                     TermCreateCommand command = TermCreateCommand.builder()
-                            .vocabularyId(new VocabularyId(vocabulary.getId()))
                             .term("a".repeat(101))
                             .meaning("용어 설명")
                             .synonyms(List.of("동의어1", "동의어2"))
@@ -87,7 +74,6 @@ class TermServiceTest extends IntegrationTestBase {
                 }),
                 DynamicTest.dynamicTest("용어 뜻이 누락 된 경우", () -> {
                     TermCreateCommand command = TermCreateCommand.builder()
-                            .vocabularyId(new VocabularyId(vocabulary.getId()))
                             .term("용어")
                             .synonyms(List.of("동의어1", "동의어2"))
                             .build();
@@ -96,7 +82,6 @@ class TermServiceTest extends IntegrationTestBase {
                 }),
                 DynamicTest.dynamicTest("용어 뜻이 제한을 넘는 경우", () -> {
                     TermCreateCommand command = TermCreateCommand.builder()
-                            .vocabularyId(new VocabularyId(vocabulary.getId()))
                             .term("용어")
                             .meaning("a".repeat(2001))
                             .synonyms(List.of("동의어1", "동의어2"))
@@ -106,7 +91,6 @@ class TermServiceTest extends IntegrationTestBase {
                 }),
                 DynamicTest.dynamicTest("동의어가 누락 된 경우", () -> {
                     TermCreateCommand command = TermCreateCommand.builder()
-                            .vocabularyId(new VocabularyId(vocabulary.getId()))
                             .term("용어")
                             .meaning("용어 설명")
                             .build();
