@@ -11,10 +11,10 @@ public class VocabularyPolicy {
 
     public void validateOwner(User user, Vocabulary vocabulary) {
         if (!vocabulary.isValidOwner(new UserId(user.getId()))) {
-            throw new NotValidOwnerException();
+            throw new NotValidVocabularyOwnerException();
         }
     }
 
-    public static class NotValidOwnerException extends UseCaseException {
+    public static class NotValidVocabularyOwnerException extends UseCaseException {
     }
 }

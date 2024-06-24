@@ -17,6 +17,7 @@ import vook.server.api.domain.vocabulary.model.VocabularyRepository;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
+import vook.server.api.usecases.common.polices.VocabularyPolicy;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 
 import java.util.List;
@@ -124,5 +125,27 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         // when
         assertThatThrownBy(() -> useCase.execute(command))
                 .isInstanceOf(TermLimitExceededException.class);
+    }
+
+    @Test
+    @DisplayName("용어 생성 - 실패; 사용자가 용어집 소유자가 아닌 경우")
+    void executeError3() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
+
+        User anotherUser = testUserCreator.createCompletedOnboardingUser();
+
+        var command = new CreateTermUseCase.Command(
+                anotherUser.getUid(),
+                vocabulary.getUid(),
+                "테스트 용어",
+                "테스트 뜻",
+                List.of("동의어1", "동의어2")
+        );
+
+        // when
+        assertThatThrownBy(() -> useCase.execute(command))
+                .isInstanceOf(VocabularyPolicy.NotValidVocabularyOwnerException.class);
     }
 }

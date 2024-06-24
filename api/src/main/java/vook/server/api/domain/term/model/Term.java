@@ -51,7 +51,26 @@ public class Term extends BaseEntity {
         return result;
     }
 
+    public static Term forUpdateOf(
+            String term,
+            String meaning,
+            List<String> synonyms
+    ) {
+        Term result = new Term();
+        result.term = term;
+        result.meaning = meaning;
+        result.addAllSynonym(synonyms);
+        return result;
+    }
+
     public void addAllSynonym(List<String> synonyms) {
         synonyms.forEach(s -> this.synonyms.add(TermSynonym.forCreateOf(s, this)));
+    }
+
+    public void update(Term term) {
+        this.term = term.getTerm();
+        this.meaning = term.getMeaning();
+        this.synonyms.clear();
+        this.synonyms.addAll(term.getSynonyms());
     }
 }

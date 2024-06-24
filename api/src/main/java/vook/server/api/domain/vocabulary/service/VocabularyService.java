@@ -52,4 +52,8 @@ public class VocabularyService {
     public Vocabulary getByUid(@NotBlank String vocabularyUid) {
         return repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
     }
+
+    public Vocabulary getById(@NotNull Long id) {
+        return repository.findById(id).orElseThrow(VocabularyNotFoundException::new);
+    }
 }

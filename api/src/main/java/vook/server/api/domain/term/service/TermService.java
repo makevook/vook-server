@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import vook.server.api.domain.term.exception.TermLimitExceededException;
+import vook.server.api.domain.term.exception.TermNotFoundException;
 import vook.server.api.domain.term.model.Term;
 import vook.server.api.domain.term.model.TermRepository;
 import vook.server.api.domain.term.model.VocabularyId;
 import vook.server.api.domain.term.service.data.TermCreateCommand;
+import vook.server.api.domain.term.service.data.TermUpdateCommand;
 
 @Service
 @Validated
@@ -32,5 +34,15 @@ public class TermService {
 
     public int countByVocabularyId(VocabularyId vocabularyId) {
         return termRepository.countByVocabularyId(vocabularyId);
+    }
+
+    public Term getByUid(String uid) {
+        return termRepository.findByUid(uid).orElseThrow(TermNotFoundException::new);
+    }
+
+    public void update(TermUpdateCommand serviceCommand) {
+        Term term = termRepository.findByUid(serviceCommand.getUid()).orElseThrow(TermNotFoundException::new);
+        Term updateTerm = serviceCommand.toEntity();
+        term.update(updateTerm);
     }
 }
