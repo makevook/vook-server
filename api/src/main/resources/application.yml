@@ -1,6 +1,9 @@
 spring:
   profiles:
     default: local
+    group:
+      local: local, modulith
+      default: default, modulith
   jpa:
     properties:
       hibernate.jdbc.time_zone: UTC

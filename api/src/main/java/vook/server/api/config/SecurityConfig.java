@@ -15,10 +15,10 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import vook.server.api.web.auth.app.TokenService;
-import vook.server.api.web.auth.jwt.JWTFilter;
-import vook.server.api.web.auth.oauth2.LoginSuccessHandler;
-import vook.server.api.web.auth.oauth2.VookOAuth2UserService;
+import vook.server.api.web.common.auth.app.TokenService;
+import vook.server.api.web.common.auth.jwt.JWTFilter;
+import vook.server.api.web.common.auth.oauth2.LoginSuccessHandler;
+import vook.server.api.web.common.auth.oauth2.VookOAuth2UserService;
 
 @Configuration
 @EnableWebSecurity

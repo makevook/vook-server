@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import vook.server.api.app.contexts.demo.domain.DemoTermRepository;
 import vook.server.api.devhelper.app.InitService;
+import vook.server.api.domain.demo.model.DemoTermRepository;
 
 @Slf4j
 @Profile("local")

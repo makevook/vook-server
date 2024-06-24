@@ -3,11 +3,11 @@ package vook.server.api.testhelper.creator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.app.contexts.user.domain.User;
-import vook.server.api.app.contexts.vocabulary.application.VocabularyService;
-import vook.server.api.app.contexts.vocabulary.application.data.VocabularyCreateCommand;
-import vook.server.api.app.contexts.vocabulary.domain.UserId;
-import vook.server.api.app.contexts.vocabulary.domain.Vocabulary;
+import vook.server.api.domain.user.model.User;
+import vook.server.api.domain.vocabulary.model.UserId;
+import vook.server.api.domain.vocabulary.model.Vocabulary;
+import vook.server.api.domain.vocabulary.service.VocabularyService;
+import vook.server.api.domain.vocabulary.service.data.VocabularyCreateCommand;
 
 @Component
 @Transactional
