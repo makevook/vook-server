@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vook.server.api.devhelper.app.InitService;
-import vook.server.api.web.common.CommonApiResponse;
+import vook.server.api.web.common.response.CommonApiResponse;
 
 @Profile({"local", "dev", "stag"})
 @RestController
