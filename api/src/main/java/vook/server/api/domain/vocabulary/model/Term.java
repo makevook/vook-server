@@ -31,6 +31,12 @@ public class Term extends BaseEntity {
     @Column(length = 2000, nullable = false)
     private String meaning;
 
+    /**
+     * 동의어
+     */
+    @Column(length = 1000)
+    private String synonym;
+
     @OneToMany(mappedBy = "term", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TermSynonym> synonyms = new ArrayList<>();
 
@@ -66,13 +72,15 @@ public class Term extends BaseEntity {
         return result;
     }
 
-    private void addAllSynonym(List<String> synonyms) {
-        synonyms.forEach(s -> this.synonyms.add(TermSynonym.forCreateOf(s, this)));
+    private void addAllSynonym(List<String> input) {
+        this.synonym = String.join(",", input);
+        input.forEach(s -> this.synonyms.add(TermSynonym.forCreateOf(s, this)));
     }
 
     public void update(Term term) {
         this.term = term.getTerm();
         this.meaning = term.getMeaning();
+        this.synonym = term.getSynonym();
         this.synonyms.clear();
         this.synonyms.addAll(term.getSynonyms());
     }

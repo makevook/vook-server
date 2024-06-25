@@ -52,11 +52,12 @@ public interface TermApi {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
-                    ## 허용하는 sort 키워드 
-                    term, meaning, createdAt
+                    ## 허용하는 sort 키워드
+                    term, synonym, meaning, createdAt
                                         
                     사용 예시
                     - term,asc
+                    - synonym,desc
                     - meaning,desc
                     - createdAt,asc
                                         
