@@ -9,7 +9,6 @@ import vook.server.api.domain.vocabulary.exception.TermNotFoundException;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.TermRepository;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
-import vook.server.api.domain.vocabulary.model.VocabularyRepository;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
@@ -34,8 +33,6 @@ class UpdateTermUseCaseTest extends IntegrationTestBase {
     TestVocabularyCreator testVocabularyCreator;
     @Autowired
     TermRepository termRepository;
-    @Autowired
-    VocabularyRepository vocabularyRepository;
 
     @Test
     @DisplayName("용어 수정 - 정상")

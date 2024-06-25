@@ -40,4 +40,10 @@ public class TermService {
         Term updateTerm = serviceCommand.toEntity();
         term.update(updateTerm);
     }
+
+    public void delete(String uid) {
+        Term term = termRepository.findByUid(uid).orElseThrow(TermNotFoundException::new);
+        term.getVocabulary().removeTerm(term);
+        termRepository.delete(term);
+    }
 }

@@ -6,8 +6,8 @@ import lombok.Getter;
 import org.hibernate.annotations.Formula;
 import vook.server.api.domain.common.model.BaseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -31,8 +31,8 @@ public class Vocabulary extends BaseEntity {
     @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
     private UserId userId;
 
-    @OneToMany(mappedBy = "vocabulary", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Term> terms = new ArrayList<>();
+    @OneToMany(mappedBy = "vocabulary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<Term> terms = new HashSet<>();
 
     @Getter(AccessLevel.NONE)
     @Formula("(SELECT COUNT(t.id) FROM term t WHERE t.vocabulary_id = id)")
@@ -64,5 +64,10 @@ public class Vocabulary extends BaseEntity {
 
     public int termCount() {
         return this.termCount;
+    }
+
+    public void removeTerm(Term term) {
+        this.terms.remove(term);
+        termCount--;
     }
 }

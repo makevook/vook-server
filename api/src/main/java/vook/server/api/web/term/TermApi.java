@@ -52,4 +52,16 @@ public interface TermApi {
                     - NotValidVocabularyOwner: 수정하려는 용어가 속해있는 용어집에 대한 권한이 없는 경우"""
     )
     CommonApiResponse<Void> update(VookLoginUser user, TermUpdateRequest request);
+
+    @Operation(
+            summary = "용어 삭제",
+            security = {
+                    @SecurityRequirement(name = "AccessToken")
+            },
+            description = """
+                    비즈니스 규칙 위반 내용
+                    - TermNotFound: 사용자의 용어집 중 해당 ID의 용어가 존재하지 않는 경우
+                    - NotValidVocabularyOwner: 삭제하려는 용어가 속해있는 용어집에 대한 권한이 없는 경우"""
+    )
+    CommonApiResponse<Void> delete(VookLoginUser user, String termUid);
 }
