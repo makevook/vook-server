@@ -1,5 +1,6 @@
 package vook.server.api.domain.vocabulary.service.data;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -24,7 +25,9 @@ public class TermUpdateCommand {
     private String meaning;
 
     @NotNull
-    private List<String> synonyms;
+    @Valid
+    @Size(max = 10)
+    private List<@Size(min = 1, max = 100) String> synonyms;
 
     @Builder
     private static TermUpdateCommand of(String uid, String term, String meaning, List<String> synonyms) {
