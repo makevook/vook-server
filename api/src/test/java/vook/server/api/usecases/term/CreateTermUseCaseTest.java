@@ -64,6 +64,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         Term term = termRepository.findByUid(result.uid()).orElseThrow();
         assertThat(term.getTerm()).isEqualTo(command.term());
         assertThat(term.getMeaning()).isEqualTo(command.meaning());
+        assertThat(term.getSynonym()).isEqualTo(String.join(",", command.synonyms()));
         assertThat(term.getSynonyms().stream().map(TermSynonym::getSynonym))
                 .containsExactlyInAnyOrderElementsOf(command.synonyms());
         assertThat(term.getVocabulary().termCount()).isEqualTo(1);

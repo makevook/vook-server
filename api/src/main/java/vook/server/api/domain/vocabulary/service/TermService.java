@@ -1,6 +1,7 @@
 package vook.server.api.domain.vocabulary.service;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,17 +32,17 @@ public class TermService {
         return termRepository.save(term);
     }
 
-    public Term getByUid(String uid) {
+    public Term getByUid(@NotBlank String uid) {
         return termRepository.findByUid(uid).orElseThrow(TermNotFoundException::new);
     }
 
-    public void update(TermUpdateCommand serviceCommand) {
+    public void update(@Valid TermUpdateCommand serviceCommand) {
         Term term = termRepository.findByUid(serviceCommand.getUid()).orElseThrow(TermNotFoundException::new);
         Term updateTerm = serviceCommand.toEntity();
         term.update(updateTerm);
     }
 
-    public void delete(String uid) {
+    public void delete(@NotBlank String uid) {
         Term term = termRepository.findByUid(uid).orElseThrow(TermNotFoundException::new);
         term.getVocabulary().removeTerm(term);
         termRepository.delete(term);

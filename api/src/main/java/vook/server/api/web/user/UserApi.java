@@ -45,7 +45,7 @@ public interface UserApi {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
-                    비즈니스 규칙 위반 내용
+                    ## 비즈니스 규칙 위반 내용
                     - AlreadyRegistered: 이미 회원가입이 완료된 유저가 해당 API를 호출 할 경우
                     - WithdrawnUser: 탈퇴한 유저가 해당 API를 호출 할 경우"""
     )
@@ -70,7 +70,7 @@ public interface UserApi {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
-                    비즈니스 규칙 위반 내용
+                    ## 비즈니스 규칙 위반 내용
                     - NotReadyToOnboarding: 회원 가입이 완료되지 않은 유저가 해당 API를 호출 할 경우
                     - AlreadyOnboarding: 이미 온보딩이 완료된 유저가 해당 API를 호출 할 경우"""
     )
@@ -95,7 +95,7 @@ public interface UserApi {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
-                    비즈니스 규칙 위반 내용
+                    ## 비즈니스 규칙 위반 내용
                     - NotRegistered: 가입하지 않은 유저가 해당 API를 호출 할 경우"""
     )
     @ApiResponses(value = {

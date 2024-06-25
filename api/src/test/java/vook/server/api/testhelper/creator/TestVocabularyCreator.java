@@ -38,7 +38,7 @@ public class TestVocabularyCreator {
                 .vocabularyUid(vocabulary.getUid())
                 .term("testTerm" + suffix)
                 .meaning("testMeaning" + suffix)
-                .synonyms(List.of("testSynonym" + suffix))
+                .synonyms(List.of("testSynonymA" + suffix, "testSynonymB" + suffix))
                 .build());
     }
 }

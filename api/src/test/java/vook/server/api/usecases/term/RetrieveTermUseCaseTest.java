@@ -156,6 +156,34 @@ class RetrieveTermUseCaseTest extends IntegrationTestBase {
                     assertThat(result.terms().getContent().get(0).termUid()).isEqualTo(term3.getUid());
                     assertThat(result.terms().getContent().get(1).termUid()).isEqualTo(term2.getUid());
                     assertThat(result.terms().getContent().get(2).termUid()).isEqualTo(term1.getUid());
+                }),
+                DynamicTest.dynamicTest("동의어 오름차순", () -> {
+                    // when
+                    RetrieveTermUseCase.Result result = useCase.execute(new RetrieveTermUseCase.Command(
+                            user.getUid(),
+                            vocabulary.getUid(),
+                            PageRequest.of(0, Integer.MAX_VALUE, Sort.Direction.ASC, "synonym")
+                    ));
+
+                    // then
+                    assertThat(result.terms().getContent()).hasSize(3);
+                    assertThat(result.terms().getContent().get(0).termUid()).isEqualTo(term1.getUid());
+                    assertThat(result.terms().getContent().get(1).termUid()).isEqualTo(term2.getUid());
+                    assertThat(result.terms().getContent().get(2).termUid()).isEqualTo(term3.getUid());
+                }),
+                DynamicTest.dynamicTest("동의어 내림차순", () -> {
+                    // when
+                    RetrieveTermUseCase.Result result = useCase.execute(new RetrieveTermUseCase.Command(
+                            user.getUid(),
+                            vocabulary.getUid(),
+                            PageRequest.of(0, Integer.MAX_VALUE, Sort.Direction.DESC, "synonym")
+                    ));
+
+                    // then
+                    assertThat(result.terms().getContent()).hasSize(3);
+                    assertThat(result.terms().getContent().get(0).termUid()).isEqualTo(term3.getUid());
+                    assertThat(result.terms().getContent().get(1).termUid()).isEqualTo(term2.getUid());
+                    assertThat(result.terms().getContent().get(2).termUid()).isEqualTo(term1.getUid());
                 })
         );
     }
