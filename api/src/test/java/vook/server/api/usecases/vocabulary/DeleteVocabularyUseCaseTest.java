@@ -74,6 +74,6 @@ class DeleteVocabularyUseCaseTest extends IntegrationTestBase {
         assertThatThrownBy(() -> {
             var command = new DeleteVocabularyUseCase.Command(vookLoginUser.getUid(), vocabulary.getUid());
             useCase.execute(command);
-        }).isInstanceOf(VocabularyPolicy.NotValidOwnerException.class);
+        }).isInstanceOf(VocabularyPolicy.NotValidVocabularyOwnerException.class);
     }
 }

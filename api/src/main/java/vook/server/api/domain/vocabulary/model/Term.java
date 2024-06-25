@@ -1,4 +1,4 @@
-package vook.server.api.domain.term.model;
+package vook.server.api.domain.vocabulary.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,27 +31,49 @@ public class Term extends BaseEntity {
     @Column(length = 2000, nullable = false)
     private String meaning;
 
-    @Embedded
-    @AttributeOverride(name = "id", column = @Column(name = "vocabulary_id", nullable = false))
-    private VocabularyId vocabularyId;
-
     @OneToMany(mappedBy = "term", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TermSynonym> synonyms = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "vocabulary_id", nullable = false)
+    private Vocabulary vocabulary;
 
     public static Term forCreateOf(
             String term,
             String meaning,
-            VocabularyId vocabularyId
+            List<String> synonyms,
+            Vocabulary vocabulary
     ) {
         Term result = new Term();
         result.uid = UUID.randomUUID().toString();
         result.term = term;
         result.meaning = meaning;
-        result.vocabularyId = vocabularyId;
+        result.addAllSynonym(synonyms);
+        result.vocabulary = vocabulary;
+        vocabulary.addTerm(result);
         return result;
     }
 
-    public void addAllSynonym(List<String> synonyms) {
+    public static Term forUpdateOf(
+            String term,
+            String meaning,
+            List<String> synonyms
+    ) {
+        Term result = new Term();
+        result.term = term;
+        result.meaning = meaning;
+        result.addAllSynonym(synonyms);
+        return result;
+    }
+
+    private void addAllSynonym(List<String> synonyms) {
         synonyms.forEach(s -> this.synonyms.add(TermSynonym.forCreateOf(s, this)));
+    }
+
+    public void update(Term term) {
+        this.term = term.getTerm();
+        this.meaning = term.getMeaning();
+        this.synonyms.clear();
+        this.synonyms.addAll(term.getSynonyms());
     }
 }

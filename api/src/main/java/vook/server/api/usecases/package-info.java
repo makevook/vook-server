@@ -2,8 +2,7 @@
         type = ApplicationModule.Type.OPEN,
         allowedDependencies = {
                 "user",
-                "vocabulary",
-                "term"
+                "vocabulary"
         }
 )
 package vook.server.api.usecases;

@@ -5,18 +5,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.term.exception.TermLimitExceededException;
-import vook.server.api.domain.term.model.Term;
-import vook.server.api.domain.term.model.TermRepository;
-import vook.server.api.domain.term.model.TermSynonym;
-import vook.server.api.domain.term.model.VocabularyId;
 import vook.server.api.domain.user.model.User;
+import vook.server.api.domain.vocabulary.exception.TermLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
+import vook.server.api.domain.vocabulary.model.Term;
+import vook.server.api.domain.vocabulary.model.TermRepository;
+import vook.server.api.domain.vocabulary.model.TermSynonym;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
-import vook.server.api.domain.vocabulary.model.VocabularyRepository;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
+import vook.server.api.usecases.common.polices.VocabularyPolicy;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 
 import java.util.List;
@@ -37,8 +36,6 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
     TestVocabularyCreator testVocabularyCreator;
     @Autowired
     TermRepository termRepository;
-    @Autowired
-    VocabularyRepository vocabularyRepository;
     @Autowired
     EntityManager em;
 
@@ -63,15 +60,13 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
 
         // then
         assertThat(result.uid()).isNotNull();
-        termRepository.findByUid(result.uid()).ifPresent(term -> {
-            assertThat(term.getVocabularyId().getId()).isEqualTo(vocabulary.getId());
-            assertThat(term.getTerm()).isEqualTo(command.term());
-            assertThat(term.getMeaning()).isEqualTo(command.meaning());
-            assertThat(term.getSynonyms().stream().map(TermSynonym::getSynonym))
-                    .containsExactlyInAnyOrderElementsOf(command.synonyms());
-        });
-        int termCount = termRepository.countByVocabularyId(new VocabularyId(vocabulary.getId()));
-        assertThat(termCount).isEqualTo(1);
+
+        Term term = termRepository.findByUid(result.uid()).orElseThrow();
+        assertThat(term.getTerm()).isEqualTo(command.term());
+        assertThat(term.getMeaning()).isEqualTo(command.meaning());
+        assertThat(term.getSynonyms().stream().map(TermSynonym::getSynonym))
+                .containsExactlyInAnyOrderElementsOf(command.synonyms());
+        assertThat(term.getVocabulary().termCount()).isEqualTo(1);
     }
 
     @Test
@@ -102,15 +97,17 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
         Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
 
-        termRepository.saveAllAndFlush(
+        termRepository.saveAll(
                 IntStream.range(0, 100)
                         .mapToObj(i -> Term.forCreateOf(
                                 "테스트 용어" + i,
                                 "테스트 뜻" + i,
-                                new VocabularyId(vocabulary.getId())
+                                List.of(),
+                                vocabulary
                         ))
                         .toList()
         );
+        em.flush();
         em.clear();
 
         var command = new CreateTermUseCase.Command(
@@ -124,5 +121,27 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         // when
         assertThatThrownBy(() -> useCase.execute(command))
                 .isInstanceOf(TermLimitExceededException.class);
+    }
+
+    @Test
+    @DisplayName("용어 생성 - 실패; 사용자가 용어집 소유자가 아닌 경우")
+    void executeError3() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
+
+        User anotherUser = testUserCreator.createCompletedOnboardingUser();
+
+        var command = new CreateTermUseCase.Command(
+                anotherUser.getUid(),
+                vocabulary.getUid(),
+                "테스트 용어",
+                "테스트 뜻",
+                List.of("동의어1", "동의어2")
+        );
+
+        // when
+        assertThatThrownBy(() -> useCase.execute(command))
+                .isInstanceOf(VocabularyPolicy.NotValidVocabularyOwnerException.class);
     }
 }

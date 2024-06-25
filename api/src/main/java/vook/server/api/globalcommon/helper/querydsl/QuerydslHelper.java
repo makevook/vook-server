@@ -20,8 +20,8 @@ public class QuerydslHelper {
         List<OrderSpecifier<T>> result = new ArrayList<>();
 
         if (pageable.getSort().isSorted()) {
+            PathBuilder<?> pathBuilder = new PathBuilder<>(qClass.getType(), qClass.getMetadata());
             for (Sort.Order o : pageable.getSort()) {
-                PathBuilder<?> pathBuilder = new PathBuilder<>(qClass.getType(), qClass.getMetadata());
                 OrderSpecifier<T> order = new OrderSpecifier(
                         o.isAscending() ? Order.ASC : Order.DESC,
                         pathBuilder.get(o.getProperty())

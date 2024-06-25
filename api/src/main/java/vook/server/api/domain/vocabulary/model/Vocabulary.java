@@ -1,9 +1,13 @@
 package vook.server.api.domain.vocabulary.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import org.hibernate.annotations.Formula;
 import vook.server.api.domain.common.model.BaseEntity;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -27,6 +31,13 @@ public class Vocabulary extends BaseEntity {
     @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
     private UserId userId;
 
+    @OneToMany(mappedBy = "vocabulary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<Term> terms = new HashSet<>();
+
+    @Getter(AccessLevel.NONE)
+    @Formula("(SELECT COUNT(t.id) FROM term t WHERE t.vocabulary_id = id)")
+    private int termCount;
+
     public static Vocabulary forCreateOf(
             String name,
             UserId userId
@@ -44,5 +55,19 @@ public class Vocabulary extends BaseEntity {
 
     public void update(String name) {
         this.name = name;
+    }
+
+    public void addTerm(Term term) {
+        this.terms.add(term);
+        termCount++;
+    }
+
+    public int termCount() {
+        return this.termCount;
+    }
+
+    public void removeTerm(Term term) {
+        this.terms.remove(term);
+        termCount--;
     }
 }

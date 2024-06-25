@@ -9,12 +9,12 @@ import vook.server.api.usecases.common.exception.UseCaseException;
 @Component
 public class VocabularyPolicy {
 
-    public void validateOwner(User user, Vocabulary vocabulary) {
+    public void validateOwner(User user, Vocabulary vocabulary) throws NotValidVocabularyOwnerException {
         if (!vocabulary.isValidOwner(new UserId(user.getId()))) {
-            throw new NotValidOwnerException();
+            throw new NotValidVocabularyOwnerException();
         }
     }
 
-    public static class NotValidOwnerException extends UseCaseException {
+    public static class NotValidVocabularyOwnerException extends UseCaseException {
     }
 }

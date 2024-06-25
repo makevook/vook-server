@@ -1,20 +1,19 @@
-package vook.server.api.domain.term.service.data;
+package vook.server.api.domain.vocabulary.service.data;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
-import vook.server.api.domain.term.model.Term;
-import vook.server.api.domain.term.model.VocabularyId;
+import vook.server.api.domain.vocabulary.model.Term;
 
 import java.util.List;
 
 @Getter
-public class TermCreateCommand {
+public class TermUpdateCommand {
 
     @NotNull
-    private VocabularyId vocabularyId;
+    private String uid;
 
     @NotBlank
     @Size(min = 1, max = 100)
@@ -28,9 +27,9 @@ public class TermCreateCommand {
     private List<String> synonyms;
 
     @Builder
-    private static TermCreateCommand of(VocabularyId vocabularyId, String term, String meaning, List<String> synonyms) {
-        TermCreateCommand command = new TermCreateCommand();
-        command.vocabularyId = vocabularyId;
+    private static TermUpdateCommand of(String uid, String term, String meaning, List<String> synonyms) {
+        TermUpdateCommand command = new TermUpdateCommand();
+        command.uid = uid;
         command.term = term;
         command.meaning = meaning;
         command.synonyms = synonyms;
@@ -38,6 +37,6 @@ public class TermCreateCommand {
     }
 
     public Term toEntity() {
-        return Term.forCreateOf(term, meaning, vocabularyId);
+        return Term.forUpdateOf(term, meaning, synonyms);
     }
 }

@@ -85,6 +85,6 @@ class UpdateVocabularyUseCaseTest extends IntegrationTestBase {
         assertThatThrownBy(() -> {
             var command = new UpdateVocabularyUseCase.Command(vookLoginUser.getUid(), vocabulary.getUid(), request.getName());
             useCase.execute(command);
-        }).isInstanceOf(VocabularyPolicy.NotValidOwnerException.class);
+        }).isInstanceOf(VocabularyPolicy.NotValidVocabularyOwnerException.class);
     }
 }

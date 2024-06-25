@@ -6,10 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
 import vook.server.api.domain.vocabulary.model.Term;
-import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.TermService;
-import vook.server.api.domain.vocabulary.service.VocabularyService;
-import vook.server.api.domain.vocabulary.service.data.TermCreateCommand;
+import vook.server.api.domain.vocabulary.service.data.TermUpdateCommand;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
 
 import java.util.List;
@@ -17,45 +15,34 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CreateTermUseCase {
+public class UpdateTermUseCase {
 
     private final UserService userService;
-    private final VocabularyService vocabularyService;
-    private final TermService termService;
     private final VocabularyPolicy vocabularyPolicy;
+    private final TermService termService;
 
-    public Result execute(Command command) {
+    public void execute(Command command) {
         User user = userService.getByUid(command.userUid());
-        Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
-        vocabularyPolicy.validateOwner(user, vocabulary);
+        Term term = termService.getByUid(command.termUid());
+        vocabularyPolicy.validateOwner(user, term.getVocabulary());
 
-        Term term = termService.create(command.toTermCreateCommand());
-
-        return Result.from(term);
+        termService.update(command.toServiceCommand());
     }
 
     public record Command(
             String userUid,
-            String vocabularyUid,
+            String termUid,
             String term,
             String meaning,
             List<String> synonyms
     ) {
-        public TermCreateCommand toTermCreateCommand() {
-            return TermCreateCommand.builder()
-                    .vocabularyUid(vocabularyUid)
+        public TermUpdateCommand toServiceCommand() {
+            return TermUpdateCommand.builder()
+                    .uid(termUid)
                     .term(term)
                     .meaning(meaning)
                     .synonyms(synonyms)
                     .build();
-        }
-    }
-
-    public record Result(
-            String uid
-    ) {
-        public static Result from(Term term) {
-            return new Result(term.getUid());
         }
     }
 }
