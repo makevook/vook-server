@@ -1,7 +1,9 @@
 @ApplicationModule(
         type = ApplicationModule.Type.OPEN,
         allowedDependencies = {
-                "demo"
+                "demo",
+                "vocabulary",
+                "usecases"
         }
 )
 package vook.server.api.infra;
