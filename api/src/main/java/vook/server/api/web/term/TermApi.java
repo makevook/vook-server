@@ -27,7 +27,8 @@ public interface TermApi {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
-                    비즈니스 규칙 위반 내용
+                    ## 비즈니스 규칙 위반 내용
+                                        
                     - VocabularyNotFound: 사용자의 용어집 중 해당 ID의 용어집이 존재하지 않는 경우
                     - TermLimitExceeded: 사용자의 용어집에 용어를 추가할 수 있는 제한을 초과한 경우
                     - NotValidVocabularyOwner: 용어를 추가하려는 용어집에 대한 권한이 없는 경우"""
@@ -84,7 +85,7 @@ public interface TermApi {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
-                    비즈니스 규칙 위반 내용
+                    ## 비즈니스 규칙 위반 내용
                     - TermNotFound: 삭제하려는 용어가 존재하지 않는 경우
                     - NotValidVocabularyOwner: 조회하려는 용어가 속해있는 용어집에 대한 권한이 없는 경우"""
     )
@@ -96,7 +97,7 @@ public interface TermApi {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
-                    비즈니스 규칙 위반 내용
+                    ## 비즈니스 규칙 위반 내용
                     - TermNotFound: 삭제하려는 용어가 존재하지 않는 경우
                     - NotValidVocabularyOwner: 삭제하려는 용어가 속해있는 용어집에 대한 권한이 없는 경우"""
     )

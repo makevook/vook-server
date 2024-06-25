@@ -46,7 +46,7 @@ public interface VocabularyApi {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
-                    비즈니스 규칙 위반 내용
+                    ## 비즈니스 규칙 위반 내용
                     - VocabularyLimitExceeded: 사용자의 용어집 생성 제한을 초과하여 용어집을 생성할 수 없는 경우 (3개 초과)"""
     )
     @ApiResponses(value = {
@@ -70,7 +70,7 @@ public interface VocabularyApi {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
-                    비즈니스 규칙 위반 내용
+                    ## 비즈니스 규칙 위반 내용
                     - VocabularyNotFound: 사용자의 용어집 중 해당 ID의 용어집이 존재하지 않는 경우"""
     )
     @ApiResponses(value = {
@@ -98,7 +98,7 @@ public interface VocabularyApi {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
-                    비즈니스 규칙 위반 내용
+                    ## 비즈니스 규칙 위반 내용
                     - VocabularyNotFound: 사용자의 용어집 중 해당 ID의 용어집이 존재하지 않는 경우"""
     )
     @ApiResponses(value = {
