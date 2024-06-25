@@ -3,15 +3,13 @@ package vook.server.api.usecases.term;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.term.model.Term;
-import vook.server.api.domain.term.service.TermService;
-import vook.server.api.domain.term.service.data.TermCreateCommand;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
-import vook.server.api.domain.vocabulary.model.TermId;
+import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
+import vook.server.api.domain.vocabulary.service.TermService;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
-import vook.server.api.domain.vocabulary.service.data.VocabularyTermAddCommand;
+import vook.server.api.domain.vocabulary.service.data.TermCreateCommand;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
 
 import java.util.List;
@@ -28,12 +26,10 @@ public class CreateTermUseCase {
 
     public Result execute(Command command) {
         User user = userService.getByUid(command.userUid());
-
         Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
         vocabularyPolicy.validateOwner(user, vocabulary);
 
         Term term = termService.create(command.toTermCreateCommand());
-        vocabularyService.addTerm(command.toTermAddCommand(term));
 
         return Result.from(term);
     }
@@ -47,16 +43,10 @@ public class CreateTermUseCase {
     ) {
         public TermCreateCommand toTermCreateCommand() {
             return TermCreateCommand.builder()
+                    .vocabularyUid(vocabularyUid)
                     .term(term)
                     .meaning(meaning)
                     .synonyms(synonyms)
-                    .build();
-        }
-
-        public VocabularyTermAddCommand toTermAddCommand(Term term) {
-            return VocabularyTermAddCommand.builder()
-                    .vocabularyUid(vocabularyUid)
-                    .termId(new TermId(term.getId()))
                     .build();
         }
     }

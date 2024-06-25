@@ -1,4 +1,4 @@
-package vook.server.api.domain.term.model;
+package vook.server.api.domain.vocabulary.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -34,14 +34,23 @@ public class Term extends BaseEntity {
     @OneToMany(mappedBy = "term", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TermSynonym> synonyms = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "vocabulary_id", nullable = false)
+    private Vocabulary vocabulary;
+
     public static Term forCreateOf(
             String term,
-            String meaning
+            String meaning,
+            List<String> synonyms,
+            Vocabulary vocabulary
     ) {
         Term result = new Term();
         result.uid = UUID.randomUUID().toString();
         result.term = term;
         result.meaning = meaning;
+        result.addAllSynonym(synonyms);
+        result.vocabulary = vocabulary;
+        vocabulary.addTerm(result);
         return result;
     }
 
@@ -57,7 +66,7 @@ public class Term extends BaseEntity {
         return result;
     }
 
-    public void addAllSynonym(List<String> synonyms) {
+    private void addAllSynonym(List<String> synonyms) {
         synonyms.forEach(s -> this.synonyms.add(TermSynonym.forCreateOf(s, this)));
     }
 

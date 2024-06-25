@@ -4,13 +4,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.term.exception.TermNotFoundException;
-import vook.server.api.domain.term.model.TermRepository;
 import vook.server.api.domain.user.model.User;
+import vook.server.api.domain.vocabulary.exception.TermNotFoundException;
+import vook.server.api.domain.vocabulary.model.Term;
+import vook.server.api.domain.vocabulary.model.TermRepository;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.model.VocabularyRepository;
 import vook.server.api.testhelper.IntegrationTestBase;
-import vook.server.api.testhelper.creator.TestTermCreator;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
@@ -33,8 +33,6 @@ class UpdateTermUseCaseTest extends IntegrationTestBase {
     @Autowired
     TestVocabularyCreator testVocabularyCreator;
     @Autowired
-    TestTermCreator testTermCreator;
-    @Autowired
     TermRepository termRepository;
     @Autowired
     VocabularyRepository vocabularyRepository;
@@ -44,9 +42,8 @@ class UpdateTermUseCaseTest extends IntegrationTestBase {
     void execute() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
-        var term = testTermCreator.createTerm();
         var vocabulary = testVocabularyCreator.createVocabulary(user);
-        testVocabularyCreator.addTerm(vocabulary, term);
+        var term = testVocabularyCreator.createTerm(vocabulary);
 
         UpdateTermUseCase.Command command = new UpdateTermUseCase.Command(
                 user.getUid(),
@@ -91,8 +88,7 @@ class UpdateTermUseCaseTest extends IntegrationTestBase {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
         Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
-        var term = testTermCreator.createTerm();
-        testVocabularyCreator.addTerm(vocabulary, term);
+        Term term = testVocabularyCreator.createTerm(vocabulary);
 
         User anotherUser = testUserCreator.createCompletedOnboardingUser();
 

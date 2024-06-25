@@ -32,10 +32,10 @@ public class Vocabulary extends BaseEntity {
     private UserId userId;
 
     @OneToMany(mappedBy = "vocabulary", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<VocabularyTerm> terms = new ArrayList<>();
+    private List<Term> terms = new ArrayList<>();
 
     @Getter(AccessLevel.NONE)
-    @Formula("(SELECT COUNT(t.id) FROM vocabulary_term t WHERE t.vocabulary_id = id)")
+    @Formula("(SELECT COUNT(t.id) FROM term t WHERE t.vocabulary_id = id)")
     private int termCount;
 
     public static Vocabulary forCreateOf(
@@ -57,16 +57,12 @@ public class Vocabulary extends BaseEntity {
         this.name = name;
     }
 
-    public void addTerm(TermId termId) {
-        this.terms.add(VocabularyTerm.forCreateOf(termId, this));
+    public void addTerm(Term term) {
+        this.terms.add(term);
         termCount++;
     }
 
     public int termCount() {
         return this.termCount;
-    }
-
-    public void removeTerm(TermId termId) {
-        this.terms.removeIf(s -> s.getTermId().equals(termId));
     }
 }

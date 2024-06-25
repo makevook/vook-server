@@ -5,15 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.term.model.Term;
-import vook.server.api.domain.term.model.TermRepository;
-import vook.server.api.domain.term.model.TermSynonym;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.vocabulary.exception.TermLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
-import vook.server.api.domain.vocabulary.model.TermId;
+import vook.server.api.domain.vocabulary.model.Term;
+import vook.server.api.domain.vocabulary.model.TermRepository;
+import vook.server.api.domain.vocabulary.model.TermSynonym;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
-import vook.server.api.domain.vocabulary.model.VocabularyTermRepository;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
@@ -38,8 +36,6 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
     TestVocabularyCreator testVocabularyCreator;
     @Autowired
     TermRepository termRepository;
-    @Autowired
-    VocabularyTermRepository vocabularyTermRepository;
     @Autowired
     EntityManager em;
 
@@ -70,11 +66,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         assertThat(term.getMeaning()).isEqualTo(command.meaning());
         assertThat(term.getSynonyms().stream().map(TermSynonym::getSynonym))
                 .containsExactlyInAnyOrderElementsOf(command.synonyms());
-
-        int termCount = vocabularyTermRepository.findByTermId(new TermId(term.getId())).orElseThrow()
-                .getVocabulary()
-                .termCount();
-        assertThat(termCount).isEqualTo(1);
+        assertThat(term.getVocabulary().termCount()).isEqualTo(1);
     }
 
     @Test
@@ -105,15 +97,16 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
         Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
 
-        List<Term> terms = termRepository.saveAll(
+        termRepository.saveAll(
                 IntStream.range(0, 100)
                         .mapToObj(i -> Term.forCreateOf(
                                 "테스트 용어" + i,
-                                "테스트 뜻" + i
+                                "테스트 뜻" + i,
+                                List.of(),
+                                vocabulary
                         ))
                         .toList()
         );
-        terms.forEach(t -> testVocabularyCreator.addTerm(vocabulary, t));
         em.flush();
         em.clear();
 
