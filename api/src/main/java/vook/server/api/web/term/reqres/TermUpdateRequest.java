@@ -13,9 +13,6 @@ import java.util.List;
 public class TermUpdateRequest {
 
     @NotBlank
-    private String termUid;
-
-    @NotBlank
     @Size(min = 1, max = 100)
     private String term;
 
@@ -25,7 +22,7 @@ public class TermUpdateRequest {
 
     private List<String> synonyms = new ArrayList<>();
 
-    public UpdateTermUseCase.Command toCommand(VookLoginUser loginUser) {
+    public UpdateTermUseCase.Command toCommand(VookLoginUser loginUser, String termUid) {
         return new UpdateTermUseCase.Command(
                 loginUser.getUid(),
                 termUid,
