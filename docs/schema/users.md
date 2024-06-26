@@ -8,18 +8,17 @@
 ```sql
 CREATE TABLE `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted_at` datetime(6) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `last_updated_at` datetime(6) DEFAULT NULL,
   `onboarding_completed` bit(1) NOT NULL,
   `onboarding_completed_at` datetime(6) DEFAULT NULL,
   `registered_at` datetime(6) DEFAULT NULL,
-  `status` enum('SOCIAL_LOGIN_COMPLETED','REGISTERED','WITHDRAWN') DEFAULT NULL,
+  `status` varchar(30) NOT NULL,
   `uid` varchar(255) DEFAULT NULL,
   `withdrawn_at` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_6dotkott2kjsp8vw4d0m25fb7` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ```
 
 </details>
@@ -28,14 +27,13 @@ CREATE TABLE `users` (
 
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | bigint(20) |  | false | auto_increment | [social_user](social_user.md) [user_info](user_info.md) [vocabulary](vocabulary.md) |  |  |
-| deleted_at | datetime(6) | NULL | true |  |  |  |  |
+| id | bigint(20) |  | false | auto_increment | [social_user](social_user.md) [user_info](user_info.md) |  |  |
 | email | varchar(255) | NULL | true |  |  |  |  |
 | last_updated_at | datetime(6) | NULL | true |  |  |  |  |
 | onboarding_completed | bit(1) |  | false |  |  |  |  |
 | onboarding_completed_at | datetime(6) | NULL | true |  |  |  |  |
 | registered_at | datetime(6) | NULL | true |  |  |  |  |
-| status | enum('SOCIAL_LOGIN_COMPLETED','REGISTERED','WITHDRAWN') | NULL | true |  |  |  |  |
+| status | varchar(30) |  | false |  |  |  |  |
 | uid | varchar(255) | NULL | true |  |  |  |  |
 | withdrawn_at | datetime(6) | NULL | true |  |  |  |  |
 
@@ -60,17 +58,15 @@ erDiagram
 
 "social_user" }o--o| "users" : "FOREIGN KEY (user_id) REFERENCES users (id)"
 "user_info" |o--o| "users" : "FOREIGN KEY (user_id) REFERENCES users (id)"
-"vocabulary" }o--|| "users" : "FOREIGN KEY (user_id) REFERENCES users (id)"
 
 "users" {
   bigint_20_ id PK
-  datetime_6_ deleted_at
   varchar_255_ email
   datetime_6_ last_updated_at
   bit_1_ onboarding_completed
   datetime_6_ onboarding_completed_at
   datetime_6_ registered_at
-  enum__SOCIAL_LOGIN_COMPLETED___REGISTERED___WITHDRAWN__ status
+  varchar_30_ status
   varchar_255_ uid
   datetime_6_ withdrawn_at
 }
@@ -83,18 +79,10 @@ erDiagram
 }
 "user_info" {
   bigint_20_ id PK
-  enum__X___FACEBOOK___LINKEDIN___INSTAGRAM___NAVER_BLOG___RECOMMENDATION___OTHER__ funnel
-  enum__PLANNER___DESIGNER___DEVELOPER___MARKETER___CEO___HR___OTHER__ job
+  varchar_20_ funnel
+  varchar_20_ job
   bit_1_ marketing_email_opt_in
-  varchar_255_ nickname
-  bigint_20_ user_id FK
-}
-"vocabulary" {
-  bigint_20_ id PK
-  varchar_100_ name
-  datetime_6_ created_at
-  datetime_6_ updated_at
-  varchar_255_ uid
+  varchar_10_ nickname
   bigint_20_ user_id FK
 }
 ```
