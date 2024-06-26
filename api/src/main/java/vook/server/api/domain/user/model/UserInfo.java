@@ -18,9 +18,11 @@ public class UserInfo {
     private Boolean marketingEmailOptIn;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(20)")
     private Funnel funnel;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(20)")
     private Job job;
 
     @OneToOne
