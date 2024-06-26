@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.TermRepository;
-import vook.server.api.domain.vocabulary.model.TermSynonym;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
@@ -54,12 +53,10 @@ class RetrieveTermUseCaseTest extends IntegrationTestBase {
 
         // then
         assertThat(result.terms().getContent()).hasSize(1);
-        assertThat(result.terms().getContent().get(0).termUid()).isEqualTo(term.getUid());
-        assertThat(result.terms().getContent().get(0).term()).isEqualTo(term.getTerm());
-        assertThat(result.terms().getContent().get(0).meaning()).isEqualTo(term.getMeaning());
-        assertThat(result.terms().getContent().get(0).synonym()).containsExactlyInAnyOrderElementsOf(
-                term.getSynonyms().stream().map(TermSynonym::getSynonym).toList()
-        );
+        assertThat(result.terms().getContent().getFirst().termUid()).isEqualTo(term.getUid());
+        assertThat(result.terms().getContent().getFirst().term()).isEqualTo(term.getTerm());
+        assertThat(result.terms().getContent().getFirst().meaning()).isEqualTo(term.getMeaning());
+        assertThat(result.terms().getContent().getFirst().synonyms()).containsExactlyInAnyOrderElementsOf(term.getSynonyms());
     }
 
     @TestFactory

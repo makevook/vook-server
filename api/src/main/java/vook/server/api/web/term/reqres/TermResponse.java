@@ -13,7 +13,7 @@ public class TermResponse {
     String termUid;
     String term;
     String meaning;
-    List<String> synonym;
+    List<String> synonyms;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime createdAt;
 
@@ -26,7 +26,7 @@ public class TermResponse {
         result.termUid = term.termUid();
         result.term = term.term();
         result.meaning = term.meaning();
-        result.synonym = term.synonym();
+        result.synonyms = term.synonyms();
         result.createdAt = term.createdAt();
         return result;
     }

@@ -58,7 +58,6 @@ class UpdateTermUseCaseTest extends IntegrationTestBase {
         assertThat(updatedTerm.getTerm()).isEqualTo(command.term());
         assertThat(updatedTerm.getMeaning()).isEqualTo(command.meaning());
         assertThat(updatedTerm.getSynonyms()).isEmpty();
-        assertThat(updatedTerm.getSynonym()).isEmpty();
     }
 
     @Test
