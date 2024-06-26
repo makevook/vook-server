@@ -8,15 +8,13 @@
 ```sql
 CREATE TABLE `vocabulary` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
+  `name` varchar(20) NOT NULL,
   `uid` varchar(255) DEFAULT NULL,
   `user_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK50fel7tsib4tpnuqa7irn7f5c` (`user_id`),
-  CONSTRAINT `FK50fel7tsib4tpnuqa7irn7f5c` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ```
 
 </details>
@@ -26,24 +24,22 @@ CREATE TABLE `vocabulary` (
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
 | id | bigint(20) |  | false | auto_increment | [term](term.md) |  |  |
-| name | varchar(100) |  | false |  |  |  |  |
 | created_at | datetime(6) | NULL | true |  |  |  |  |
 | updated_at | datetime(6) | NULL | true |  |  |  |  |
+| name | varchar(20) |  | false |  |  |  |  |
 | uid | varchar(255) | NULL | true |  |  |  |  |
-| user_id | bigint(20) |  | false |  |  | [users](users.md) |  |
+| user_id | bigint(20) |  | false |  |  |  |  |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
-| FK50fel7tsib4tpnuqa7irn7f5c | FOREIGN KEY | FOREIGN KEY (user_id) REFERENCES users (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
-| FK50fel7tsib4tpnuqa7irn7f5c | KEY FK50fel7tsib4tpnuqa7irn7f5c (user_id) USING BTREE |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
 
 ## Relations
@@ -52,35 +48,24 @@ CREATE TABLE `vocabulary` (
 erDiagram
 
 "term" }o--|| "vocabulary" : "FOREIGN KEY (vocabulary_id) REFERENCES vocabulary (id)"
-"vocabulary" }o--|| "users" : "FOREIGN KEY (user_id) REFERENCES users (id)"
 
 "vocabulary" {
   bigint_20_ id PK
-  varchar_100_ name
   datetime_6_ created_at
   datetime_6_ updated_at
+  varchar_20_ name
   varchar_255_ uid
-  bigint_20_ user_id FK
+  bigint_20_ user_id
 }
 "term" {
   bigint_20_ id PK
-  varchar_2000_ meaning
-  varchar_100_ term
-  bigint_20_ vocabulary_id FK
   datetime_6_ created_at
   datetime_6_ updated_at
-}
-"users" {
-  bigint_20_ id PK
-  datetime_6_ deleted_at
-  varchar_255_ email
-  datetime_6_ last_updated_at
-  bit_1_ onboarding_completed
-  datetime_6_ onboarding_completed_at
-  datetime_6_ registered_at
-  enum__SOCIAL_LOGIN_COMPLETED___REGISTERED___WITHDRAWN__ status
+  varchar_2000_ meaning
+  varchar_1100_ synonym
+  varchar_100_ term
   varchar_255_ uid
-  datetime_6_ withdrawn_at
+  bigint_20_ vocabulary_id FK
 }
 ```
 

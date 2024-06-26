@@ -23,6 +23,7 @@ public class User {
     private String email;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "varchar(30)")
     private UserStatus status;
 
     @Column(nullable = false)

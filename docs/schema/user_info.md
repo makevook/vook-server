@@ -8,15 +8,15 @@
 ```sql
 CREATE TABLE `user_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `funnel` enum('X','FACEBOOK','LINKEDIN','INSTAGRAM','NAVER_BLOG','RECOMMENDATION','OTHER') DEFAULT NULL,
-  `job` enum('PLANNER','DESIGNER','DEVELOPER','MARKETER','CEO','HR','OTHER') DEFAULT NULL,
+  `funnel` varchar(20) DEFAULT NULL,
+  `job` varchar(20) DEFAULT NULL,
   `marketing_email_opt_in` bit(1) DEFAULT NULL,
-  `nickname` varchar(255) DEFAULT NULL,
+  `nickname` varchar(10) NOT NULL,
   `user_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_hixwjgx0ynne0cq4tqvoawoda` (`user_id`),
   CONSTRAINT `FKr1b96ca4asuvrhwoqkdmbo7nj` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ```
 
 </details>
@@ -26,10 +26,10 @@ CREATE TABLE `user_info` (
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
 | id | bigint(20) |  | false | auto_increment |  |  |  |
-| funnel | enum('X','FACEBOOK','LINKEDIN','INSTAGRAM','NAVER_BLOG','RECOMMENDATION','OTHER') | NULL | true |  |  |  |  |
-| job | enum('PLANNER','DESIGNER','DEVELOPER','MARKETER','CEO','HR','OTHER') | NULL | true |  |  |  |  |
+| funnel | varchar(20) | NULL | true |  |  |  |  |
+| job | varchar(20) | NULL | true |  |  |  |  |
 | marketing_email_opt_in | bit(1) | NULL | true |  |  |  |  |
-| nickname | varchar(255) | NULL | true |  |  |  |  |
+| nickname | varchar(10) |  | false |  |  |  |  |
 | user_id | bigint(20) | NULL | true |  |  | [users](users.md) |  |
 
 ## Constraints
@@ -56,21 +56,20 @@ erDiagram
 
 "user_info" {
   bigint_20_ id PK
-  enum__X___FACEBOOK___LINKEDIN___INSTAGRAM___NAVER_BLOG___RECOMMENDATION___OTHER__ funnel
-  enum__PLANNER___DESIGNER___DEVELOPER___MARKETER___CEO___HR___OTHER__ job
+  varchar_20_ funnel
+  varchar_20_ job
   bit_1_ marketing_email_opt_in
-  varchar_255_ nickname
+  varchar_10_ nickname
   bigint_20_ user_id FK
 }
 "users" {
   bigint_20_ id PK
-  datetime_6_ deleted_at
   varchar_255_ email
   datetime_6_ last_updated_at
   bit_1_ onboarding_completed
   datetime_6_ onboarding_completed_at
   datetime_6_ registered_at
-  enum__SOCIAL_LOGIN_COMPLETED___REGISTERED___WITHDRAWN__ status
+  varchar_30_ status
   varchar_255_ uid
   datetime_6_ withdrawn_at
 }

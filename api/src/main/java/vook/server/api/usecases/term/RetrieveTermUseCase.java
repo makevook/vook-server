@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
 import vook.server.api.domain.vocabulary.model.Term;
-import vook.server.api.domain.vocabulary.model.TermSynonym;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
@@ -50,7 +49,7 @@ public class RetrieveTermUseCase {
                 String termUid,
                 String term,
                 String meaning,
-                List<String> synonym,
+                List<String> synonyms,
                 LocalDateTime createdAt
         ) {
 
@@ -59,7 +58,7 @@ public class RetrieveTermUseCase {
                         term.getUid(),
                         term.getTerm(),
                         term.getMeaning(),
-                        term.getSynonyms().stream().map(TermSynonym::getSynonym).toList(),
+                        term.getSynonyms(),
                         term.getCreatedAt()
                 );
             }

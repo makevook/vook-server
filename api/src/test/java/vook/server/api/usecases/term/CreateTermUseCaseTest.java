@@ -10,7 +10,6 @@ import vook.server.api.domain.vocabulary.exception.TermLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.TermRepository;
-import vook.server.api.domain.vocabulary.model.TermSynonym;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
@@ -64,9 +63,7 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
         Term term = termRepository.findByUid(result.uid()).orElseThrow();
         assertThat(term.getTerm()).isEqualTo(command.term());
         assertThat(term.getMeaning()).isEqualTo(command.meaning());
-        assertThat(term.getSynonym()).isEqualTo(String.join(",", command.synonyms()));
-        assertThat(term.getSynonyms().stream().map(TermSynonym::getSynonym))
-                .containsExactlyInAnyOrderElementsOf(command.synonyms());
+        assertThat(term.getSynonyms()).containsExactlyInAnyOrderElementsOf(command.synonyms());
         assertThat(term.getVocabulary().termCount()).isEqualTo(1);
     }
 
