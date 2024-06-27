@@ -9,10 +9,9 @@ import vook.server.api.domain.demo.model.DemoTermSynonymRepository;
 import vook.server.api.domain.user.model.SocialUserRepository;
 import vook.server.api.domain.user.model.UserInfoRepository;
 import vook.server.api.domain.user.model.UserRepository;
-import vook.server.api.domain.vocabulary.model.TemplateTermRepository;
-import vook.server.api.domain.vocabulary.model.TemplateVocabularyRepository;
-import vook.server.api.domain.vocabulary.model.TermRepository;
-import vook.server.api.domain.vocabulary.model.VocabularyRepository;
+import vook.server.api.domain.vocabulary.model.*;
+import vook.server.api.domain.vocabulary.service.TemplateVocabularyService;
+import vook.server.api.domain.vocabulary.service.data.TemplateVocabularyCreateCommand;
 import vook.server.api.infra.search.demo.MeilisearchDemoTermSearchService;
 
 import java.util.Arrays;
@@ -36,17 +35,33 @@ public class InitService {
     private final TestTermsLoader testTermsLoader;
     private final MeilisearchDemoTermSearchService searchService;
 
+    private final TemplateVocabularyService templateVocabularyService;
+
     public void init() {
         deleteAll();
 
-        List<DemoTerm> devTerms = testTermsLoader.getTerms(
+        // 데모 용어집
+        List<DemoTerm> demoTerms = testTermsLoader.getTerms(
                 "classpath:init/데모.tsv",
                 InitService::convertToDemoTerm
         );
-        demoTermRepository.saveAll(devTerms);
+        demoTermRepository.saveAll(demoTerms);
 
         searchService.init();
-        searchService.addTerms(devTerms);
+        searchService.addTerms(demoTerms);
+
+        // 템플릿 용어집
+        createTemplateVocabulary(TemplateVocabularyName.DEVELOPMENT, "classpath:init/템플릿용어집-개발.tsv");
+        createTemplateVocabulary(TemplateVocabularyName.MARKETING, "classpath:init/템플릿용어집-마케팅.tsv");
+        createTemplateVocabulary(TemplateVocabularyName.DESIGN, "classpath:init/템플릿용어집-디자인.tsv");
+        createTemplateVocabulary(TemplateVocabularyName.GENERAL_OFFICE, "classpath:init/템플릿용어집-일반사무.tsv");
+    }
+
+    private void createTemplateVocabulary(TemplateVocabularyName name, String location) {
+        templateVocabularyService.create(new TemplateVocabularyCreateCommand(
+                name,
+                testTermsLoader.getTerms(location, InitService::convertToTemplateTerm)
+        ));
     }
 
     private void deleteAll() {
@@ -81,6 +96,18 @@ public class InitService {
                             .forEach(term::addSynonym);
                     return term;
                 })
+                .toList();
+    }
+
+    public static List<TemplateVocabularyCreateCommand.Term> convertToTemplateTerm(List<TestTermsLoader.RawTerm> input) {
+        return input.stream()
+                .map(t -> new TemplateVocabularyCreateCommand.Term(
+                        t.getTerm(),
+                        t.getMeaning(),
+                        Arrays.stream(t.getSynonyms().split(","))
+                                .map(String::trim)
+                                .toList()
+                ))
                 .toList();
     }
 }
