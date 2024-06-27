@@ -10,9 +10,13 @@ import vook.server.api.domain.vocabulary.exception.TermLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.TermNotFoundException;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.TermRepository;
+import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.model.VocabularyRepository;
+import vook.server.api.domain.vocabulary.service.data.TermCreateAllCommand;
 import vook.server.api.domain.vocabulary.service.data.TermCreateCommand;
 import vook.server.api.domain.vocabulary.service.data.TermUpdateCommand;
+
+import java.util.List;
 
 @Service
 @Validated
@@ -30,6 +34,20 @@ public class TermService {
             throw new TermLimitExceededException();
         }
         return termRepository.save(term);
+    }
+
+    public void createAll(@Valid TermCreateAllCommand command) {
+        Vocabulary vocabulary = vocabularyRepository.findByUid(command.getVocabularyUid()).orElseThrow();
+        int savedCount = vocabulary.termCount();
+        int count = command.getTermInfos().size();
+        if (savedCount + count > 100) {
+            throw new TermLimitExceededException();
+        }
+
+        List<Term> terms = command.getTermInfos().stream()
+                .map(term -> term.toEntity(vocabulary))
+                .toList();
+        termRepository.saveAll(terms);
     }
 
     public Term getByUid(@NotBlank String uid) {
