@@ -34,7 +34,7 @@ public class OnboardingUserUseCase {
         userService.onboarding(command.toOnboardingCommand());
 
         User user = userService.getByUid(command.userUid());
-        TemplateVocabularyName vocabularyName = TemplateVocabularyName.from(command.job());
+        TemplateVocabularyName vocabularyName = vocabularyNameFrom(command.job());
         Vocabulary vocabulary = vocabularyService.create(VocabularyCreateCommand.of(vocabularyName.name(), new UserId(user.getId())));
 
         List<TemplateTerm> terms = templateVocabularyService.getTermsByName(vocabularyName);
@@ -52,6 +52,16 @@ public class OnboardingUserUseCase {
                         )
                         .build()
         );
+    }
+
+    private TemplateVocabularyName vocabularyNameFrom(Job job) {
+        return switch (job) {
+            case PLANNER, DESIGNER -> TemplateVocabularyName.DEVELOPMENT;
+            case MARKETER -> TemplateVocabularyName.MARKETING;
+            case DEVELOPER -> TemplateVocabularyName.DESIGN;
+            case CEO, HR, OTHER -> TemplateVocabularyName.GENERAL_OFFICE;
+            case null -> TemplateVocabularyName.GENERAL_OFFICE;
+        };
     }
 
     public record Command(
