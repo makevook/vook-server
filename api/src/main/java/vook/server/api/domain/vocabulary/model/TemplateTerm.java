@@ -37,7 +37,7 @@ public class TemplateTerm {
     @Column(length = 1100)
     private String synonym;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "template_vocabulary_id", nullable = false)
     private TemplateVocabulary templateVocabulary;
 

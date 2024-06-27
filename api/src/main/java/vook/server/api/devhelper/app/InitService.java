@@ -9,6 +9,8 @@ import vook.server.api.domain.demo.model.DemoTermSynonymRepository;
 import vook.server.api.domain.user.model.SocialUserRepository;
 import vook.server.api.domain.user.model.UserInfoRepository;
 import vook.server.api.domain.user.model.UserRepository;
+import vook.server.api.domain.vocabulary.model.TemplateTermRepository;
+import vook.server.api.domain.vocabulary.model.TemplateVocabularyRepository;
 import vook.server.api.domain.vocabulary.model.TermRepository;
 import vook.server.api.domain.vocabulary.model.VocabularyRepository;
 import vook.server.api.infra.search.demo.MeilisearchDemoTermSearchService;
@@ -22,6 +24,8 @@ public class InitService {
 
     private final DemoTermRepository demoTermRepository;
     private final DemoTermSynonymRepository demoTermSynonymRepository;
+    private final TemplateTermRepository templateTermRepository;
+    private final TemplateVocabularyRepository templateVocabularyRepository;
     private final TermRepository termRepository;
     private final VocabularyRepository vocabularyRepository;
     private final UserInfoRepository userInfoRepository;
@@ -44,6 +48,10 @@ public class InitService {
         // 데모 용어
         demoTermSynonymRepository.deleteAllInBatch();
         demoTermRepository.deleteAllInBatch();
+
+        // 템플릿 용어집
+        templateTermRepository.deleteAllInBatch();
+        templateVocabularyRepository.deleteAllInBatch();
 
         // 용어집
         termRepository.deleteAllInBatch();
