@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.devhelper.app.InitService;
 import vook.server.api.devhelper.app.TestTermsLoader;
 import vook.server.api.domain.demo.model.DemoTerm;
 import vook.server.api.domain.demo.model.DemoTermRepository;
@@ -33,7 +34,10 @@ class DemoServiceTest extends IntegrationTestBase {
 
     @BeforeAll
     void beforeAll() {
-        List<DemoTerm> terms = testTermsLoader.getTerms("classpath:init/개발.tsv");
+        List<DemoTerm> terms = testTermsLoader.getTerms(
+                "classpath:init/데모.tsv",
+                InitService::convertToDemoTerm
+        );
         demoTermRepository.saveAll(terms);
         demoTermSearchService.init();
         demoTermSearchService.addTerms(terms);

@@ -80,6 +80,30 @@ class CsvReaderTest {
                 );
     }
 
+    @Test
+    @DisplayName("TSV Reader - 개행처리")
+    void readValueWithNewLine() {
+        // given
+        String csvString = """
+                term\tsynonyms\tdescription
+                "Ja\\nva"\t"자\\n바"\t"자바는 객체지향 \\n프로그래밍 언어이다."
+                Spr\\ning\t"스프\\n링"\t스프링은 자바 기반의 프레임워크이다.
+                """;
+
+        CsvReader reader = new CsvReader("\t");
+
+        // when
+        List<Term> entity = reader.readValue(csvString, Term.class);
+
+        // then
+        assertThat(entity).hasSize(2);
+        assertThat(entity).extracting("term", "synonyms", "description")
+                .containsExactlyInAnyOrder(
+                        tuple("Ja\nva", "자\n바", "자바는 객체지향 \n프로그래밍 언어이다."),
+                        tuple("Spr\\ning", "스프\n링", "스프링은 자바 기반의 프레임워크이다.")
+                );
+    }
+
     @Getter
     static class Term {
         private String term;

@@ -15,6 +15,7 @@ import vook.server.api.domain.vocabulary.model.TermRepository;
 import vook.server.api.domain.vocabulary.model.VocabularyRepository;
 import vook.server.api.infra.search.demo.MeilisearchDemoTermSearchService;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -31,13 +32,17 @@ public class InitService {
     private final UserInfoRepository userInfoRepository;
     private final SocialUserRepository socialUserRepository;
     private final UserRepository userRepository;
-    private final MeilisearchDemoTermSearchService searchService;
+
     private final TestTermsLoader testTermsLoader;
+    private final MeilisearchDemoTermSearchService searchService;
 
     public void init() {
         deleteAll();
 
-        List<DemoTerm> devTerms = testTermsLoader.getTerms("classpath:init/개발.tsv");
+        List<DemoTerm> devTerms = testTermsLoader.getTerms(
+                "classpath:init/데모.tsv",
+                InitService::convertToDemoTerm
+        );
         demoTermRepository.saveAll(devTerms);
 
         searchService.init();
@@ -64,5 +69,18 @@ public class InitService {
 
         // 검색 엔진
         searchService.clearAll();
+    }
+
+    public static List<DemoTerm> convertToDemoTerm(List<TestTermsLoader.RawTerm> input) {
+        return input.stream()
+                .map(t -> {
+                    DemoTerm term = DemoTerm.forCreateOf(t.getTerm(), t.getMeaning());
+                    String[] synonymArray = t.getSynonyms().split("//n");
+                    Arrays.stream(synonymArray)
+                            .map(String::trim)
+                            .forEach(term::addSynonym);
+                    return term;
+                })
+                .toList();
     }
 }
