@@ -22,8 +22,8 @@ import vook.server.api.usecases.common.polices.VocabularyPolicy;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Validated
@@ -41,7 +41,7 @@ public class SearchTermUseCase {
         List<Vocabulary> userVocabularies = vocabularyService.findAllBy(new UserId(user.getId()));
         vocabularyPolicy.validateOwner(userVocabularies, command.vocabularyUids());
 
-        TermSearchResult result = termSearchService.search(command.toSearchParams());
+        SearchResult result = termSearchService.search(command.toSearchParams());
         return Result.from(command.query(), result);
     }
 
@@ -73,7 +73,7 @@ public class SearchTermUseCase {
             String query,
             List<Term> hits
     ) {
-        public static Result from(String query, TermSearchResult result) {
+        public static Result from(String query, SearchResult result) {
             return Result.builder()
                     .query(query)
                     .hits(Term.from(result.results()))
@@ -94,11 +94,19 @@ public class SearchTermUseCase {
 
             private static List<Term> from(MultiSearchResult result) {
                 return result.getHits().stream()
+                        .map(hit -> {
+                            Object formatted = hit.get("_formatted");
+                            if (formatted instanceof Map formattedDocument) {
+                                return formattedDocument;
+                            } else {
+                                return hit;
+                            }
+                        })
                         .map(hit -> Term.from(result.getIndexUid(), hit))
                         .toList();
             }
 
-            public static Term from(String vocabularyUid, HashMap<String, Object> hit) {
+            public static Term from(String vocabularyUid, Map<String, Object> hit) {
                 return Term.builder()
                         .vocabularyUid(vocabularyUid)
                         .uid((String) hit.get("uid"))
@@ -111,7 +119,7 @@ public class SearchTermUseCase {
     }
 
     public interface TermSearchService {
-        TermSearchResult search(SearchParams searchParams);
+        SearchResult search(SearchParams searchParams);
     }
 
     @Builder
@@ -148,11 +156,11 @@ public class SearchTermUseCase {
     }
 
     @Builder
-    public record TermSearchResult(
+    public record SearchResult(
             List<MultiSearchResult> results
     ) {
-        public static TermSearchResult from(Results<MultiSearchResult> results) {
-            return TermSearchResult.builder()
+        public static SearchResult from(Results<MultiSearchResult> results) {
+            return SearchResult.builder()
                     .results(Arrays.stream(results.getResults()).toList())
                     .build();
         }

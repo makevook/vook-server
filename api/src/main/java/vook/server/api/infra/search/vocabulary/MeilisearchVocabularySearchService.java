@@ -128,10 +128,10 @@ public class MeilisearchVocabularySearchService extends MeilisearchService imple
     }
 
     @Override
-    public SearchTermUseCase.TermSearchResult search(SearchTermUseCase.SearchParams searchParams) {
+    public SearchTermUseCase.SearchResult search(SearchTermUseCase.SearchParams searchParams) {
         MultiSearchRequest request = searchParams.buildMultiSearchRequest();
         Results<MultiSearchResult> results = this.client.multiSearch(request);
-        return SearchTermUseCase.TermSearchResult.from(results);
+        return SearchTermUseCase.SearchResult.from(results);
     }
 
     @Getter
