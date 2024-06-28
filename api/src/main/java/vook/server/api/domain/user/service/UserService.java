@@ -37,11 +37,11 @@ public class UserService {
     }
 
     public User getByUid(@NotBlank String uid) {
-        return repository.findByUid(uid).orElseThrow(UserNotFoundException::new);
+        return getUserByUid(uid);
     }
 
     public void register(@Valid RegisterCommand command) {
-        User user = repository.findByUid(command.userUid()).orElseThrow();
+        User user = getUserByUid(command.userUid());
         if (user.isRegistered()) {
             throw new AlreadyRegisteredException();
         }
@@ -58,7 +58,7 @@ public class UserService {
     }
 
     public void onboarding(@Valid OnboardingCommand command) {
-        User user = repository.findByUid(command.userUid()).orElseThrow();
+        User user = getUserByUid(command.userUid());
         if (!user.isReadyToOnboarding()) {
             throw new NotReadyToOnboardingException();
         }
@@ -73,7 +73,7 @@ public class UserService {
             @NotBlank String uid,
             @NotBlank @Size(min = 1, max = 10) String nickname
     ) {
-        User user = repository.findByUid(uid).orElseThrow();
+        User user = getUserByUid(uid);
         if (!user.isRegistered()) {
             throw new NotRegisteredException();
         }
@@ -81,10 +81,14 @@ public class UserService {
     }
 
     public void withdraw(@NotBlank String uid) {
-        User user = repository.findByUid(uid).orElseThrow();
+        User user = getUserByUid(uid);
         if (user.isWithdrawn()) {
             return;
         }
         user.withdraw();
+    }
+
+    private User getUserByUid(String uid) {
+        return repository.findByUid(uid).orElseThrow(UserNotFoundException::new);
     }
 }
