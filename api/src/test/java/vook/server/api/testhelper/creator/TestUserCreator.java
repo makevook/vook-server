@@ -27,20 +27,36 @@ public class TestUserCreator {
 
     public User createUnregisteredUser() {
         SocialUser user = userService.signUpFromSocial(
-                SignUpFromSocialCommand.of("testProvider", "testProviderUserId" + userCounter.getAndIncrement(), "testEmail" + userCounter.getAndIncrement() + "@test.com")
+                SignUpFromSocialCommand.builder()
+                        .provider("testProvider")
+                        .providerUserId("testProviderUserId" + userCounter.getAndIncrement())
+                        .email("testEmail" + userCounter.getAndIncrement() + "@test.com")
+                        .build()
         );
         return user.getUser();
     }
 
     public User createRegisteredUser() {
         User user = createUnregisteredUser();
-        userService.register(RegisterCommand.of(user.getUid(), "testNick", true));
+        userService.register(
+                RegisterCommand.builder()
+                        .userUid(user.getUid())
+                        .nickname("testNick")
+                        .marketingEmailOptIn(true)
+                        .build()
+        );
         return userService.getByUid(user.getUid());
     }
 
     public User createCompletedOnboardingUser() {
         User user = createRegisteredUser();
-        userService.onboarding(OnboardingCommand.of(user.getUid(), Funnel.OTHER, Job.OTHER));
+        userService.onboarding(
+                OnboardingCommand.builder()
+                        .userUid(user.getUid())
+                        .funnel(Funnel.OTHER)
+                        .job(Job.OTHER)
+                        .build()
+        );
         return userService.getByUid(user.getUid());
     }
 

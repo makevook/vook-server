@@ -25,7 +25,12 @@ public class TestVocabularyCreator {
     private final AtomicInteger termNameCounter = new AtomicInteger(0);
 
     public Vocabulary createVocabulary(User user) {
-        return vocabularyService.create(VocabularyCreateCommand.of("testVocabulary", new UserId(user.getId())));
+        return vocabularyService.create(
+                VocabularyCreateCommand.builder()
+                        .name("testVocabulary")
+                        .userId(new UserId(user.getId()))
+                        .build()
+        );
     }
 
     public Term createTerm(Vocabulary vocabulary) {

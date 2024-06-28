@@ -1,11 +1,11 @@
 package vook.server.api.domain.demo.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import vook.server.api.domain.demo.service.data.DemoTermSearchParams;
 import vook.server.api.domain.demo.service.data.DemoTermSearchResult;
+import vook.server.api.globalcommon.annotation.DomainService;
 
-@Service
+@DomainService
 @RequiredArgsConstructor
 public class DemoService {
 

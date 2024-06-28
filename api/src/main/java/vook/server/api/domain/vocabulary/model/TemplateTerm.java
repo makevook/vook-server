@@ -4,15 +4,12 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
 @Entity
 @Table(name = "template_term")
 public class TemplateTerm {
-
-    public static final String SYNONYM_DELIMITER = ":,:";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +32,7 @@ public class TemplateTerm {
      */
     @Getter(AccessLevel.PRIVATE)
     @Column(length = 1100)
-    private String synonym;
+    private Synonym synonym;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "template_vocabulary_id", nullable = false)
@@ -50,19 +47,12 @@ public class TemplateTerm {
         TemplateTerm result = new TemplateTerm();
         result.term = term;
         result.meaning = meaning;
-        result.addAllSynonym(synonyms);
+        result.synonym = Synonym.from(synonyms);
         result.templateVocabulary = templateVocabulary;
         return result;
     }
 
-    private void addAllSynonym(List<String> input) {
-        this.synonym = String.join(SYNONYM_DELIMITER, input);
-    }
-
     public List<String> getSynonyms() {
-        if (synonym == null || synonym.isEmpty()) {
-            return List.of();
-        }
-        return Arrays.stream(synonym.split(SYNONYM_DELIMITER)).toList();
+        return this.synonym.synonyms();
     }
 }

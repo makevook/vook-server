@@ -13,7 +13,6 @@ import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
 import vook.server.api.web.common.auth.data.VookLoginUser;
-import vook.server.api.web.vocabulary.reqres.VocabularyUpdateRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -39,16 +38,13 @@ class UpdateVocabularyUseCaseTest extends IntegrationTestBase {
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
         Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
 
-        var request = new VocabularyUpdateRequest();
-        request.setName("updatedName");
-
         // when
-        var command = new UpdateVocabularyUseCase.Command(vookLoginUser.getUid(), vocabulary.getUid(), request.getName());
+        var command = new UpdateVocabularyUseCase.Command(vookLoginUser.getUid(), vocabulary.getUid(), "updatedName");
         useCase.execute(command);
 
         // then
         Vocabulary updatedVocabulary = vocabularyRepository.findByUid(vocabulary.getUid()).orElseThrow();
-        assertThat(updatedVocabulary.getName()).isEqualTo(request.getName());
+        assertThat(updatedVocabulary.getName()).isEqualTo("updatedName");
     }
 
     @Test
@@ -59,12 +55,9 @@ class UpdateVocabularyUseCaseTest extends IntegrationTestBase {
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
         testVocabularyCreator.createVocabulary(user);
 
-        var request = new VocabularyUpdateRequest();
-        request.setName("updatedName");
-
         // when
         assertThatThrownBy(() -> {
-            var command = new UpdateVocabularyUseCase.Command(vookLoginUser.getUid(), "nonExistentUid", request.getName());
+            var command = new UpdateVocabularyUseCase.Command(vookLoginUser.getUid(), "nonExistentUid", "updatedName");
             useCase.execute(command);
         }).isInstanceOf(VocabularyNotFoundException.class);
     }
@@ -78,12 +71,9 @@ class UpdateVocabularyUseCaseTest extends IntegrationTestBase {
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
         Vocabulary vocabulary = testVocabularyCreator.createVocabulary(otherUser);
 
-        var request = new VocabularyUpdateRequest();
-        request.setName("updatedName");
-
         // when
         assertThatThrownBy(() -> {
-            var command = new UpdateVocabularyUseCase.Command(vookLoginUser.getUid(), vocabulary.getUid(), request.getName());
+            var command = new UpdateVocabularyUseCase.Command(vookLoginUser.getUid(), vocabulary.getUid(), "updatedName");
             useCase.execute(command);
         }).isInstanceOf(VocabularyPolicy.NotValidVocabularyOwnerException.class);
     }

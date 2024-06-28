@@ -34,7 +34,11 @@ public class UpdateVocabularyUseCase {
             String name
     ) {
         public VocabularyUpdateCommand toServiceCommand() {
-            return VocabularyUpdateCommand.of(vocabularyUid, name);
+            return VocabularyUpdateCommand
+                    .builder()
+                    .vocabularyUid(vocabularyUid)
+                    .name(name)
+                    .build();
         }
     }
 }

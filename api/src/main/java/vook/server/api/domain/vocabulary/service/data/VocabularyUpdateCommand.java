@@ -2,22 +2,15 @@ package vook.server.api.domain.vocabulary.service.data;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
+import lombok.Builder;
 
-@Getter
-public class VocabularyUpdateCommand {
+@Builder
+public record VocabularyUpdateCommand(
+        @NotBlank
+        String vocabularyUid,
 
-    @NotBlank
-    private String vocabularyUid;
-
-    @NotBlank
-    @Size(min = 1, max = 20)
-    private String name;
-
-    public static VocabularyUpdateCommand of(String vocabularyUid, String name) {
-        VocabularyUpdateCommand command = new VocabularyUpdateCommand();
-        command.vocabularyUid = vocabularyUid;
-        command.name = name;
-        return command;
-    }
+        @NotBlank
+        @Size(min = 1, max = 20)
+        String name
+) {
 }

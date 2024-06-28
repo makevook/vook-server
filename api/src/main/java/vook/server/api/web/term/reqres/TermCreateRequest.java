@@ -3,38 +3,34 @@ package vook.server.api.web.term.reqres;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import vook.server.api.usecases.term.CreateTermUseCase;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Data
-public class TermCreateRequest {
+public record TermCreateRequest(
+        @NotBlank
+        String vocabularyUid,
 
-    @NotBlank
-    private String vocabularyUid;
+        @NotBlank
+        @Size(min = 1, max = 100)
+        String term,
 
-    @NotBlank
-    @Size(min = 1, max = 100)
-    private String term;
+        @NotBlank
+        @Size(min = 1, max = 2000)
+        String meaning,
 
-    @NotBlank
-    @Size(min = 1, max = 2000)
-    private String meaning;
-
-    @Valid
-    @Size(max = 10)
-    private List<@Size(min = 1, max = 100) String> synonyms = new ArrayList<>();
-
+        @Valid
+        @Size(max = 10)
+        List<@Size(min = 1, max = 100) String> synonyms
+) {
     public CreateTermUseCase.Command toCommand(VookLoginUser loginUser) {
         return new CreateTermUseCase.Command(
                 loginUser.getUid(),
                 vocabularyUid,
                 term,
                 meaning,
-                synonyms
+                synonyms == null ? List.of() : synonyms
         );
     }
 }

@@ -43,7 +43,7 @@ public class VocabularyRestController implements VocabularyApi {
             @AuthenticationPrincipal VookLoginUser user,
             @Validated @RequestBody VocabularyCreateRequest request
     ) {
-        var command = new CreateVocabularyUseCase.Command(user.getUid(), request.getName());
+        var command = new CreateVocabularyUseCase.Command(user.getUid(), request.name());
         createVocabulary.execute(command);
         return CommonApiResponse.ok();
     }
@@ -55,7 +55,7 @@ public class VocabularyRestController implements VocabularyApi {
             @PathVariable String vocabularyUid,
             @Validated @RequestBody VocabularyUpdateRequest request
     ) {
-        var command = new UpdateVocabularyUseCase.Command(user.getUid(), vocabularyUid, request.getName());
+        var command = new UpdateVocabularyUseCase.Command(user.getUid(), vocabularyUid, request.name());
         updateVocabulary.execute(command);
         return CommonApiResponse.ok();
     }

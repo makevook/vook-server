@@ -60,7 +60,7 @@ class DemoServiceTest extends IntegrationTestBase {
         DemoTermSearchResult result = demoService.searchTerm(params);
 
         assertThat(result).isNotNull();
-        assertThat(result.getQuery()).isEqualTo("하이브리드앱");
-        assertThat(result.getHits()).isNotEmpty();
+        assertThat(result.query()).isEqualTo("하이브리드앱");
+        assertThat(result.hits()).isNotEmpty();
     }
 }
