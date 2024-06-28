@@ -16,6 +16,7 @@ import vook.server.api.infra.search.common.MeilisearchProperties;
 import vook.server.api.infra.search.common.MeilisearchService;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -97,8 +98,26 @@ public class MeilisearchVocabularySearchService extends MeilisearchService imple
     }
 
     private String getDocument(Term term) {
+        return toJsonString(Document.from(term));
+    }
+
+    @Override
+    public void saveAll(List<Term> terms) {
+        if (terms.isEmpty()) {
+            return;
+        }
+        Index index = client.index(terms.getFirst().getVocabulary().getUid());
+        TaskInfo taskInfo = index.addDocuments(getDocuments(terms));
+        client.waitForTask(taskInfo.getTaskUid());
+    }
+
+    private String getDocuments(List<Term> terms) {
+        return toJsonString(Document.from(terms));
+    }
+
+    private String toJsonString(Object object) {
         try {
-            return objectMapper.writeValueAsString(Document.from(term));
+            return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -112,6 +131,12 @@ public class MeilisearchVocabularySearchService extends MeilisearchService imple
         private String synonyms;
         private String meaning;
         private String createdAt;
+
+        public static List<Document> from(List<Term> terms) {
+            return terms.stream()
+                    .map(Document::from)
+                    .toList();
+        }
 
         public static Document from(Term term) {
             return new Document(

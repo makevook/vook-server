@@ -47,6 +47,7 @@ public class TermService {
                 .map(term -> term.toEntity(vocabulary))
                 .toList();
         termRepository.saveAll(terms);
+        termSearchService.saveAll(terms);
     }
 
     public Term getByUid(@NotBlank String uid) {

@@ -6,8 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.vocabulary.exception.TermNotFoundException;
 import vook.server.api.domain.vocabulary.model.Term;
+import vook.server.api.domain.vocabulary.model.TermRepository;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.TermService;
+import vook.server.api.domain.vocabulary.service.data.TermCreateAllCommand;
 import vook.server.api.domain.vocabulary.service.data.TermCreateCommand;
 import vook.server.api.domain.vocabulary.service.data.TermUpdateCommand;
 import vook.server.api.globalcommon.exception.ParameterValidateException;
@@ -35,8 +37,11 @@ class TermServiceTest extends IntegrationTestBase {
     TestUserCreator userCreator;
     @Autowired
     TestVocabularyCreator vocabularyCreator;
+
     @Autowired
     MeilisearchVocabularySearchService searchService;
+    @Autowired
+    TermRepository termRepository;
 
     @AfterEach
     void tearDown() {
@@ -120,6 +125,55 @@ class TermServiceTest extends IntegrationTestBase {
                     assertThatThrownBy(() -> service.create(command)).isInstanceOf(ParameterValidateException.class);
                 })
         );
+    }
+
+    @Test
+    @DisplayName("용어 뭉치 생성 - 성공")
+    void createAll() {
+        // given
+        User user = userCreator.createCompletedOnboardingUser();
+        Vocabulary vocabulary = vocabularyCreator.createVocabulary(user);
+
+        TermCreateAllCommand command = TermCreateAllCommand.builder()
+                .vocabularyUid(vocabulary.getUid())
+                .termInfos(List.of(
+                        TermCreateAllCommand.TermInfo.builder()
+                                .term("용어1")
+                                .meaning("용어 설명1")
+                                .synonyms(List.of("동의어1", "동의어2"))
+                                .build(),
+                        TermCreateAllCommand.TermInfo.builder()
+                                .term("용어2")
+                                .meaning("용어 설명2")
+                                .synonyms(List.of("동의어3", "동의어4"))
+                                .build()
+                ))
+                .build();
+
+        // when
+        service.createAll(command);
+
+        // then
+        List<Term> terms = termRepository.findAll();
+        assertEquals(2, terms.size());
+        assertEquals("용어1", terms.get(0).getTerm());
+        assertEquals("용어 설명1", terms.get(0).getMeaning());
+        assertEquals(2, terms.get(0).getSynonyms().size());
+        assertEquals("용어2", terms.get(1).getTerm());
+        assertEquals("용어 설명2", terms.get(1).getMeaning());
+        assertEquals(2, terms.get(1).getSynonyms().size());
+
+        assertThat(searchService.isDocumentExists(vocabulary.getUid(), terms.get(0).getUid())).isTrue();
+        Map document1 = searchService.getDocument(vocabulary.getUid(), terms.get(0).getUid());
+        assertEquals("용어1", document1.get("term"));
+        assertEquals("용어 설명1", document1.get("meaning"));
+        assertEquals("동의어1,동의어2", document1.get("synonyms"));
+
+        assertThat(searchService.isDocumentExists(vocabulary.getUid(), terms.get(1).getUid())).isTrue();
+        Map document2 = searchService.getDocument(vocabulary.getUid(), terms.get(1).getUid());
+        assertEquals("용어2", document2.get("term"));
+        assertEquals("용어 설명2", document2.get("meaning"));
+        assertEquals("동의어3,동의어4", document2.get("synonyms"));
     }
 
     @Test
