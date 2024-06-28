@@ -83,6 +83,13 @@ public class MeilisearchVocabularySearchService extends MeilisearchService imple
         saveOrReplaceTerm(term);
     }
 
+    @Override
+    public void delete(Term term) {
+        Index index = client.index(term.getVocabulary().getUid());
+        TaskInfo taskInfo = index.deleteDocument(term.getUid());
+        client.waitForTask(taskInfo.getTaskUid());
+    }
+
     private void saveOrReplaceTerm(Term term) {
         Index index = client.index(term.getVocabulary().getUid());
         TaskInfo taskInfo = index.addDocuments(getDocument(term));

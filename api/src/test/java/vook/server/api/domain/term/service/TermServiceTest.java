@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
+import vook.server.api.domain.vocabulary.exception.TermNotFoundException;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.TermService;
@@ -150,5 +151,22 @@ class TermServiceTest extends IntegrationTestBase {
         assertEquals("수정된 용어", document.get("term"));
         assertEquals("수정된 용어 설명", document.get("meaning"));
         assertEquals("수정된 동의어1,수정된 동의어2", document.get("synonyms"));
+    }
+
+    @Test
+    @DisplayName("용어 삭제 - 성공")
+    void delete() {
+        // given
+        User user = userCreator.createCompletedOnboardingUser();
+        Vocabulary vocabulary = vocabularyCreator.createVocabulary(user);
+        Term term = vocabularyCreator.createTerm(vocabulary);
+        assertThat(searchService.isDocumentExists(vocabulary.getUid(), term.getUid())).isTrue();
+
+        // when
+        service.delete(term.getUid());
+
+        // then
+        assertThatThrownBy(() -> service.getByUid(term.getUid())).isInstanceOf(TermNotFoundException.class);
+        assertThat(searchService.isDocumentExists(vocabulary.getUid(), term.getUid())).isFalse();
     }
 }

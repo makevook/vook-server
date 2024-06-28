@@ -64,5 +64,6 @@ public class TermService {
         Term term = termRepository.findByUid(uid).orElseThrow(TermNotFoundException::new);
         term.getVocabulary().removeTerm(term);
         termRepository.delete(term);
+        termSearchService.delete(term);
     }
 }
