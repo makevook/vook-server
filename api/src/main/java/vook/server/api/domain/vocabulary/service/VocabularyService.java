@@ -10,7 +10,6 @@ import vook.server.api.domain.vocabulary.model.UserId;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.model.VocabularyRepository;
 import vook.server.api.domain.vocabulary.service.data.VocabularyCreateCommand;
-import vook.server.api.domain.vocabulary.service.data.VocabularyDeleteCommand;
 import vook.server.api.domain.vocabulary.service.data.VocabularyUpdateCommand;
 import vook.server.api.globalcommon.annotation.DomainService;
 
@@ -40,8 +39,8 @@ public class VocabularyService {
         vocabulary.update(command.name());
     }
 
-    public void delete(@Valid VocabularyDeleteCommand command) {
-        Vocabulary vocabulary = repository.findByUid(command.vocabularyUid()).orElseThrow(VocabularyNotFoundException::new);
+    public void delete(@NotBlank String vocabularyUid) {
+        Vocabulary vocabulary = repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
         repository.delete(vocabulary);
     }
 
