@@ -74,4 +74,14 @@ public class UserRestController implements UserApi {
         withdrawUserUseCase.execute(new WithdrawUserUseCase.Command(loginUser.getUid()));
         return CommonApiResponse.ok();
     }
+
+    @Override
+    @PostMapping("/re-register")
+    public CommonApiResponse<Void> reRegister(
+            @AuthenticationPrincipal VookLoginUser user,
+            @RequestBody UserRegisterRequest request
+    ) {
+        userService.reRegister(request.toCommand(user.getUid()));
+        return CommonApiResponse.ok();
+    }
 }

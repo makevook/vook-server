@@ -414,4 +414,32 @@ class UserServiceTest extends IntegrationTestBase {
                 })
         );
     }
+
+    @Test
+    @DisplayName("재가입 - 정상")
+    void reRegister1() {
+        // given
+        User withdrawnUser = testUserCreator.createWithdrawnUser();
+
+        RegisterCommand command = RegisterCommand.builder()
+                .userUid(withdrawnUser.getUid())
+                .nickname("reRegister")
+                .marketingEmailOptIn(false)
+                .build();
+
+        // when
+        service.reRegister(command);
+
+        // then
+        User user = service.getByUid(withdrawnUser.getUid());
+        assertThat(user.getStatus()).isEqualTo(UserStatus.REGISTERED);
+        assertThat(user.getOnboardingCompleted()).isFalse();
+        assertThat(user.getRegisteredAt()).isNotNull();
+        assertThat(user.getWithdrawnAt()).isNull();
+        assertThat(user.getUserInfo()).isNotNull();
+        assertThat(user.getUserInfo().getNickname()).isEqualTo(command.nickname());
+        assertThat(user.getUserInfo().getMarketingEmailOptIn()).isEqualTo(command.marketingEmailOptIn());
+        assertThat(user.getUserInfo().getJob()).isNull();
+        assertThat(user.getUserInfo().getFunnel()).isNull();
+    }
 }

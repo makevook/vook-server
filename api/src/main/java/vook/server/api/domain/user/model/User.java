@@ -72,13 +72,22 @@ public class User {
     }
 
     public void update(String nickname) {
-        userInfo.update(nickname);
-        lastUpdatedAt = LocalDateTime.now();
+        this.userInfo.update(nickname);
+        this.lastUpdatedAt = LocalDateTime.now();
     }
 
     public void withdraw() {
         this.status = UserStatus.WITHDRAWN;
         this.withdrawnAt = LocalDateTime.now();
+    }
+
+    public void reRegister(String nickname, Boolean marketingEmailOptIn) {
+        this.status = UserStatus.REGISTERED;
+        this.onboardingCompleted = false;
+        this.userInfo.reRegister(nickname, marketingEmailOptIn);
+        this.registeredAt = LocalDateTime.now();
+        this.lastUpdatedAt = null;
+        this.withdrawnAt = null;
     }
 
     public void validateRegisterProcessReady() {
@@ -105,6 +114,12 @@ public class User {
         }
         if (!this.onboardingCompleted) {
             throw new NotOnboardingException();
+        }
+    }
+
+    public void validateReRegisterProcessReady() {
+        if (status != UserStatus.WITHDRAWN) {
+            throw new NotWithdrawnUserException();
         }
     }
 }

@@ -121,4 +121,23 @@ public interface UserApi {
             description = "탈퇴된 회원에 대한 요청은 무시됩니다."
     )
     CommonApiResponse<Void> withdraw(VookLoginUser user);
+
+    @Operation(
+            summary = "회원 재가입",
+            security = {
+                    @SecurityRequirement(name = "AccessToken")
+            },
+            description = """
+                    ## 수행 내용
+                    - 유저의 상태를 탈퇴에서 가입으로 변경하고, 과거 온보딩 정보를 삭제합니다.
+                                        
+                    ## 호출 시나리오
+                    - 탈퇴한 유저가 가입 페이지에서 '가입' 버튼을 클릭했을 때 호출됩니다.
+                    - 이 API를 호출 한 후, 온보딩 API를 호출하여 온보딩을 다시 진행해야 합니다.
+                                        
+                    ## 비즈니스 규칙 위반 내용
+                    - NotWithdrawnUser: 탈퇴하지 않은 유저가 해당 API를 호출 할 경우
+                    """
+    )
+    CommonApiResponse<Void> reRegister(VookLoginUser user, UserRegisterRequest request);
 }

@@ -82,6 +82,13 @@ public class UserService {
         user.withdraw();
     }
 
+    public void reRegister(RegisterCommand command) {
+        User user = getUserByUid(command.userUid());
+        user.validateReRegisterProcessReady();
+
+        user.reRegister(command.nickname(), command.marketingEmailOptIn());
+    }
+
     private User getUserByUid(String uid) {
         return repository.findByUid(uid).orElseThrow(UserNotFoundException::new);
     }
