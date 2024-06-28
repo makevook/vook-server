@@ -45,6 +45,7 @@ public class VocabularyService {
     public void delete(@NotBlank String vocabularyUid) {
         Vocabulary vocabulary = repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
         repository.delete(vocabulary);
+        searchService.deleteVocabulary(vocabulary);
     }
 
     public Vocabulary getByUid(@NotBlank String vocabularyUid) {

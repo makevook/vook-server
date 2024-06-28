@@ -1,6 +1,7 @@
 package vook.server.api.infra.search.vocabulary;
 
 import com.meilisearch.sdk.exceptions.MeilisearchApiException;
+import com.meilisearch.sdk.model.TaskInfo;
 import org.springframework.stereotype.Service;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.VocabularySearchService;
@@ -34,5 +35,11 @@ public class MeilisearchVocabularySearchService extends MeilisearchService imple
     @Override
     public void saveVocabulary(Vocabulary saved) {
         createIndex(saved.getUid(), "uid");
+    }
+
+    @Override
+    public void deleteVocabulary(Vocabulary vocabulary) {
+        TaskInfo taskInfo = client.deleteIndex(vocabulary.getUid());
+        client.waitForTask(taskInfo.getTaskUid());
     }
 }

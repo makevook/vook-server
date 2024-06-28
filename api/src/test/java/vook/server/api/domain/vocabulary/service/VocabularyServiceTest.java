@@ -53,4 +53,22 @@ class VocabularyServiceTest extends IntegrationTestBase {
 
         assertThat(searchService.isIndexExists(vocabulary.getUid())).isTrue();
     }
+
+    @Test
+    @DisplayName("단어장 삭제 - 성공")
+    void delete() {
+        // given
+        User user = userCreator.createCompletedOnboardingUser();
+        VocabularyCreateCommand command = VocabularyCreateCommand.builder()
+                .name("단어장 이름")
+                .userId(new UserId(user.getId()))
+                .build();
+        Vocabulary vocabulary = service.create(command);
+
+        // when
+        service.delete(vocabulary.getUid());
+
+        // then
+        assertThat(searchService.isIndexExists(vocabulary.getUid())).isFalse();
+    }
 }
