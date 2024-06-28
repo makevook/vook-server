@@ -19,7 +19,7 @@ public class DeleteTermUseCase {
     private final TermService termService;
 
     public void execute(Command command) {
-        User user = userService.getByUid(command.userUid());
+        User user = userService.getCompletedUserByUid(command.userUid());
         Term term = termService.getByUid(command.termUid());
         vocabularyPolicy.validateOwner(user, term.getVocabulary());
 

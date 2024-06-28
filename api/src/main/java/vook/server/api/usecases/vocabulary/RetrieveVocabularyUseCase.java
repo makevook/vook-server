@@ -21,7 +21,7 @@ public class RetrieveVocabularyUseCase {
     private final VocabularyService vocabularyService;
 
     public Result execute(Command command) {
-        User user = userService.getByUid(command.userUid());
+        User user = userService.getCompletedUserByUid(command.userUid());
         List<Vocabulary> vocabularies = vocabularyService.findAllBy(new UserId(user.getId()));
         List<Result.Tuple> tupleList = vocabularies
                 .stream()

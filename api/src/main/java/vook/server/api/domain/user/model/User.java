@@ -2,6 +2,7 @@ package vook.server.api.domain.user.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import vook.server.api.domain.user.exception.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -70,14 +71,6 @@ public class User {
         this.onboardingCompletedAt = LocalDateTime.now();
     }
 
-    public boolean isReadyToOnboarding() {
-        return status == UserStatus.REGISTERED;
-    }
-
-    public boolean isRegistered() {
-        return status == UserStatus.REGISTERED;
-    }
-
     public void update(String nickname) {
         userInfo.update(nickname);
         lastUpdatedAt = LocalDateTime.now();
@@ -88,7 +81,30 @@ public class User {
         this.withdrawnAt = LocalDateTime.now();
     }
 
-    public boolean isWithdrawn() {
-        return status == UserStatus.WITHDRAWN;
+    public void validateRegisterProcessReady() {
+        if (status == UserStatus.REGISTERED) {
+            throw new AlreadyRegisteredException();
+        }
+        if (status == UserStatus.WITHDRAWN) {
+            throw new WithdrawnUserException();
+        }
+    }
+
+    public void validateOnboardingProcessReady() {
+        if (status != UserStatus.REGISTERED) {
+            throw new NotReadyToOnboardingException();
+        }
+        if (this.onboardingCompleted) {
+            throw new AlreadyOnboardingException();
+        }
+    }
+
+    public void validateRegisterProcessCompleted() {
+        if (status != UserStatus.REGISTERED) {
+            throw new NotRegisteredException();
+        }
+        if (!this.onboardingCompleted) {
+            throw new NotOnboardingException();
+        }
     }
 }

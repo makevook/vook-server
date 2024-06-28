@@ -336,7 +336,7 @@ class UserServiceTest extends IntegrationTestBase {
     @DisplayName("사용자 정보 수정 - 정상")
     void updateInfo1() {
         // given
-        User registeredUser = testUserCreator.createRegisteredUser();
+        User registeredUser = testUserCreator.createCompletedOnboardingUser();
 
         // when
         service.updateInfo(registeredUser.getUid(), "newNick");

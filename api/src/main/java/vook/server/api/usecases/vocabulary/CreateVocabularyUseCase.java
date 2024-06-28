@@ -18,7 +18,7 @@ public class CreateVocabularyUseCase {
     private final VocabularyService vocabularyService;
 
     public void execute(Command command) {
-        User user = userService.getByUid(command.userUid());
+        User user = userService.getCompletedUserByUid(command.userUid());
         vocabularyService.create(VocabularyCreateCommand.builder()
                 .name(command.name())
                 .userId(new UserId(user.getId()))
