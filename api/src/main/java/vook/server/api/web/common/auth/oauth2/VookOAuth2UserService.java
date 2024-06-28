@@ -46,11 +46,11 @@ public class VookOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private VookLoginUser signUpUser(OAuth2Response oAuth2Response) {
-        SignUpFromSocialCommand command = SignUpFromSocialCommand.of(
-                oAuth2Response.getProvider(),
-                oAuth2Response.getProviderId(),
-                oAuth2Response.getEmail()
-        );
+        SignUpFromSocialCommand command = SignUpFromSocialCommand.builder()
+                .provider(oAuth2Response.getProvider())
+                .providerUserId(oAuth2Response.getProviderId())
+                .email(oAuth2Response.getEmail())
+                .build();
         SocialUser saved = userService.signUpFromSocial(command);
         return VookLoginUser.from(saved);
     }

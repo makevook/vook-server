@@ -31,21 +31,21 @@ public class VocabularyService {
     }
 
     public Vocabulary create(@Valid VocabularyCreateCommand command) {
-        UserId userId = command.getUserId();
+        UserId userId = command.userId();
         if (repository.findAllByUserId(userId).size() >= 3) {
             throw new VocabularyLimitExceededException();
         }
 
-        return repository.save(Vocabulary.forCreateOf(command.getName(), new UserId(userId.getId())));
+        return repository.save(Vocabulary.forCreateOf(command.name(), new UserId(userId.getId())));
     }
 
     public void update(@Valid VocabularyUpdateCommand command) {
-        Vocabulary vocabulary = repository.findByUid(command.getVocabularyUid()).orElseThrow(VocabularyNotFoundException::new);
-        vocabulary.update(command.getName());
+        Vocabulary vocabulary = repository.findByUid(command.vocabularyUid()).orElseThrow(VocabularyNotFoundException::new);
+        vocabulary.update(command.name());
     }
 
     public void delete(@Valid VocabularyDeleteCommand command) {
-        Vocabulary vocabulary = repository.findByUid(command.getVocabularyUid()).orElseThrow(VocabularyNotFoundException::new);
+        Vocabulary vocabulary = repository.findByUid(command.vocabularyUid()).orElseThrow(VocabularyNotFoundException::new);
         repository.delete(vocabulary);
     }
 

@@ -2,35 +2,22 @@ package vook.server.api.domain.user.service.data;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
+import lombok.Builder;
 import vook.server.api.domain.user.model.SocialUser;
 import vook.server.api.domain.user.model.User;
 
-@Getter
-public class SignUpFromSocialCommand {
+@Builder
+public record SignUpFromSocialCommand(
+        @NotBlank
+        String provider,
 
-    @NotBlank
-    private String provider;
+        @NotBlank
+        String providerUserId,
 
-    @NotBlank
-    private String providerUserId;
-
-    @Email
-    @NotBlank
-    private String email;
-
-    public static SignUpFromSocialCommand of(
-            String provider,
-            String providerUserId,
-            String email
-    ) {
-        SignUpFromSocialCommand command = new SignUpFromSocialCommand();
-        command.provider = provider;
-        command.providerUserId = providerUserId;
-        command.email = email;
-        return command;
-    }
-
+        @Email
+        @NotBlank
+        String email
+) {
     public SocialUser toSocialUser(User user) {
         return SocialUser.forNewOf(provider, providerUserId, user);
     }

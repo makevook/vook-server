@@ -6,52 +6,36 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import lombok.Getter;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 
 import java.util.List;
 
-@Getter
-public class TermCreateAllCommand {
+@Builder
+public record TermCreateAllCommand(
+        @NotNull
+        String vocabularyUid,
 
-    @NotNull
-    private String vocabularyUid;
-
-    @Valid
-    @NotEmpty
-    private List<TermInfo> termInfos;
+        @Valid
+        @NotEmpty
+        List<TermInfo> termInfos
+) {
 
     @Builder
-    public static TermCreateAllCommand of(String vocabularyUid, List<TermInfo> termInfos) {
-        TermCreateAllCommand command = new TermCreateAllCommand();
-        command.vocabularyUid = vocabularyUid;
-        command.termInfos = termInfos;
-        return command;
-    }
+    public record TermInfo(
+            @NotBlank
+            @Size(min = 1, max = 100)
+            String term,
 
-    public static class TermInfo {
-        @NotBlank
-        @Size(min = 1, max = 100)
-        private String term;
+            @NotBlank
+            @Size(min = 1, max = 2000)
+            String meaning,
 
-        @NotBlank
-        @Size(min = 1, max = 2000)
-        private String meaning;
-
-        @NotNull
-        @Valid
-        @Size(max = 10)
-        private List<@Size(min = 1, max = 100) String> synonyms;
-
-        @Builder
-        public static TermInfo of(String term, String meaning, List<String> synonyms) {
-            TermInfo termInfo = new TermInfo();
-            termInfo.term = term;
-            termInfo.meaning = meaning;
-            termInfo.synonyms = synonyms;
-            return termInfo;
-        }
+            @NotNull
+            @Valid
+            @Size(max = 10)
+            List<@Size(min = 1, max = 100) String> synonyms
+    ) {
 
         public Term toEntity(Vocabulary vocabulary) {
             return Term.forCreateOf(term, meaning, synonyms, vocabulary);

@@ -1,43 +1,42 @@
 package vook.server.api.web.demo.reqres;
 
-import lombok.Getter;
+import lombok.Builder;
 import vook.server.api.domain.demo.service.data.DemoTermSearchResult;
 
 import java.util.List;
 import java.util.Map;
 
-@Getter
-public class SearchTermResponse {
-
-    private String query;
-    private List<Document> hits;
-
+@Builder
+public record SearchTermResponse(
+        String query,
+        List<Document> hits
+) {
     public static SearchTermResponse from(DemoTermSearchResult searchResult) {
-        SearchTermResponse searchResponse = new SearchTermResponse();
-        searchResponse.query = searchResult.getQuery();
-        searchResponse.hits = searchResult.getHits().stream().map(document -> {
-            Object formatted = document.get("_formatted");
-            if (formatted instanceof Map formattedDocument) {
-                return Document.from(formattedDocument);
-            } else {
-                return Document.from(document);
-            }
-        }).toList();
-        return searchResponse;
+        return SearchTermResponse.builder()
+                .query(searchResult.query())
+                .hits(searchResult.hits().stream().map(document -> {
+                    Object formatted = document.get("_formatted");
+                    if (formatted instanceof Map formattedDocument) {
+                        return Document.from(formattedDocument);
+                    } else {
+                        return Document.from(document);
+                    }
+                }).toList())
+                .build();
     }
 
-    @Getter
-    public static class Document {
-        private String term;
-        private String synonyms;
-        private String meaning;
-
+    @Builder
+    public record Document(
+            String term,
+            String synonyms,
+            String meaning
+    ) {
         public static Document from(Map<String, Object> document) {
-            Document result = new Document();
-            result.term = (String) document.get("term");
-            result.synonyms = (String) document.get("synonyms");
-            result.meaning = (String) document.get("meaning");
-            return result;
+            return Document.builder()
+                    .term((String) document.get("term"))
+                    .synonyms((String) document.get("synonyms"))
+                    .meaning((String) document.get("meaning"))
+                    .build();
         }
     }
 }

@@ -25,7 +25,11 @@ public class DeleteVocabularyUseCase {
         Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
         vocabularyPolicy.validateOwner(user, vocabulary);
 
-        vocabularyService.delete(VocabularyDeleteCommand.of(command.vocabularyUid()));
+        vocabularyService.delete(
+                VocabularyDeleteCommand.builder()
+                        .vocabularyUid(command.vocabularyUid())
+                        .build()
+        );
     }
 
     public record Command(

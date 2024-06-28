@@ -60,7 +60,7 @@ public class UserRestController implements UserApi {
             @AuthenticationPrincipal VookLoginUser loginUser,
             @Validated @RequestBody UserUpdateInfoRequest request
     ) {
-        userService.updateInfo(loginUser.getUid(), request.getNickname());
+        userService.updateInfo(loginUser.getUid(), request.nickname());
         return CommonApiResponse.ok();
     }
 

@@ -19,7 +19,11 @@ public class CreateVocabularyUseCase {
 
     public void execute(Command command) {
         User user = userService.getByUid(command.userUid());
-        vocabularyService.create(VocabularyCreateCommand.of(command.name(), new UserId(user.getId())));
+        vocabularyService.create(VocabularyCreateCommand.builder()
+                .name(command.name())
+                .userId(new UserId(user.getId()))
+                .build()
+        );
     }
 
     public record Command(

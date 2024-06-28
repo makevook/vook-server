@@ -13,7 +13,6 @@ import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
 import vook.server.api.web.common.auth.data.VookLoginUser;
-import vook.server.api.web.vocabulary.reqres.VocabularyCreateRequest;
 
 import java.util.List;
 
@@ -39,17 +38,15 @@ class CreateVocabularyUseCaseTest extends IntegrationTestBase {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
         VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
-        var request = new VocabularyCreateRequest();
-        request.setName("testVocabulary");
 
         // when
-        var command = new CreateVocabularyUseCase.Command(vookLoginUser.getUid(), request.getName());
+        var command = new CreateVocabularyUseCase.Command(vookLoginUser.getUid(), "testVocabulary");
         useCase.execute(command);
 
         // then
         List<Vocabulary> vocabularies = vocabularyRepository.findAllByUserId(new UserId(user.getId()));
         assertThat(vocabularies).hasSize(1);
-        assertThat(vocabularies.getFirst().getName()).isEqualTo(request.getName());
+        assertThat(vocabularies.getFirst().getName()).isEqualTo("testVocabulary");
     }
 
     @Test
@@ -64,12 +61,9 @@ class CreateVocabularyUseCaseTest extends IntegrationTestBase {
         testVocabularyCreator.createVocabulary(user);
         testVocabularyCreator.createVocabulary(user);
 
-        var request = new VocabularyCreateRequest();
-        request.setName("testVocabulary");
-
         // when
         assertThatThrownBy(() -> {
-            var command = new CreateVocabularyUseCase.Command(vookLoginUser.getUid(), request.getName());
+            var command = new CreateVocabularyUseCase.Command(vookLoginUser.getUid(), "testVocabulary");
             useCase.execute(command);
         }).isInstanceOf(VocabularyLimitExceededException.class);
     }

@@ -1,16 +1,15 @@
 package vook.server.api.web.term.reqres;
 
-import lombok.Getter;
+import lombok.Builder;
 import vook.server.api.usecases.term.CreateTermUseCase;
 
-@Getter
-public class TermCreateResponse {
-
-    private String uid;
-
+@Builder
+public record TermCreateResponse(
+        String uid
+) {
     public static TermCreateResponse from(CreateTermUseCase.Result term) {
-        TermCreateResponse response = new TermCreateResponse();
-        response.uid = term.uid();
-        return response;
+        return TermCreateResponse.builder()
+                .uid(term.uid())
+                .build();
     }
 }

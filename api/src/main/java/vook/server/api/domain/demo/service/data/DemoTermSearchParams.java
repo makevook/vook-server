@@ -2,23 +2,21 @@ package vook.server.api.domain.demo.service.data;
 
 import com.meilisearch.sdk.SearchRequest;
 import lombok.Builder;
-import lombok.Getter;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-@Getter
 @Builder
-public class DemoTermSearchParams {
+public record DemoTermSearchParams(
+        String query,
+        boolean withFormat,
+        String highlightPreTag,
+        String highlightPostTag,
+        List<String> sort
+) {
 
     private static final String DEFAULT_HIGHLIGHT_PRE_TAG = "<em>";
     private static final String DEFAULT_HIGHLIGHT_POST_TAG = "</em>";
-
-    private String query;
-    private boolean withFormat;
-    private String highlightPreTag;
-    private String highlightPostTag;
-    private List<String> sort;
 
     public SearchRequest buildSearchRequest() {
         SearchRequest.SearchRequestBuilder builder = SearchRequest.builder();

@@ -5,39 +5,28 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import lombok.Getter;
 import vook.server.api.domain.vocabulary.model.Term;
 
 import java.util.List;
 
-@Getter
-public class TermUpdateCommand {
+@Builder
+public record TermUpdateCommand(
+        @NotNull
+        String uid,
 
-    @NotNull
-    private String uid;
+        @NotBlank
+        @Size(min = 1, max = 100)
+        String term,
 
-    @NotBlank
-    @Size(min = 1, max = 100)
-    private String term;
+        @NotBlank
+        @Size(min = 1, max = 2000)
+        String meaning,
 
-    @NotBlank
-    @Size(min = 1, max = 2000)
-    private String meaning;
-
-    @NotNull
-    @Valid
-    @Size(max = 10)
-    private List<@Size(min = 1, max = 100) String> synonyms;
-
-    @Builder
-    private static TermUpdateCommand of(String uid, String term, String meaning, List<String> synonyms) {
-        TermUpdateCommand command = new TermUpdateCommand();
-        command.uid = uid;
-        command.term = term;
-        command.meaning = meaning;
-        command.synonyms = synonyms;
-        return command;
-    }
+        @NotNull
+        @Valid
+        @Size(max = 10)
+        List<@Size(min = 1, max = 100) String> synonyms
+) {
 
     public Term toEntity() {
         return Term.forUpdateOf(term, meaning, synonyms);

@@ -37,14 +37,14 @@ public class TermService {
     }
 
     public void createAll(@Valid TermCreateAllCommand command) {
-        Vocabulary vocabulary = vocabularyRepository.findByUid(command.getVocabularyUid()).orElseThrow();
+        Vocabulary vocabulary = vocabularyRepository.findByUid(command.vocabularyUid()).orElseThrow();
         int savedCount = vocabulary.termCount();
-        int count = command.getTermInfos().size();
+        int count = command.termInfos().size();
         if (savedCount + count > 100) {
             throw new TermLimitExceededException();
         }
 
-        List<Term> terms = command.getTermInfos().stream()
+        List<Term> terms = command.termInfos().stream()
                 .map(term -> term.toEntity(vocabulary))
                 .toList();
         termRepository.saveAll(terms);
@@ -55,7 +55,7 @@ public class TermService {
     }
 
     public void update(@Valid TermUpdateCommand serviceCommand) {
-        Term term = termRepository.findByUid(serviceCommand.getUid()).orElseThrow(TermNotFoundException::new);
+        Term term = termRepository.findByUid(serviceCommand.uid()).orElseThrow(TermNotFoundException::new);
         Term updateTerm = serviceCommand.toEntity();
         term.update(updateTerm);
     }

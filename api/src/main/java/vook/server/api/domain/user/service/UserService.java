@@ -31,7 +31,7 @@ public class UserService {
 
     public SocialUser signUpFromSocial(@Valid SignUpFromSocialCommand command) {
         User user = repository
-                .findByEmail(command.getEmail())
+                .findByEmail(command.email())
                 .orElseGet(() -> repository.save(command.toNewUser()));
 
         SocialUser savedSocialUser = socialUserRepository.save(command.toSocialUser(user));
@@ -45,7 +45,7 @@ public class UserService {
     }
 
     public void register(@Valid RegisterCommand command) {
-        User user = repository.findByUid(command.getUserUid()).orElseThrow();
+        User user = repository.findByUid(command.userUid()).orElseThrow();
         if (user.isRegistered()) {
             throw new AlreadyRegisteredException();
         }
@@ -54,15 +54,15 @@ public class UserService {
         }
 
         UserInfo userInfo = userInfoRepository.save(UserInfo.forRegisterOf(
-                command.getNickname(),
+                command.nickname(),
                 user,
-                command.getMarketingEmailOptIn()
+                command.marketingEmailOptIn()
         ));
         user.register(userInfo);
     }
 
     public void onboarding(@Valid OnboardingCommand command) {
-        User user = repository.findByUid(command.getUserUid()).orElseThrow();
+        User user = repository.findByUid(command.userUid()).orElseThrow();
         if (!user.isReadyToOnboarding()) {
             throw new NotReadyToOnboardingException();
         }
@@ -70,7 +70,7 @@ public class UserService {
             throw new AlreadyOnboardingException();
         }
 
-        user.onboarding(command.getFunnel(), command.getJob());
+        user.onboarding(command.funnel(), command.job());
     }
 
     public void updateInfo(

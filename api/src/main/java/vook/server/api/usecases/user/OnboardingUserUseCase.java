@@ -35,7 +35,12 @@ public class OnboardingUserUseCase {
 
         User user = userService.getByUid(command.userUid());
         TemplateVocabularyName vocabularyName = vocabularyNameFrom(command.job());
-        Vocabulary vocabulary = vocabularyService.create(VocabularyCreateCommand.of(vocabularyName.name(), new UserId(user.getId())));
+        Vocabulary vocabulary = vocabularyService.create(
+                VocabularyCreateCommand.builder()
+                        .name(vocabularyName.name())
+                        .userId(new UserId(user.getId()))
+                        .build()
+        );
 
         List<TemplateTerm> terms = templateVocabularyService.getTermsByName(vocabularyName);
         termService.createAll(
@@ -70,7 +75,11 @@ public class OnboardingUserUseCase {
             Job job
     ) {
         public OnboardingCommand toOnboardingCommand() {
-            return OnboardingCommand.of(userUid, funnel, job);
+            return OnboardingCommand.builder()
+                    .userUid(userUid)
+                    .funnel(funnel)
+                    .job(job)
+                    .build();
         }
     }
 }
