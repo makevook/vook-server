@@ -20,7 +20,7 @@ public class UpdateVocabularyUseCase {
     private final VocabularyPolicy vocabularyPolicy;
 
     public void execute(Command command) {
-        User user = userService.getByUid(command.userUid());
+        User user = userService.getCompletedUserByUid(command.userUid());
 
         Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
         vocabularyPolicy.validateOwner(user, vocabulary);

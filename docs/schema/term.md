@@ -11,7 +11,7 @@ CREATE TABLE `term` (
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `meaning` varchar(2000) NOT NULL,
-  `synonym` varchar(1100) DEFAULT NULL,
+  `synonym` varchar(255) DEFAULT NULL,
   `term` varchar(100) NOT NULL,
   `uid` varchar(255) DEFAULT NULL,
   `vocabulary_id` bigint(20) NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE `term` (
 | created_at | datetime(6) | NULL | true |  |  |  |  |
 | updated_at | datetime(6) | NULL | true |  |  |  |  |
 | meaning | varchar(2000) |  | false |  |  |  |  |
-| synonym | varchar(1100) | NULL | true |  |  |  |  |
+| synonym | varchar(255) | NULL | true |  |  |  |  |
 | term | varchar(100) |  | false |  |  |  |  |
 | uid | varchar(255) | NULL | true |  |  |  |  |
 | vocabulary_id | bigint(20) |  | false |  |  | [vocabulary](vocabulary.md) |  |
@@ -62,7 +62,7 @@ erDiagram
   datetime_6_ created_at
   datetime_6_ updated_at
   varchar_2000_ meaning
-  varchar_1100_ synonym
+  varchar_255_ synonym
   varchar_100_ term
   varchar_255_ uid
   bigint_20_ vocabulary_id FK

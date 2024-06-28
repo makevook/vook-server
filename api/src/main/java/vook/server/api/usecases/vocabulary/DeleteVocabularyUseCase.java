@@ -7,7 +7,6 @@ import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
-import vook.server.api.domain.vocabulary.service.data.VocabularyDeleteCommand;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
 
 @Service
@@ -20,16 +19,12 @@ public class DeleteVocabularyUseCase {
     private final VocabularyPolicy vocabularyPolicy;
 
     public void execute(Command command) {
-        User user = userService.getByUid(command.userUid());
+        User user = userService.getCompletedUserByUid(command.userUid());
 
         Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
         vocabularyPolicy.validateOwner(user, vocabulary);
 
-        vocabularyService.delete(
-                VocabularyDeleteCommand.builder()
-                        .vocabularyUid(command.vocabularyUid())
-                        .build()
-        );
+        vocabularyService.delete(command.vocabularyUid());
     }
 
     public record Command(

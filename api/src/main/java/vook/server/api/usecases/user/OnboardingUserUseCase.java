@@ -33,7 +33,7 @@ public class OnboardingUserUseCase {
     public void execute(Command command) {
         userService.onboarding(command.toOnboardingCommand());
 
-        User user = userService.getByUid(command.userUid());
+        User user = userService.getCompletedUserByUid(command.userUid());
         TemplateVocabularyName vocabularyName = vocabularyNameFrom(command.job());
         Vocabulary vocabulary = vocabularyService.create(
                 VocabularyCreateCommand.builder()

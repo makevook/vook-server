@@ -15,7 +15,7 @@ public class TemplateVocabulary {
     /**
      * 용어집 이름
      */
-    @Column(length = 20, nullable = false, unique = true)
+    @Column(nullable = false, unique = true, columnDefinition = "varchar(20)")
     @Enumerated(EnumType.STRING)
     private TemplateVocabularyName name;
 

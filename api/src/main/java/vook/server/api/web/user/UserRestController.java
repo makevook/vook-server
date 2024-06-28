@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
 import vook.server.api.usecases.user.OnboardingUserUseCase;
+import vook.server.api.usecases.user.WithdrawUserUseCase;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 import vook.server.api.web.common.response.CommonApiResponse;
 import vook.server.api.web.user.reqres.UserInfoResponse;
@@ -23,6 +24,7 @@ public class UserRestController implements UserApi {
 
     private final UserService userService;
     private final OnboardingUserUseCase onboardingUserUseCase;
+    private final WithdrawUserUseCase withdrawUserUseCase;
 
     @Override
     @GetMapping("/info")
@@ -69,7 +71,17 @@ public class UserRestController implements UserApi {
     public CommonApiResponse<Void> withdraw(
             @AuthenticationPrincipal VookLoginUser loginUser
     ) {
-        userService.withdraw(loginUser.getUid());
+        withdrawUserUseCase.execute(new WithdrawUserUseCase.Command(loginUser.getUid()));
+        return CommonApiResponse.ok();
+    }
+
+    @Override
+    @PostMapping("/re-register")
+    public CommonApiResponse<Void> reRegister(
+            @AuthenticationPrincipal VookLoginUser user,
+            @RequestBody UserRegisterRequest request
+    ) {
+        userService.reRegister(request.toCommand(user.getUid()));
         return CommonApiResponse.ok();
     }
 }

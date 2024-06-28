@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
-import vook.server.api.domain.user.exception.*;
+import vook.server.api.domain.user.exception.UserNotFoundException;
 import vook.server.api.domain.user.model.*;
 import vook.server.api.domain.user.service.data.OnboardingCommand;
 import vook.server.api.domain.user.service.data.RegisterCommand;
@@ -40,14 +40,15 @@ public class UserService {
         return getUserByUid(uid);
     }
 
+    public User getCompletedUserByUid(@NotBlank String uid) {
+        User user = getUserByUid(uid);
+        user.validateRegisterProcessCompleted();
+        return user;
+    }
+
     public void register(@Valid RegisterCommand command) {
         User user = getUserByUid(command.userUid());
-        if (user.isRegistered()) {
-            throw new AlreadyRegisteredException();
-        }
-        if (user.isWithdrawn()) {
-            throw new WithdrawnUserException();
-        }
+        user.validateRegisterProcessReady();
 
         UserInfo userInfo = userInfoRepository.save(UserInfo.forRegisterOf(
                 command.nickname(),
@@ -59,12 +60,7 @@ public class UserService {
 
     public void onboarding(@Valid OnboardingCommand command) {
         User user = getUserByUid(command.userUid());
-        if (!user.isReadyToOnboarding()) {
-            throw new NotReadyToOnboardingException();
-        }
-        if (user.getOnboardingCompleted()) {
-            throw new AlreadyOnboardingException();
-        }
+        user.validateOnboardingProcessReady();
 
         user.onboarding(command.funnel(), command.job());
     }
@@ -74,18 +70,23 @@ public class UserService {
             @NotBlank @Size(min = 1, max = 10) String nickname
     ) {
         User user = getUserByUid(uid);
-        if (!user.isRegistered()) {
-            throw new NotRegisteredException();
-        }
+        user.validateRegisterProcessCompleted();
         user.update(nickname);
     }
 
     public void withdraw(@NotBlank String uid) {
         User user = getUserByUid(uid);
-        if (user.isWithdrawn()) {
+        if (user.getStatus() == UserStatus.WITHDRAWN) {
             return;
         }
         user.withdraw();
+    }
+
+    public void reRegister(RegisterCommand command) {
+        User user = getUserByUid(command.userUid());
+        user.validateReRegisterProcessReady();
+
+        user.reRegister(command.nickname(), command.marketingEmailOptIn());
     }
 
     private User getUserByUid(String uid) {

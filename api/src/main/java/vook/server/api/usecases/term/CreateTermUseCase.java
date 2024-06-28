@@ -25,7 +25,7 @@ public class CreateTermUseCase {
     private final VocabularyPolicy vocabularyPolicy;
 
     public Result execute(Command command) {
-        User user = userService.getByUid(command.userUid());
+        User user = userService.getCompletedUserByUid(command.userUid());
         Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
         vocabularyPolicy.validateOwner(user, vocabulary);
 

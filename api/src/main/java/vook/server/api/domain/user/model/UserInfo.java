@@ -49,4 +49,12 @@ public class UserInfo {
     public void update(String nickname) {
         this.nickname = nickname;
     }
+
+    public void reRegister(String nickname, Boolean marketingEmailOptIn) {
+        this.nickname = nickname;
+        this.marketingEmailOptIn = marketingEmailOptIn;
+
+        funnel = null;
+        job = null;
+    }
 }

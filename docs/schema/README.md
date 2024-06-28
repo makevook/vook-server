@@ -8,6 +8,8 @@
 | [demo_term_synonym](demo_term_synonym.md) | 3 |  | BASE TABLE |
 | [event_publication](event_publication.md) | 6 |  | BASE TABLE |
 | [social_user](social_user.md) | 5 |  | BASE TABLE |
+| [template_term](template_term.md) | 5 |  | BASE TABLE |
+| [template_vocabulary](template_vocabulary.md) | 2 |  | BASE TABLE |
 | [term](term.md) | 8 |  | BASE TABLE |
 | [users](users.md) | 9 |  | BASE TABLE |
 | [user_info](user_info.md) | 6 |  | BASE TABLE |
@@ -20,6 +22,7 @@ erDiagram
 
 "demo_term_synonym" }o--|| "demo_term" : "FOREIGN KEY (demo_term_id) REFERENCES demo_term (id)"
 "social_user" }o--o| "users" : "FOREIGN KEY (user_id) REFERENCES users (id)"
+"template_term" }o--|| "template_vocabulary" : "FOREIGN KEY (template_vocabulary_id) REFERENCES template_vocabulary (id)"
 "term" }o--|| "vocabulary" : "FOREIGN KEY (vocabulary_id) REFERENCES vocabulary (id)"
 "user_info" |o--o| "users" : "FOREIGN KEY (user_id) REFERENCES users (id)"
 
@@ -50,12 +53,23 @@ erDiagram
   varchar_255_ provider_user_id
   bigint_20_ user_id FK
 }
+"template_term" {
+  bigint_20_ id PK
+  varchar_2000_ meaning
+  varchar_255_ synonym
+  varchar_100_ term
+  bigint_20_ template_vocabulary_id FK
+}
+"template_vocabulary" {
+  bigint_20_ id PK
+  varchar_20_ name
+}
 "term" {
   bigint_20_ id PK
   datetime_6_ created_at
   datetime_6_ updated_at
   varchar_2000_ meaning
-  varchar_1100_ synonym
+  varchar_255_ synonym
   varchar_100_ term
   varchar_255_ uid
   bigint_20_ vocabulary_id FK
