@@ -16,6 +16,7 @@ import vook.server.api.infra.search.common.MeilisearchProperties;
 import vook.server.api.infra.search.common.MeilisearchService;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 @Service
 public class MeilisearchVocabularySearchService extends MeilisearchService implements VocabularySearchService, TermSearchService {
@@ -57,6 +58,10 @@ public class MeilisearchVocabularySearchService extends MeilisearchService imple
         }
     }
 
+    public Map getDocument(String indexUid, String documentUid) {
+        return client.getIndex(indexUid).getDocument(documentUid, Map.class);
+    }
+
     @Override
     public void saveVocabulary(Vocabulary saved) {
         createIndex(saved.getUid(), "uid");
@@ -70,6 +75,15 @@ public class MeilisearchVocabularySearchService extends MeilisearchService imple
 
     @Override
     public void saveTerm(Term term) {
+        saveOrReplaceTerm(term);
+    }
+
+    @Override
+    public void update(Term term) {
+        saveOrReplaceTerm(term);
+    }
+
+    private void saveOrReplaceTerm(Term term) {
         Index index = client.index(term.getVocabulary().getUid());
         TaskInfo taskInfo = index.addDocuments(getDocument(term));
         client.waitForTask(taskInfo.getTaskUid());

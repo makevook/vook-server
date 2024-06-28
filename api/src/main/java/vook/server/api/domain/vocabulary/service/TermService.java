@@ -57,6 +57,7 @@ public class TermService {
         Term term = termRepository.findByUid(serviceCommand.uid()).orElseThrow(TermNotFoundException::new);
         Term updateTerm = serviceCommand.toEntity();
         term.update(updateTerm);
+        termSearchService.update(term);
     }
 
     public void delete(@NotBlank String uid) {

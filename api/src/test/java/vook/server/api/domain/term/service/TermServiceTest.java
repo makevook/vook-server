@@ -8,6 +8,7 @@ import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.TermService;
 import vook.server.api.domain.vocabulary.service.data.TermCreateCommand;
+import vook.server.api.domain.vocabulary.service.data.TermUpdateCommand;
 import vook.server.api.globalcommon.exception.ParameterValidateException;
 import vook.server.api.infra.search.vocabulary.MeilisearchVocabularySearchService;
 import vook.server.api.testhelper.IntegrationTestBase;
@@ -16,6 +17,7 @@ import vook.server.api.testhelper.creator.TestVocabularyCreator;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -64,6 +66,10 @@ class TermServiceTest extends IntegrationTestBase {
         assertEquals(2, term.getSynonyms().size());
 
         assertThat(searchService.isDocumentExists(vocabulary.getUid(), term.getUid())).isTrue();
+        Map document = searchService.getDocument(vocabulary.getUid(), term.getUid());
+        assertEquals("용어", document.get("term"));
+        assertEquals("용어 설명", document.get("meaning"));
+        assertEquals("동의어1,동의어2", document.get("synonyms"));
     }
 
     @TestFactory
@@ -113,5 +119,36 @@ class TermServiceTest extends IntegrationTestBase {
                     assertThatThrownBy(() -> service.create(command)).isInstanceOf(ParameterValidateException.class);
                 })
         );
+    }
+
+    @Test
+    @DisplayName("용어 수정 - 성공")
+    void update() {
+        // given
+        User user = userCreator.createCompletedOnboardingUser();
+        Vocabulary vocabulary = vocabularyCreator.createVocabulary(user);
+        Term term = vocabularyCreator.createTerm(vocabulary);
+
+        TermUpdateCommand command = TermUpdateCommand.builder()
+                .uid(term.getUid())
+                .term("수정된 용어")
+                .meaning("수정된 용어 설명")
+                .synonyms(List.of("수정된 동의어1", "수정된 동의어2"))
+                .build();
+
+        // when
+        service.update(command);
+
+        // then
+        Term updated = service.getByUid(term.getUid());
+        assertEquals("수정된 용어", updated.getTerm());
+        assertEquals("수정된 용어 설명", updated.getMeaning());
+        assertEquals(2, updated.getSynonyms().size());
+
+        assertThat(searchService.isDocumentExists(vocabulary.getUid(), term.getUid())).isTrue();
+        Map document = searchService.getDocument(vocabulary.getUid(), term.getUid());
+        assertEquals("수정된 용어", document.get("term"));
+        assertEquals("수정된 용어 설명", document.get("meaning"));
+        assertEquals("수정된 동의어1,수정된 동의어2", document.get("synonyms"));
     }
 }
