@@ -30,7 +30,7 @@ public class RetrieveTermUseCase {
         Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
         vocabularyPolicy.validateOwner(user, vocabulary);
 
-        Page<Term> termPage = termSearchService.findAllBy(command.pageable());
+        Page<Term> termPage = termSearchService.findAllBy(command.vocabularyUid(), command.pageable());
         Page<Result.Tuple> tuplePage = termPage.map(Result.Tuple::from);
         return new Result(tuplePage);
     }
@@ -66,6 +66,6 @@ public class RetrieveTermUseCase {
     }
 
     public interface TermSearchService {
-        Page<Term> findAllBy(Pageable params);
+        Page<Term> findAllBy(String vocabularyUid, Pageable params);
     }
 }

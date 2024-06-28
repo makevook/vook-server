@@ -21,20 +21,22 @@ public class JpaTermSearchRepository implements RetrieveTermUseCase.TermSearchSe
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Term> findAllBy(Pageable pageable) {
+    public Page<Term> findAllBy(String vocabularyUid, Pageable pageable) {
         QTerm term = QTerm.term1;
 
         JPAQuery<Term> dataQuery = queryFactory
                 .selectFrom(term)
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
+                .limit(pageable.getPageSize())
+                .where(term.vocabulary.uid.eq(vocabularyUid));
 
         QuerydslHelper.toOrderSpecifiers(term, pageable).forEach(dataQuery::orderBy);
         List<Term> result = dataQuery.fetch();
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(term.count())
-                .from(term);
+                .from(term)
+                .where(term.vocabulary.uid.eq(vocabularyUid));
 
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
     }

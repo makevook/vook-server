@@ -185,4 +185,31 @@ class RetrieveTermUseCaseTest extends IntegrationTestBase {
         );
     }
 
+    @Test
+    @DisplayName("용어 조회 - 정상; 2개 이상의 용어집에서 검색")
+    void executeMultipleVocabularies() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        Vocabulary vocabulary1 = testVocabularyCreator.createVocabulary(user);
+        testVocabularyCreator.createTerm(vocabulary1);
+        Vocabulary vocabulary2 = testVocabularyCreator.createVocabulary(user);
+        Term term2 = testVocabularyCreator.createTerm(vocabulary2);
+
+        RetrieveTermUseCase.Command command = new RetrieveTermUseCase.Command(
+                user.getUid(),
+                vocabulary2.getUid(),
+                PageRequest.ofSize(Integer.MAX_VALUE)
+        );
+
+        // when
+        RetrieveTermUseCase.Result result = useCase.execute(command);
+
+        // then
+        assertThat(result.terms().getContent()).hasSize(1);
+        assertThat(result.terms().getContent().getFirst().termUid()).isEqualTo(term2.getUid());
+        assertThat(result.terms().getContent().getFirst().term()).isEqualTo(term2.getTerm());
+        assertThat(result.terms().getContent().getFirst().meaning()).isEqualTo(term2.getMeaning());
+        assertThat(result.terms().getContent().getFirst().synonyms()).containsExactlyInAnyOrderElementsOf(term2.getSynonyms());
+    }
+
 }
