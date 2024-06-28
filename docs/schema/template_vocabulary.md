@@ -1,4 +1,4 @@
-# vocabulary
+# template_vocabulary
 
 ## Description
 
@@ -6,15 +6,12 @@
 <summary><strong>Table Definition</strong></summary>
 
 ```sql
-CREATE TABLE `vocabulary` (
+CREATE TABLE `template_vocabulary` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
   `name` varchar(20) NOT NULL,
-  `uid` varchar(255) DEFAULT NULL,
-  `user_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_7smfim1klyuu5rh21994clsl4` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ```
 
 </details>
@@ -23,49 +20,40 @@ CREATE TABLE `vocabulary` (
 
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | bigint(20) |  | false | auto_increment | [term](term.md) |  |  |
-| created_at | datetime(6) | NULL | true |  |  |  |  |
-| updated_at | datetime(6) | NULL | true |  |  |  |  |
+| id | bigint(20) |  | false | auto_increment | [template_term](template_term.md) |  |  |
 | name | varchar(20) |  | false |  |  |  |  |
-| uid | varchar(255) | NULL | true |  |  |  |  |
-| user_id | bigint(20) |  | false |  |  |  |  |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
+| UK_7smfim1klyuu5rh21994clsl4 | UNIQUE | UNIQUE KEY UK_7smfim1klyuu5rh21994clsl4 (name) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
+| UK_7smfim1klyuu5rh21994clsl4 | UNIQUE KEY UK_7smfim1klyuu5rh21994clsl4 (name) USING BTREE |
 
 ## Relations
 
 ```mermaid
 erDiagram
 
-"term" }o--|| "vocabulary" : "FOREIGN KEY (vocabulary_id) REFERENCES vocabulary (id)"
+"template_term" }o--|| "template_vocabulary" : "FOREIGN KEY (template_vocabulary_id) REFERENCES template_vocabulary (id)"
 
-"vocabulary" {
+"template_vocabulary" {
   bigint_20_ id PK
-  datetime_6_ created_at
-  datetime_6_ updated_at
   varchar_20_ name
-  varchar_255_ uid
-  bigint_20_ user_id
 }
-"term" {
+"template_term" {
   bigint_20_ id PK
-  datetime_6_ created_at
-  datetime_6_ updated_at
   varchar_2000_ meaning
   varchar_255_ synonym
   varchar_100_ term
-  varchar_255_ uid
-  bigint_20_ vocabulary_id FK
+  bigint_20_ template_vocabulary_id FK
 }
 ```
 
