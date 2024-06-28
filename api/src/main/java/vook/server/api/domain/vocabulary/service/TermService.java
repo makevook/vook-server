@@ -3,9 +3,6 @@ package vook.server.api.domain.vocabulary.service;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import vook.server.api.domain.vocabulary.exception.TermLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.TermNotFoundException;
 import vook.server.api.domain.vocabulary.model.Term;
@@ -15,12 +12,11 @@ import vook.server.api.domain.vocabulary.model.VocabularyRepository;
 import vook.server.api.domain.vocabulary.service.data.TermCreateAllCommand;
 import vook.server.api.domain.vocabulary.service.data.TermCreateCommand;
 import vook.server.api.domain.vocabulary.service.data.TermUpdateCommand;
+import vook.server.api.globalcommon.annotation.DomainService;
 
 import java.util.List;
 
-@Service
-@Validated
-@Transactional
+@DomainService
 @RequiredArgsConstructor
 public class TermService {
 

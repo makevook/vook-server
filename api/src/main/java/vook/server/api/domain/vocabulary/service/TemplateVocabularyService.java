@@ -2,17 +2,13 @@ package vook.server.api.domain.vocabulary.service;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import vook.server.api.domain.vocabulary.model.*;
 import vook.server.api.domain.vocabulary.service.data.TemplateVocabularyCreateCommand;
+import vook.server.api.globalcommon.annotation.DomainService;
 
 import java.util.List;
 
-@Service
-@Validated
-@Transactional
+@DomainService
 @RequiredArgsConstructor
 public class TemplateVocabularyService {
 

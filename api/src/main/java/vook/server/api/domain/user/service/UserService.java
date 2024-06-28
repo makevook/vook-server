@@ -4,20 +4,16 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import vook.server.api.domain.user.exception.*;
 import vook.server.api.domain.user.model.*;
 import vook.server.api.domain.user.service.data.OnboardingCommand;
 import vook.server.api.domain.user.service.data.RegisterCommand;
 import vook.server.api.domain.user.service.data.SignUpFromSocialCommand;
+import vook.server.api.globalcommon.annotation.DomainService;
 
 import java.util.Optional;
 
-@Service
-@Validated
-@Transactional
+@DomainService
 @RequiredArgsConstructor
 public class UserService {
 

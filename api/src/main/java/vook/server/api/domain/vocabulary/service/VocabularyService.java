@@ -4,9 +4,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import vook.server.api.domain.vocabulary.exception.VocabularyLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
 import vook.server.api.domain.vocabulary.model.UserId;
@@ -15,12 +12,11 @@ import vook.server.api.domain.vocabulary.model.VocabularyRepository;
 import vook.server.api.domain.vocabulary.service.data.VocabularyCreateCommand;
 import vook.server.api.domain.vocabulary.service.data.VocabularyDeleteCommand;
 import vook.server.api.domain.vocabulary.service.data.VocabularyUpdateCommand;
+import vook.server.api.globalcommon.annotation.DomainService;
 
 import java.util.List;
 
-@Service
-@Validated
-@Transactional
+@DomainService
 @RequiredArgsConstructor
 public class VocabularyService {
 
