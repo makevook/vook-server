@@ -1,9 +1,6 @@
 package vook.server.api.domain.term.service;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
@@ -12,6 +9,7 @@ import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.TermService;
 import vook.server.api.domain.vocabulary.service.data.TermCreateCommand;
 import vook.server.api.globalcommon.exception.ParameterValidateException;
+import vook.server.api.infra.search.vocabulary.MeilisearchVocabularySearchService;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
@@ -19,6 +17,7 @@ import vook.server.api.testhelper.creator.TestVocabularyCreator;
 import java.util.Collection;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -33,6 +32,13 @@ class TermServiceTest extends IntegrationTestBase {
     TestUserCreator userCreator;
     @Autowired
     TestVocabularyCreator vocabularyCreator;
+    @Autowired
+    MeilisearchVocabularySearchService searchService;
+
+    @AfterEach
+    void tearDown() {
+        searchService.clearAll();
+    }
 
     @Test
     @DisplayName("용어 생성 - 성공")
@@ -56,6 +62,8 @@ class TermServiceTest extends IntegrationTestBase {
         assertEquals("용어", term.getTerm());
         assertEquals("용어 설명", term.getMeaning());
         assertEquals(2, term.getSynonyms().size());
+
+        assertThat(searchService.isDocumentExists(vocabulary.getUid(), term.getUid())).isTrue();
     }
 
     @TestFactory

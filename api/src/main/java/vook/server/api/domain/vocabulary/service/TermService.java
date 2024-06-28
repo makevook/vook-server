@@ -22,6 +22,7 @@ public class TermService {
 
     private final TermRepository termRepository;
     private final VocabularyRepository vocabularyRepository;
+    private final TermSearchService termSearchService;
 
     public Term create(@Valid TermCreateCommand command) {
         Term term = command.toEntity(vocabularyRepository::findByUid);
@@ -29,7 +30,9 @@ public class TermService {
         if (termCount >= 100) {
             throw new TermLimitExceededException();
         }
-        return termRepository.save(term);
+        Term saved = termRepository.save(term);
+        termSearchService.saveTerm(saved);
+        return saved;
     }
 
     public void createAll(@Valid TermCreateAllCommand command) {
