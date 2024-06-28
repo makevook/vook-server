@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import vook.server.api.domain.common.model.BaseEntity;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,8 +12,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "term")
 public class Term extends BaseEntity {
-
-    public static final String SYNONYM_DELIMITER = ":,:";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +36,7 @@ public class Term extends BaseEntity {
      */
     @Getter(AccessLevel.PRIVATE)
     @Column(length = 1100)
-    private String synonym;
+    private Synonym synonym;
 
     @ManyToOne
     @JoinColumn(name = "vocabulary_id", nullable = false)
@@ -55,7 +52,7 @@ public class Term extends BaseEntity {
         result.uid = UUID.randomUUID().toString();
         result.term = term;
         result.meaning = meaning;
-        result.addAllSynonym(synonyms);
+        result.synonym = Synonym.from(synonyms);
         result.vocabulary = vocabulary;
         vocabulary.addTerm(result);
         return result;
@@ -69,7 +66,7 @@ public class Term extends BaseEntity {
         Term result = new Term();
         result.term = term;
         result.meaning = meaning;
-        result.addAllSynonym(synonyms);
+        result.synonym = Synonym.from(synonyms);
         return result;
     }
 
@@ -79,14 +76,7 @@ public class Term extends BaseEntity {
         this.synonym = term.getSynonym();
     }
 
-    private void addAllSynonym(List<String> input) {
-        this.synonym = String.join(SYNONYM_DELIMITER, input);
-    }
-
     public List<String> getSynonyms() {
-        if (synonym == null || synonym.isEmpty()) {
-            return List.of();
-        }
-        return Arrays.stream(synonym.split(SYNONYM_DELIMITER)).toList();
+        return synonym.synonyms();
     }
 }
