@@ -70,6 +70,11 @@ public interface UserApi {
                     @SecurityRequirement(name = "AccessToken")
             },
             description = """
+                    ## 호출 시나리오
+                    - 회원가입이 완료된 유저가 온보딩 프로세스의 마지막 페이지에서 '시작하기' 버튼을 클릭했을 때 호출됩니다.
+                    - '건너뛰기' 버튼을 클릭 할 경우 해당 온보딩 프로세스 페이지의 선택 값을 null로 합니다.
+                    - 온보딩 프로세스의 마지막 페이지에서 '건너뛰기' 버튼을 클릭했을 때도 이 API를 호출합니다. 
+                                        
                     ## 비즈니스 규칙 위반 내용
                     - NotReadyToOnboarding: 회원 가입이 완료되지 않은 유저가 해당 API를 호출 할 경우
                     - AlreadyOnboarding: 이미 온보딩이 완료된 유저가 해당 API를 호출 할 경우"""

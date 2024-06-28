@@ -320,14 +320,6 @@ class UserServiceTest extends IntegrationTestBase {
                 DynamicTest.dynamicTest("유저 UID가 빈 문자열인 경우", () -> {
                     assertThatThrownBy(() -> service.onboarding(new OnboardingCommand("", Funnel.OTHER, Job.OTHER)))
                             .isInstanceOf(ParameterValidateException.class);
-                }),
-                DynamicTest.dynamicTest("퍼널이 누락된 경우", () -> {
-                    assertThatThrownBy(() -> service.onboarding(new OnboardingCommand("uid", null, Job.OTHER)))
-                            .isInstanceOf(ParameterValidateException.class);
-                }),
-                DynamicTest.dynamicTest("직업이 누락된 경우", () -> {
-                    assertThatThrownBy(() -> service.onboarding(new OnboardingCommand("uid", Funnel.OTHER, null)))
-                            .isInstanceOf(ParameterValidateException.class);
                 })
         );
     }
