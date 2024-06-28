@@ -20,6 +20,7 @@ import java.util.List;
 public class VocabularyService {
 
     private final VocabularyRepository repository;
+    private final VocabularySearchService searchService;
 
     public List<Vocabulary> findAllBy(@NotNull UserId userId) {
         return repository.findAllByUserId(userId);
@@ -31,7 +32,9 @@ public class VocabularyService {
             throw new VocabularyLimitExceededException();
         }
 
-        return repository.save(Vocabulary.forCreateOf(command.name(), new UserId(userId.getId())));
+        Vocabulary saved = repository.save(Vocabulary.forCreateOf(command.name(), new UserId(userId.getId())));
+        searchService.saveVocabulary(saved);
+        return saved;
     }
 
     public void update(@Valid VocabularyUpdateCommand command) {
