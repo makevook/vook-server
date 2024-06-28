@@ -1,9 +1,12 @@
 package vook.server.api.usecases.term;
 
-import com.meilisearch.sdk.SearchRequest;
-import com.meilisearch.sdk.model.Searchable;
+import com.meilisearch.sdk.IndexSearchRequest;
+import com.meilisearch.sdk.MultiSearchRequest;
+import com.meilisearch.sdk.model.MultiSearchResult;
+import com.meilisearch.sdk.model.Results;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,11 +15,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
+import vook.server.api.domain.vocabulary.model.UserId;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,19 +38,19 @@ public class SearchTermUseCase {
 
     public Result execute(@Valid Command command) {
         User user = userService.getCompletedUserByUid(command.userUid());
-        Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
-        vocabularyPolicy.validateOwner(user, vocabulary);
+        List<Vocabulary> userVocabularies = vocabularyService.findAllBy(new UserId(user.getId()));
+        vocabularyPolicy.validateOwner(userVocabularies, command.vocabularyUids());
 
         TermSearchResult result = termSearchService.search(command.toSearchParams());
-        return Result.from(result);
+        return Result.from(command.query(), result);
     }
 
     @Builder
     public record Command(
             @NotBlank
             String userUid,
-            @NotBlank
-            String vocabularyUid,
+            @NotEmpty
+            List<String> vocabularyUids,
             @NotBlank
             String query,
             boolean withFormat,
@@ -54,7 +59,7 @@ public class SearchTermUseCase {
     ) {
         public SearchParams toSearchParams() {
             return SearchParams.builder()
-                    .vocabularyUid(vocabularyUid)
+                    .vocabularyUid(vocabularyUids)
                     .query(query)
                     .withFormat(withFormat)
                     .highlightPreTag(highlightPreTag)
@@ -66,30 +71,36 @@ public class SearchTermUseCase {
     @Builder
     public record Result(
             String query,
-            int processingTimeMs,
             List<Term> hits
     ) {
-        public static Result from(TermSearchResult result) {
+        public static Result from(String query, TermSearchResult result) {
             return Result.builder()
-                    .query(result.query())
-                    .processingTimeMs(result.processingTimeMs())
-                    .hits(Term.from(result.hits()))
+                    .query(query)
+                    .hits(Term.from(result.results()))
                     .build();
         }
 
         @Builder
         public record Term(
+                String vocabularyUid,
                 String uid,
                 String term,
                 String meaning,
                 String synonyms
         ) {
-            public static List<Term> from(ArrayList<HashMap<String, Object>> hits) {
-                return hits.stream().map(Term::from).toList();
+            public static List<Term> from(List<MultiSearchResult> results) {
+                return results.stream().map(Term::from).flatMap(Collection::stream).toList();
             }
 
-            public static Term from(HashMap<String, Object> hit) {
+            private static List<Term> from(MultiSearchResult result) {
+                return result.getHits().stream()
+                        .map(hit -> Term.from(result.getIndexUid(), hit))
+                        .toList();
+            }
+
+            public static Term from(String vocabularyUid, HashMap<String, Object> hit) {
                 return Term.builder()
+                        .vocabularyUid(vocabularyUid)
                         .uid((String) hit.get("uid"))
                         .term((String) hit.get("term"))
                         .meaning((String) hit.get("meaning"))
@@ -105,7 +116,7 @@ public class SearchTermUseCase {
 
     @Builder
     public record SearchParams(
-            String vocabularyUid,
+            List<String> vocabularyUid,
             String query,
             boolean withFormat,
             String highlightPreTag,
@@ -114,8 +125,15 @@ public class SearchTermUseCase {
         private static final String DEFAULT_HIGHLIGHT_PRE_TAG = "<em>";
         private static final String DEFAULT_HIGHLIGHT_POST_TAG = "</em>";
 
-        public SearchRequest buildSearchRequest() {
-            SearchRequest.SearchRequestBuilder builder = SearchRequest.builder();
+        public MultiSearchRequest buildMultiSearchRequest() {
+            MultiSearchRequest request = new MultiSearchRequest();
+            vocabularyUid.forEach(uid -> request.addQuery(buildIndexSearchRequest(uid)));
+            return request;
+        }
+
+        private IndexSearchRequest buildIndexSearchRequest(String uid) {
+            IndexSearchRequest.IndexSearchRequestBuilder builder = IndexSearchRequest.builder();
+            builder.indexUid(uid);
             if (withFormat) {
                 builder.attributesToHighlight(new String[]{"*"});
                 builder.highlightPreTag(StringUtils.hasText(highlightPreTag) ? highlightPreTag : DEFAULT_HIGHLIGHT_PRE_TAG);
@@ -131,16 +149,11 @@ public class SearchTermUseCase {
 
     @Builder
     public record TermSearchResult(
-            String query,
-            int processingTimeMs,
-            ArrayList<HashMap<String, Object>> hits
+            List<MultiSearchResult> results
     ) {
-
-        public static TermSearchResult from(Searchable search) {
+        public static TermSearchResult from(Results<MultiSearchResult> results) {
             return TermSearchResult.builder()
-                    .query(search.getQuery())
-                    .processingTimeMs(search.getProcessingTimeMs())
-                    .hits(search.getHits())
+                    .results(Arrays.stream(results.getResults()).toList())
                     .build();
         }
     }

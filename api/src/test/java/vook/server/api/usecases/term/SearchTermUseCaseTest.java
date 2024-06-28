@@ -10,6 +10,8 @@ import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -28,14 +30,17 @@ class SearchTermUseCaseTest extends IntegrationTestBase {
     void searchTerms() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
-        Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
-        testVocabularyCreator.createTerm(vocabulary, "하이브리드앱");
-        testVocabularyCreator.createTerm(vocabulary, "네이티브앱");
+        Vocabulary vocabulary1 = testVocabularyCreator.createVocabulary(user);
+        testVocabularyCreator.createTerm(vocabulary1, "하이브리드앱");
+        testVocabularyCreator.createTerm(vocabulary1, "네이티브앱");
+        Vocabulary vocabulary2 = testVocabularyCreator.createVocabulary(user);
+        testVocabularyCreator.createTerm(vocabulary2, "하이브리드웹");
+        testVocabularyCreator.createTerm(vocabulary2, "네이티브웹");
 
         SearchTermUseCase.Command command = SearchTermUseCase.Command.builder()
                 .userUid(user.getUid())
-                .vocabularyUid(vocabulary.getUid())
-                .query("하이브리드앱")
+                .vocabularyUids(List.of(vocabulary1.getUid(), vocabulary2.getUid()))
+                .query("하이브리드")
                 .withFormat(true)
                 .build();
 
@@ -43,11 +48,22 @@ class SearchTermUseCaseTest extends IntegrationTestBase {
         SearchTermUseCase.Result result = searchTermUseCase.execute(command);
 
         // then
-        assertThat(result.query()).isEqualTo("하이브리드앱");
-        assertThat(result.hits()).isNotEmpty();
-        assertThat(result.hits().getFirst().term()).contains("하이브리드앱");
-        assertThat(result.hits().getFirst().meaning()).contains("하이브리드앱");
-        assertThat(result.hits().getFirst().synonyms()).contains("하이브리드앱");
+        assertThat(result.query()).isEqualTo("하이브리드");
+        assertThat(result.hits())
+                .isNotEmpty()
+                .satisfiesExactlyInAnyOrder(
+                        term -> {
+                            assertThat(term.vocabularyUid()).isEqualTo(vocabulary1.getUid());
+                            assertThat(term.term()).contains("하이브리드앱");
+                            assertThat(term.meaning()).contains("하이브리드앱");
+                            assertThat(term.synonyms()).contains("하이브리드앱");
+                        },
+                        term -> {
+                            assertThat(term.vocabularyUid()).isEqualTo(vocabulary2.getUid());
+                            assertThat(term.term()).contains("하이브리드웹");
+                            assertThat(term.meaning()).contains("하이브리드웹");
+                            assertThat(term.synonyms()).contains("하이브리드웹");
+                        }
+                );
     }
-
 }

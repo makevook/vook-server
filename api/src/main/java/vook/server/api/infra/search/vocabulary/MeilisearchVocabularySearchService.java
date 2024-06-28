@@ -3,9 +3,10 @@ package vook.server.api.infra.search.vocabulary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meilisearch.sdk.Index;
-import com.meilisearch.sdk.SearchRequest;
+import com.meilisearch.sdk.MultiSearchRequest;
 import com.meilisearch.sdk.exceptions.MeilisearchApiException;
-import com.meilisearch.sdk.model.Searchable;
+import com.meilisearch.sdk.model.MultiSearchResult;
+import com.meilisearch.sdk.model.Results;
 import com.meilisearch.sdk.model.TaskInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -128,9 +129,9 @@ public class MeilisearchVocabularySearchService extends MeilisearchService imple
 
     @Override
     public SearchTermUseCase.TermSearchResult search(SearchTermUseCase.SearchParams searchParams) {
-        SearchRequest searchRequest = searchParams.buildSearchRequest();
-        Searchable search = this.client.getIndex(searchParams.vocabularyUid()).search(searchRequest);
-        return SearchTermUseCase.TermSearchResult.from(search);
+        MultiSearchRequest request = searchParams.buildMultiSearchRequest();
+        Results<MultiSearchResult> results = this.client.multiSearch(request);
+        return SearchTermUseCase.TermSearchResult.from(results);
     }
 
     @Getter
