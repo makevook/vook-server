@@ -3,7 +3,9 @@ package vook.server.api.infra.search.vocabulary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meilisearch.sdk.Index;
+import com.meilisearch.sdk.SearchRequest;
 import com.meilisearch.sdk.exceptions.MeilisearchApiException;
+import com.meilisearch.sdk.model.Searchable;
 import com.meilisearch.sdk.model.TaskInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,13 +16,14 @@ import vook.server.api.domain.vocabulary.service.TermSearchService;
 import vook.server.api.domain.vocabulary.service.VocabularySearchService;
 import vook.server.api.infra.search.common.MeilisearchProperties;
 import vook.server.api.infra.search.common.MeilisearchService;
+import vook.server.api.usecases.term.SearchTermUseCase;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class MeilisearchVocabularySearchService extends MeilisearchService implements VocabularySearchService, TermSearchService {
+public class MeilisearchVocabularySearchService extends MeilisearchService implements VocabularySearchService, TermSearchService, SearchTermUseCase.TermSearchService {
 
     private final ObjectMapper objectMapper;
 
@@ -121,6 +124,13 @@ public class MeilisearchVocabularySearchService extends MeilisearchService imple
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public SearchTermUseCase.TermSearchResult search(SearchTermUseCase.SearchParams searchParams) {
+        SearchRequest searchRequest = searchParams.buildSearchRequest();
+        Searchable search = this.client.getIndex(searchParams.vocabularyUid()).search(searchRequest);
+        return SearchTermUseCase.TermSearchResult.from(search);
     }
 
     @Getter
