@@ -11,10 +11,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 import vook.server.api.web.common.response.CommonApiResponse;
-import vook.server.api.web.term.reqres.TermCreateRequest;
-import vook.server.api.web.term.reqres.TermCreateResponse;
-import vook.server.api.web.term.reqres.TermResponse;
-import vook.server.api.web.term.reqres.TermUpdateRequest;
+import vook.server.api.web.term.reqres.*;
 
 import java.util.List;
 
@@ -102,4 +99,27 @@ public interface TermApi {
                     - NotValidVocabularyOwner: 삭제하려는 용어가 속해있는 용어집에 대한 권한이 없는 경우"""
     )
     CommonApiResponse<Void> delete(VookLoginUser user, String termUid);
+
+    @Operation(
+            summary = "용어 검색",
+            security = {
+                    @SecurityRequirement(name = "AccessToken")
+            },
+            description = """
+                    ## 비즈니스 규칙 위반 내용
+                    - NotValidVocabularyOwnerException: 검색 요청한 용어집 UID에 대한 권한이 없는 경우"""
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = TermApiSearchResponse.class)
+                    )
+            ),
+    })
+    CommonApiResponse<TermSearchResponse> search(VookLoginUser user, TermSearchRequest request);
+
+    class TermApiSearchResponse extends CommonApiResponse<TermSearchResponse> {
+    }
 }

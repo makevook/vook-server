@@ -22,12 +22,18 @@ public class TestVocabularyCreator {
 
     private final VocabularyService vocabularyService;
     private final TermService termService;
+    private final AtomicInteger vocabularyNameCounter = new AtomicInteger(0);
     private final AtomicInteger termNameCounter = new AtomicInteger(0);
 
     public Vocabulary createVocabulary(User user) {
+        int count = vocabularyNameCounter.getAndIncrement();
+        return createVocabulary(user, String.valueOf(count));
+    }
+
+    public Vocabulary createVocabulary(User user, String suffix) {
         return vocabularyService.create(
                 VocabularyCreateCommand.builder()
-                        .name("testVocabulary")
+                        .name("testVocabulary" + suffix)
                         .userId(new UserId(user.getId()))
                         .build()
         );

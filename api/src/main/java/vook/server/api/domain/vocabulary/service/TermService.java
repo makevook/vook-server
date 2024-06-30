@@ -22,6 +22,7 @@ public class TermService {
 
     private final TermRepository termRepository;
     private final VocabularyRepository vocabularyRepository;
+    private final TermSearchService termSearchService;
 
     public Term create(@Valid TermCreateCommand command) {
         Term term = command.toEntity(vocabularyRepository::findByUid);
@@ -29,7 +30,9 @@ public class TermService {
         if (termCount >= 100) {
             throw new TermLimitExceededException();
         }
-        return termRepository.save(term);
+        Term saved = termRepository.save(term);
+        termSearchService.saveTerm(saved);
+        return saved;
     }
 
     public void createAll(@Valid TermCreateAllCommand command) {
@@ -44,6 +47,7 @@ public class TermService {
                 .map(term -> term.toEntity(vocabulary))
                 .toList();
         termRepository.saveAll(terms);
+        termSearchService.saveAll(terms);
     }
 
     public Term getByUid(@NotBlank String uid) {
@@ -54,11 +58,13 @@ public class TermService {
         Term term = termRepository.findByUid(serviceCommand.uid()).orElseThrow(TermNotFoundException::new);
         Term updateTerm = serviceCommand.toEntity();
         term.update(updateTerm);
+        termSearchService.update(term);
     }
 
     public void delete(@NotBlank String uid) {
         Term term = termRepository.findByUid(uid).orElseThrow(TermNotFoundException::new);
         term.getVocabulary().removeTerm(term);
         termRepository.delete(term);
+        termSearchService.delete(term);
     }
 }

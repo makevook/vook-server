@@ -6,7 +6,6 @@ import com.meilisearch.sdk.Index;
 import com.meilisearch.sdk.SearchRequest;
 import com.meilisearch.sdk.model.Searchable;
 import com.meilisearch.sdk.model.TaskInfo;
-import com.meilisearch.sdk.model.TypoTolerance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -35,44 +34,11 @@ public class MeilisearchDemoTermSearchService extends MeilisearchService impleme
     }
 
     public void clearAll() {
-        clearAll(DEMO_TERMS_INDEX_UID);
+        clearAllByPrefix(DEMO_TERMS_INDEX_UID);
     }
 
     public void init() {
-        TaskInfo indexCreateTask = client.createIndex(DEMO_TERMS_INDEX_UID, "id");
-        client.waitForTask(indexCreateTask.getTaskUid());
-
-        // 용어, 동의어, 뜻에 대해서만 검색
-        TaskInfo updateSearchableTask = client.index(DEMO_TERMS_INDEX_UID).updateSearchableAttributesSettings(new String[]{
-                "term",
-                "synonyms",
-                "meaning"
-        });
-        client.waitForTask(updateSearchableTask.getTaskUid());
-
-        // 용어, 동의어, 뜻, 생성일시에 대해 정렬 가능
-        TaskInfo updateSortableTask = client.index(DEMO_TERMS_INDEX_UID).updateSortableAttributesSettings(new String[]{
-                "term",
-                "synonyms",
-                "meaning",
-                "createdAt"
-        });
-        client.waitForTask(updateSortableTask.getTaskUid());
-
-        client.index(DEMO_TERMS_INDEX_UID).updateRankingRulesSettings(new String[]{
-                "sort",
-                "words",
-                "typo",
-                "proximity",
-                "attribute",
-                "exactness"
-        });
-
-        // 오타 용인을 비활성화 하여도 띄어쓰기에 대해서는 검색이 됨으로 비활성화 함
-        TypoTolerance typoTolerance = new TypoTolerance();
-        typoTolerance.setEnabled(false);
-        TaskInfo updateTypoTask = client.index(DEMO_TERMS_INDEX_UID).updateTypoToleranceSettings(typoTolerance);
-        client.waitForTask(updateTypoTask.getTaskUid());
+        createIndex(DEMO_TERMS_INDEX_UID, "id");
     }
 
     public void addTerms(List<DemoTerm> terms) {
