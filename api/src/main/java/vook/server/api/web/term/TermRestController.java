@@ -75,10 +75,10 @@ public class TermRestController implements TermApi {
     }
 
     @Override
-    @GetMapping("/search")
+    @PostMapping("/search")
     public CommonApiResponse<TermSearchResponse> search(
             @AuthenticationPrincipal VookLoginUser user,
-            TermSearchRequest request
+            @RequestBody TermSearchRequest request
     ) {
         SearchTermUseCase.Result result = searchTermUseCase.execute(request.toCommand(user));
         TermSearchResponse response = TermSearchResponse.from(result);

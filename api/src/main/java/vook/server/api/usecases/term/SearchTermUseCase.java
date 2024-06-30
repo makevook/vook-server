@@ -44,10 +44,14 @@ public class SearchTermUseCase {
     public record Command(
             @NotBlank
             String userUid,
+
+            @Valid
             @NotEmpty
-            List<String> vocabularyUids,
+            List<@NotBlank String> vocabularyUids,
+
             @NotBlank
             String query,
+
             boolean withFormat,
             String highlightPreTag,
             String highlightPostTag
@@ -66,13 +70,26 @@ public class SearchTermUseCase {
     @Builder
     public record Result(
             String query,
-            Map<String, List<Term>> hits
+            List<Record> records
     ) {
-        public static Result from(TermSearchService.Result result) {
-            return SearchTermUseCase.Result.builder()
-                    .query(result.query())
-                    .hits(Term.from(result.records()))
+        public static Result from(TermSearchService.Result input) {
+            return Result.builder()
+                    .query(input.query())
+                    .records(Record.from(input.records()))
                     .build();
+        }
+
+        public record Record(
+                String vocabularyUid,
+                List<Term> hits
+        ) {
+            public static List<Record> from(List<TermSearchService.Result.Record> input) {
+                List<Record> result = new ArrayList<>();
+                for (TermSearchService.Result.Record record : input) {
+                    result.add(new Record(record.vocabularyUid(), Term.from(record)));
+                }
+                return result;
+            }
         }
 
         @Builder
@@ -82,15 +99,6 @@ public class SearchTermUseCase {
                 String meaning,
                 String synonyms
         ) {
-            public static Map<String, List<Term>> from(List<TermSearchService.Result.Record> records) {
-                HashMap<String, List<Term>> result = new HashMap<>();
-                for (TermSearchService.Result.Record record : records) {
-                    List<Term> vocabularyIdTermsMap = Term.from(record);
-                    result.put(record.vocabularyUid(), vocabularyIdTermsMap);
-                }
-                return result;
-            }
-
             private static List<Term> from(TermSearchService.Result.Record record) {
                 return record.hits().stream()
                         .map(hit -> {

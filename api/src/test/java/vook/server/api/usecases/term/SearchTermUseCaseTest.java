@@ -41,7 +41,6 @@ class SearchTermUseCaseTest extends IntegrationTestBase {
                 .userUid(user.getUid())
                 .vocabularyUids(List.of(vocabulary1.getUid(), vocabulary2.getUid()))
                 .query("하이브리드")
-                .withFormat(true)
                 .build();
 
         // when
@@ -49,20 +48,22 @@ class SearchTermUseCaseTest extends IntegrationTestBase {
 
         // then
         assertThat(result.query()).isEqualTo("하이브리드");
-        assertThat(result.hits())
+        assertThat(result.records())
                 .isNotEmpty()
                 .satisfiesExactlyInAnyOrder(
                         term -> {
                             assertThat(term.vocabularyUid()).isEqualTo(vocabulary1.getUid());
-                            assertThat(term.term()).contains("하이브리드앱");
-                            assertThat(term.meaning()).contains("하이브리드앱");
-                            assertThat(term.synonyms()).contains("하이브리드앱");
+                            assertThat(term.hits()).hasSize(1);
+                            assertThat(term.hits().getFirst().term()).contains("하이브리드앱");
+                            assertThat(term.hits().getFirst().meaning()).contains("하이브리드앱");
+                            assertThat(term.hits().getFirst().synonyms()).contains("하이브리드앱");
                         },
                         term -> {
                             assertThat(term.vocabularyUid()).isEqualTo(vocabulary2.getUid());
-                            assertThat(term.term()).contains("하이브리드웹");
-                            assertThat(term.meaning()).contains("하이브리드웹");
-                            assertThat(term.synonyms()).contains("하이브리드웹");
+                            assertThat(term.hits()).hasSize(1);
+                            assertThat(term.hits().getFirst().term()).contains("하이브리드웹");
+                            assertThat(term.hits().getFirst().meaning()).contains("하이브리드웹");
+                            assertThat(term.hits().getFirst().synonyms()).contains("하이브리드웹");
                         }
                 );
     }
