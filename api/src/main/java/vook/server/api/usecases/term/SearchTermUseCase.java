@@ -1,9 +1,5 @@
 package vook.server.api.usecases.term;
 
-import com.meilisearch.sdk.IndexSearchRequest;
-import com.meilisearch.sdk.MultiSearchRequest;
-import com.meilisearch.sdk.model.MultiSearchResult;
-import com.meilisearch.sdk.model.Results;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,7 +7,6 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
@@ -20,7 +15,7 @@ import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,8 +36,8 @@ public class SearchTermUseCase {
         List<Vocabulary> userVocabularies = vocabularyService.findAllBy(new UserId(user.getId()));
         vocabularyPolicy.validateOwner(userVocabularies, command.vocabularyUids());
 
-        SearchResult result = termSearchService.search(command.toSearchParams());
-        return Result.from(command.query(), result);
+        TermSearchService.Result result = termSearchService.search(command.toSearchParams());
+        return SearchTermUseCase.Result.from(result);
     }
 
     @Builder
@@ -57,9 +52,9 @@ public class SearchTermUseCase {
             String highlightPreTag,
             String highlightPostTag
     ) {
-        public SearchParams toSearchParams() {
-            return SearchParams.builder()
-                    .vocabularyUid(vocabularyUids)
+        public TermSearchService.Params toSearchParams() {
+            return TermSearchService.Params.builder()
+                    .vocabularyUids(vocabularyUids)
                     .query(query)
                     .withFormat(withFormat)
                     .highlightPreTag(highlightPreTag)
@@ -73,10 +68,10 @@ public class SearchTermUseCase {
             String query,
             Map<String, List<Term>> hits
     ) {
-        public static Result from(String query, SearchResult result) {
-            return Result.builder()
-                    .query(query)
-                    .hits(Term.from(result.results()))
+        public static Result from(TermSearchService.Result result) {
+            return SearchTermUseCase.Result.builder()
+                    .query(result.query())
+                    .hits(Term.from(result.records()))
                     .build();
         }
 
@@ -87,30 +82,27 @@ public class SearchTermUseCase {
                 String meaning,
                 String synonyms
         ) {
-            public static Map<String, List<Term>> from(List<MultiSearchResult> results) {
-                return results.stream()
-                        .map(Term::from)
-                        .reduce(new HashMap<>(), (identify, vocabularyTermMap) -> {
-                            identify.putAll(vocabularyTermMap);
-                            return identify;
-                        });
+            public static Map<String, List<Term>> from(List<TermSearchService.Result.Record> records) {
+                HashMap<String, List<Term>> result = new HashMap<>();
+                for (TermSearchService.Result.Record record : records) {
+                    List<Term> vocabularyIdTermsMap = Term.from(record);
+                    result.put(record.vocabularyUid(), vocabularyIdTermsMap);
+                }
+                return result;
             }
 
-            private static Map<String, List<Term>> from(MultiSearchResult result) {
-                return Map.of(
-                        result.getIndexUid(),
-                        result.getHits().stream()
-                                .map(hit -> {
-                                    Object formatted = hit.get("_formatted");
-                                    if (formatted instanceof Map formattedDocument) {
-                                        return formattedDocument;
-                                    } else {
-                                        return hit;
-                                    }
-                                })
-                                .map(Term::from)
-                                .toList()
-                );
+            private static List<Term> from(TermSearchService.Result.Record record) {
+                return record.hits().stream()
+                        .map(hit -> {
+                            Object formatted = hit.get("_formatted");
+                            if (formatted instanceof Map formattedDocument) {
+                                return formattedDocument;
+                            } else {
+                                return hit;
+                            }
+                        })
+                        .map(Term::from)
+                        .toList();
             }
 
             public static Term from(Map<String, Object> hit) {
@@ -125,50 +117,28 @@ public class SearchTermUseCase {
     }
 
     public interface TermSearchService {
-        SearchResult search(SearchParams searchParams);
-    }
+        Result search(Params params);
 
-    @Builder
-    public record SearchParams(
-            List<String> vocabularyUid,
-            String query,
-            boolean withFormat,
-            String highlightPreTag,
-            String highlightPostTag
-    ) {
-        private static final String DEFAULT_HIGHLIGHT_PRE_TAG = "<em>";
-        private static final String DEFAULT_HIGHLIGHT_POST_TAG = "</em>";
-
-        public MultiSearchRequest buildMultiSearchRequest() {
-            MultiSearchRequest request = new MultiSearchRequest();
-            vocabularyUid.forEach(uid -> request.addQuery(buildIndexSearchRequest(uid)));
-            return request;
+        @Builder
+        record Params(
+                List<String> vocabularyUids,
+                String query,
+                boolean withFormat,
+                String highlightPreTag,
+                String highlightPostTag
+        ) {
         }
 
-        private IndexSearchRequest buildIndexSearchRequest(String uid) {
-            IndexSearchRequest.IndexSearchRequestBuilder builder = IndexSearchRequest.builder();
-            builder.indexUid(uid);
-            if (withFormat) {
-                builder.attributesToHighlight(new String[]{"*"});
-                builder.highlightPreTag(StringUtils.hasText(highlightPreTag) ? highlightPreTag : DEFAULT_HIGHLIGHT_PRE_TAG);
-                builder.highlightPostTag(StringUtils.hasText(highlightPostTag) ? highlightPostTag : DEFAULT_HIGHLIGHT_POST_TAG);
+        @Builder
+        record Result(
+                String query,
+                List<Record> records
+        ) {
+            public record Record(
+                    String vocabularyUid,
+                    ArrayList<HashMap<String, Object>> hits
+            ) {
             }
-
-            return builder
-                    .q(query)
-                    .limit(Integer.MAX_VALUE)
-                    .build();
-        }
-    }
-
-    @Builder
-    public record SearchResult(
-            List<MultiSearchResult> results
-    ) {
-        public static SearchResult from(Results<MultiSearchResult> results) {
-            return SearchResult.builder()
-                    .results(Arrays.stream(results.getResults()).toList())
-                    .build();
         }
     }
 }

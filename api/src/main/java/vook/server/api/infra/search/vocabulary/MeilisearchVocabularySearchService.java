@@ -3,6 +3,7 @@ package vook.server.api.infra.search.vocabulary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meilisearch.sdk.Index;
+import com.meilisearch.sdk.IndexSearchRequest;
 import com.meilisearch.sdk.MultiSearchRequest;
 import com.meilisearch.sdk.exceptions.MeilisearchApiException;
 import com.meilisearch.sdk.model.MultiSearchResult;
@@ -11,6 +12,7 @@ import com.meilisearch.sdk.model.TaskInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.TermSearchService;
@@ -20,6 +22,7 @@ import vook.server.api.infra.search.common.MeilisearchService;
 import vook.server.api.usecases.term.SearchTermUseCase;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -128,10 +131,51 @@ public class MeilisearchVocabularySearchService extends MeilisearchService imple
     }
 
     @Override
-    public SearchTermUseCase.SearchResult search(SearchTermUseCase.SearchParams searchParams) {
-        MultiSearchRequest request = searchParams.buildMultiSearchRequest();
+    public Result search(Params params) {
+        MultiSearchRequest request = new RequestBuilder(params).buildMultiSearchRequest();
         Results<MultiSearchResult> results = this.client.multiSearch(request);
-        return SearchTermUseCase.SearchResult.from(results);
+        return new ResultBuilder(params.query(), results).build();
+    }
+
+    private record RequestBuilder(Params params) {
+
+        private static final String DEFAULT_HIGHLIGHT_PRE_TAG = "<em>";
+        private static final String DEFAULT_HIGHLIGHT_POST_TAG = "</em>";
+
+        public MultiSearchRequest buildMultiSearchRequest() {
+            MultiSearchRequest request = new MultiSearchRequest();
+            params.vocabularyUids().forEach(uid -> request.addQuery(buildIndexSearchRequest(uid)));
+            return request;
+        }
+
+        private IndexSearchRequest buildIndexSearchRequest(String uid) {
+            IndexSearchRequest.IndexSearchRequestBuilder builder = IndexSearchRequest.builder();
+            builder.indexUid(uid);
+            if (params.withFormat()) {
+                builder.attributesToHighlight(new String[]{"*"});
+                builder.highlightPreTag(StringUtils.hasText(params.highlightPreTag()) ? params.highlightPreTag() : DEFAULT_HIGHLIGHT_PRE_TAG);
+                builder.highlightPostTag(StringUtils.hasText(params.highlightPostTag()) ? params.highlightPostTag() : DEFAULT_HIGHLIGHT_POST_TAG);
+            }
+
+            return builder
+                    .q(params.query())
+                    .limit(Integer.MAX_VALUE)
+                    .build();
+        }
+    }
+
+    private record ResultBuilder(
+            String query,
+            Results<MultiSearchResult> results
+    ) {
+        public Result build() {
+            return Result.builder()
+                    .query(query)
+                    .records(Arrays.stream(results.getResults())
+                            .map(result -> new Result.Record(result.getIndexUid(), result.getHits()))
+                            .toList())
+                    .build();
+        }
     }
 
     @Getter
