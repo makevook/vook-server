@@ -3,12 +3,14 @@ package vook.server.api.web.term.reqres;
 import lombok.Builder;
 import vook.server.api.usecases.term.SearchTermUseCase;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Builder
 public record TermSearchResponse(
         String query,
-        List<Term> hits
+        Map<String, List<Term>> hits
 ) {
     public static TermSearchResponse from(SearchTermUseCase.Result result) {
         return TermSearchResponse.builder()
@@ -19,19 +21,27 @@ public record TermSearchResponse(
 
     @Builder
     public record Term(
-            String vocabularyUid,
             String uid,
             String term,
             String meaning,
             String synonyms
     ) {
-        public static List<Term> from(List<SearchTermUseCase.Result.Term> hits) {
-            return hits.stream().map(Term::from).toList();
+        public static Map<String, List<Term>> from(Map<String, List<SearchTermUseCase.Result.Term>> hits) {
+            Map<String, List<Term>> result = new HashMap<>();
+            for (Map.Entry<String, List<SearchTermUseCase.Result.Term>> e : hits.entrySet()) {
+                result.put(e.getKey(), Term.from(e.getValue()));
+            }
+            return result;
+        }
+
+        private static List<Term> from(List<SearchTermUseCase.Result.Term> terms) {
+            return terms.stream()
+                    .map(Term::from)
+                    .toList();
         }
 
         private static Term from(SearchTermUseCase.Result.Term term) {
             return Term.builder()
-                    .vocabularyUid(term.vocabularyUid())
                     .uid(term.uid())
                     .term(term.term())
                     .meaning(term.meaning())

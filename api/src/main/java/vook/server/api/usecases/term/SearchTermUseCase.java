@@ -21,7 +21,7 @@ import vook.server.api.domain.vocabulary.service.VocabularyService;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,7 +71,7 @@ public class SearchTermUseCase {
     @Builder
     public record Result(
             String query,
-            List<Term> hits
+            Map<String, List<Term>> hits
     ) {
         public static Result from(String query, SearchResult result) {
             return Result.builder()
@@ -82,33 +82,39 @@ public class SearchTermUseCase {
 
         @Builder
         public record Term(
-                String vocabularyUid,
                 String uid,
                 String term,
                 String meaning,
                 String synonyms
         ) {
-            public static List<Term> from(List<MultiSearchResult> results) {
-                return results.stream().map(Term::from).flatMap(Collection::stream).toList();
+            public static Map<String, List<Term>> from(List<MultiSearchResult> results) {
+                return results.stream()
+                        .map(Term::from)
+                        .reduce(new HashMap<>(), (identify, vocabularyTermMap) -> {
+                            identify.putAll(vocabularyTermMap);
+                            return identify;
+                        });
             }
 
-            private static List<Term> from(MultiSearchResult result) {
-                return result.getHits().stream()
-                        .map(hit -> {
-                            Object formatted = hit.get("_formatted");
-                            if (formatted instanceof Map formattedDocument) {
-                                return formattedDocument;
-                            } else {
-                                return hit;
-                            }
-                        })
-                        .map(hit -> Term.from(result.getIndexUid(), hit))
-                        .toList();
+            private static Map<String, List<Term>> from(MultiSearchResult result) {
+                return Map.of(
+                        result.getIndexUid(),
+                        result.getHits().stream()
+                                .map(hit -> {
+                                    Object formatted = hit.get("_formatted");
+                                    if (formatted instanceof Map formattedDocument) {
+                                        return formattedDocument;
+                                    } else {
+                                        return hit;
+                                    }
+                                })
+                                .map(Term::from)
+                                .toList()
+                );
             }
 
-            public static Term from(String vocabularyUid, Map<String, Object> hit) {
+            public static Term from(Map<String, Object> hit) {
                 return Term.builder()
-                        .vocabularyUid(vocabularyUid)
                         .uid((String) hit.get("uid"))
                         .term((String) hit.get("term"))
                         .meaning((String) hit.get("meaning"))
