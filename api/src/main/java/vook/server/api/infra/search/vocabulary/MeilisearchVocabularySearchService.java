@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class MeilisearchVocabularySearchService extends MeilisearchService implements VocabularySearchService, TermSearchService, SearchTermUseCase.TermSearchService {
@@ -116,6 +117,20 @@ public class MeilisearchVocabularySearchService extends MeilisearchService imple
         Index index = client.index(terms.getFirst().getVocabulary().getUid());
         TaskInfo taskInfo = index.addDocuments(getDocuments(terms));
         client.waitForTask(taskInfo.getTaskUid());
+    }
+
+    @Override
+    public void deleteAll(List<Term> terms) {
+        if (terms.isEmpty()) {
+            return;
+        }
+
+        Map<Vocabulary, List<Term>> vocabularyTermMap = terms.stream().collect(Collectors.groupingBy(Term::getVocabulary));
+        vocabularyTermMap.forEach((vocabulary, vocabularyTerms) -> {
+            Index index = client.index(vocabulary.getUid());
+            TaskInfo taskInfo = index.deleteDocuments(terms.stream().map(Term::getUid).toList());
+            client.waitForTask(taskInfo.getTaskUid());
+        });
     }
 
     private String getDocuments(List<Term> terms) {

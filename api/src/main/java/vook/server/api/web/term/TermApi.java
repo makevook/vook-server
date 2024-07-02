@@ -101,6 +101,18 @@ public interface TermApi {
     CommonApiResponse<Void> delete(VookLoginUser user, String termUid);
 
     @Operation(
+            summary = "용어 다중 삭제",
+            security = {
+                    @SecurityRequirement(name = "AccessToken")
+            },
+            description = """
+                    ## 비즈니스 규칙 위반 내용
+                    - TermNotFound: 삭제하려는 용어가 존재하지 않는 경우
+                    - NotValidVocabularyOwner: 삭제하려는 용어가 속해있는 용어집에 대한 권한이 없는 경우"""
+    )
+    CommonApiResponse<Void> batchDelete(VookLoginUser user, TermBatchDeleteRequest request);
+
+    @Operation(
             summary = "용어 검색",
             security = {
                     @SecurityRequirement(name = "AccessToken")

@@ -24,6 +24,7 @@ public class TermRestController implements TermApi {
     private final RetrieveTermUseCase retrieveTermUseCase;
     private final UpdateTermUseCase updateTermUseCase;
     private final DeleteTermUseCase deleteTermUseCase;
+    private final BatchDeleteTermUseCase batchDeleteTermUseCase;
     private final SearchTermUseCase searchTermUseCase;
 
     @Override
@@ -71,6 +72,16 @@ public class TermRestController implements TermApi {
     ) {
         var command = new DeleteTermUseCase.Command(user.getUid(), termUid);
         deleteTermUseCase.execute(command);
+        return CommonApiResponse.ok();
+    }
+
+    @Override
+    @PostMapping("/batch-delete")
+    public CommonApiResponse<Void> batchDelete(
+            @AuthenticationPrincipal VookLoginUser user,
+            @RequestBody TermBatchDeleteRequest request
+    ) {
+        batchDeleteTermUseCase.execute(request.toCommand(user));
         return CommonApiResponse.ok();
     }
 
