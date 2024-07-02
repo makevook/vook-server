@@ -2,6 +2,7 @@ package vook.server.api.domain.vocabulary.service;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import vook.server.api.domain.vocabulary.exception.TermLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.TermNotFoundException;
@@ -66,5 +67,16 @@ public class TermService {
         term.getVocabulary().removeTerm(term);
         termRepository.delete(term);
         termSearchService.delete(term);
+    }
+
+    public void batchDelete(
+            @Valid
+            @NotEmpty
+            List<@NotBlank String> termUids
+    ) {
+        List<Term> terms = termRepository.findByUidIn(termUids);
+        terms.forEach(term -> term.getVocabulary().removeTerm(term));
+        termRepository.deleteAll(terms);
+        termSearchService.deleteAll(terms);
     }
 }

@@ -12,4 +12,6 @@ public interface TermSearchService {
     void delete(Term term);
 
     void saveAll(List<Term> terms);
+
+    void deleteAll(List<Term> terms);
 }
