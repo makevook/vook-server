@@ -1,5 +1,6 @@
 package vook.server.api.web.common.swagger;
 
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.examples.Example;
 import io.swagger.v3.oas.models.media.Content;
@@ -7,25 +8,38 @@ import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.springdoc.core.customizers.GlobalOperationCustomizer;
+import org.springdoc.core.utils.SpringDocAnnotationsUtils;
 import org.springframework.web.method.HandlerMethod;
+import vook.server.api.web.common.response.CommonApiResponse;
 import vook.server.api.web.common.swagger.annotation.IncludeBadRequestResponse;
+import vook.server.api.web.common.swagger.annotation.IncludeOkResponse;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 
+@RequiredArgsConstructor
 public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer {
+
+    private final Supplier<OpenAPI> openAPISupplier;
 
     @Override
     public Operation customize(Operation operation, HandlerMethod handlerMethod) {
-        applyDefaultOkApiResponse(operation); //200
+        applyOkApiResponse(operation, handlerMethod); //200
         applyBadRequestApiResponse(operation, handlerMethod); //400
         applyUnauthorizedApiResponse(operation); //401
         applyInternalServerErrorApiResponse(operation); //500
         return operation;
     }
 
-    private void applyDefaultOkApiResponse(Operation operation) {
+    private void applyOkApiResponse(Operation operation, HandlerMethod handlerMethod) {
+        IncludeOkResponse methodAnnotation = handlerMethod.getMethodAnnotation(IncludeOkResponse.class);
+        if (methodAnnotation == null) {
+            return;
+        }
+
         ApiResponse apiResponse = operation.getResponses().computeIfAbsent(
                 "200",
                 k -> new ApiResponse().description("OK")
@@ -38,15 +52,16 @@ public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer 
             apiResponse.getContent().remove("*/*");
         }
 
-        // Content가 존재하면 종료
-        if (!apiResponse.getContent().isEmpty()) {
-            return;
+        Class<?> type = methodAnnotation.implementation();
+        if (type == null || type == Void.class) {
+            // Content가 존재하지 않으면 기본 성공 응답 추가
+            apiResponse.getContent().computeIfAbsent("application/json", k -> new MediaType()
+                    .schema(SpringDocAnnotationsUtils.resolveSchemaFromType(CommonApiResponse.class, openAPISupplier.get().getComponents(), null))
+                    .addExamples("성공", new Example().$ref(ComponentRefConsts.Example.SUCCESS)));
+        } else {
+            Schema schema = SpringDocAnnotationsUtils.resolveSchemaFromType(type, openAPISupplier.get().getComponents(), null);
+            apiResponse.getContent().computeIfAbsent("application/json", k -> new MediaType().schema(schema));
         }
-
-        // Content가 존재하지 않으면 기본 성공 응답 추가
-        apiResponse.getContent().computeIfAbsent("application/json", k -> new MediaType()
-                .schema(new Schema<>().$ref(ComponentRefConsts.Schema.COMMON_API_RESPONSE))
-                .addExamples("성공", new Example().$ref(ComponentRefConsts.Example.SUCCESS)));
     }
 
     private void applyBadRequestApiResponse(Operation operation, HandlerMethod handlerMethod) {
@@ -67,7 +82,7 @@ public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer 
         MediaType jsonType = apiResponse.getContent().computeIfAbsent("application/json", k -> new MediaType());
 
         if (jsonType.getSchema() == null) {
-            jsonType.setSchema(new Schema<>().$ref(ComponentRefConsts.Schema.COMMON_API_RESPONSE));
+            jsonType.setSchema(getCommonApiResponse());
         }
 
         if (jsonType.getExamples() == null) {
@@ -108,7 +123,7 @@ public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer 
         MediaType jsonType = apiResponse.getContent().computeIfAbsent("application/json", k -> new MediaType());
 
         if (jsonType.getSchema() == null) {
-            jsonType.setSchema(new Schema<>().$ref(ComponentRefConsts.Schema.COMMON_API_RESPONSE));
+            jsonType.setSchema(getCommonApiResponse());
         }
 
         if (jsonType.getExamples() == null) {
@@ -116,6 +131,10 @@ public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer 
         }
 
         jsonType.getExamples().put("처리되지 않은 서버 에러", new Example().$ref(ComponentRefConsts.Example.UNHANDLED_ERROR));
+    }
+
+    private Schema getCommonApiResponse() {
+        return SpringDocAnnotationsUtils.resolveSchemaFromType(CommonApiResponse.class, openAPISupplier.get().getComponents(), null);
     }
 
 }
