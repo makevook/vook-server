@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import org.springdoc.core.customizers.GlobalOperationCustomizer;
 import org.springframework.web.method.HandlerMethod;
+import vook.server.api.web.common.swagger.annotation.IncludeBadRequestResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer 
     @Override
     public Operation customize(Operation operation, HandlerMethod handlerMethod) {
         applyDefaultOkApiResponse(operation); //200
+        applyBadRequestApiResponse(operation, handlerMethod); //400
         applyUnauthorizedApiResponse(operation); //401
         applyInternalServerErrorApiResponse(operation); //500
         return operation;
@@ -45,6 +47,36 @@ public class GlobalOperationCustomizerImpl implements GlobalOperationCustomizer 
         apiResponse.getContent().computeIfAbsent("application/json", k -> new MediaType()
                 .schema(new Schema<>().$ref(ComponentRefConsts.Schema.COMMON_API_RESPONSE))
                 .addExamples("성공", new Example().$ref(ComponentRefConsts.Example.SUCCESS)));
+    }
+
+    private void applyBadRequestApiResponse(Operation operation, HandlerMethod handlerMethod) {
+        IncludeBadRequestResponse methodAnnotation = handlerMethod.getMethodAnnotation(IncludeBadRequestResponse.class);
+        if (methodAnnotation == null) {
+            return;
+        }
+
+        ApiResponse apiResponse = operation.getResponses().computeIfAbsent(
+                "400",
+                k -> new ApiResponse().description("Bad Request")
+        );
+
+        if (apiResponse.getContent() == null) {
+            apiResponse.setContent(new Content());
+        }
+
+        MediaType jsonType = apiResponse.getContent().computeIfAbsent("application/json", k -> new MediaType());
+
+        if (jsonType.getSchema() == null) {
+            jsonType.setSchema(new Schema<>().$ref(ComponentRefConsts.Schema.COMMON_API_RESPONSE));
+        }
+
+        if (jsonType.getExamples() == null) {
+            jsonType.setExamples(new HashMap<>());
+        }
+
+        for (IncludeBadRequestResponse.Kind kind : methodAnnotation.value()) {
+            kind.applyExample(jsonType);
+        }
     }
 
     private void applyUnauthorizedApiResponse(Operation operation) {

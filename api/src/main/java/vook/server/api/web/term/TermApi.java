@@ -2,7 +2,6 @@ package vook.server.api.web.term;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -12,10 +11,13 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 import vook.server.api.web.common.response.CommonApiResponse;
-import vook.server.api.web.common.swagger.ComponentRefConsts;
+import vook.server.api.web.common.swagger.annotation.IncludeBadRequestResponse;
 import vook.server.api.web.term.reqres.*;
 
 import java.util.List;
+
+import static vook.server.api.web.common.swagger.annotation.IncludeBadRequestResponse.Kind.INVALID_PARAMETER;
+import static vook.server.api.web.common.swagger.annotation.IncludeBadRequestResponse.Kind.VIOLATION_BUSINESS_RULE;
 
 @Tag(name = "term", description = "용어 API")
 public interface TermApi {
@@ -40,18 +42,8 @@ public interface TermApi {
                             schema = @Schema(implementation = TermApiCreateResponse.class)
                     )
             ),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
-                            examples = {
-                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
-                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
-                            }
-                    )
-            ),
     })
+    @IncludeBadRequestResponse({INVALID_PARAMETER, VIOLATION_BUSINESS_RULE})
     CommonApiResponse<TermCreateResponse> create(VookLoginUser user, TermCreateRequest request);
 
     class TermApiCreateResponse extends CommonApiResponse<TermCreateResponse> {
@@ -83,17 +75,8 @@ public interface TermApi {
                             schema = @Schema(implementation = TermApiRetrieveResponse.class)
                     )
             ),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
-                            examples = {
-                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
-                            }
-                    )
-            ),
     })
+    @IncludeBadRequestResponse(VIOLATION_BUSINESS_RULE)
     CommonApiResponse<List<TermResponse>> retrieve(VookLoginUser user, @ParameterObject Pageable pageable, String vocabularyUid);
 
     class TermApiRetrieveResponse extends CommonApiResponse<TermResponse> {
@@ -109,19 +92,7 @@ public interface TermApi {
                     - TermNotFound: 삭제하려는 용어가 존재하지 않는 경우
                     - NotValidVocabularyOwner: 조회하려는 용어가 속해있는 용어집에 대한 권한이 없는 경우"""
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
-                            examples = {
-                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
-                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
-                            }
-                    )
-            ),
-    })
+    @IncludeBadRequestResponse({INVALID_PARAMETER, VIOLATION_BUSINESS_RULE})
     CommonApiResponse<Void> update(VookLoginUser user, String termUid, TermUpdateRequest request);
 
     @Operation(
@@ -134,18 +105,7 @@ public interface TermApi {
                     - TermNotFound: 삭제하려는 용어가 존재하지 않는 경우
                     - NotValidVocabularyOwner: 삭제하려는 용어가 속해있는 용어집에 대한 권한이 없는 경우"""
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
-                            examples = {
-                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
-                            }
-                    )
-            ),
-    })
+    @IncludeBadRequestResponse(VIOLATION_BUSINESS_RULE)
     CommonApiResponse<Void> delete(VookLoginUser user, String termUid);
 
     @Operation(
@@ -158,19 +118,7 @@ public interface TermApi {
                     - TermNotFound: 삭제하려는 용어가 존재하지 않는 경우
                     - NotValidVocabularyOwner: 삭제하려는 용어가 속해있는 용어집에 대한 권한이 없는 경우"""
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
-                            examples = {
-                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
-                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
-                            }
-                    )
-            ),
-    })
+    @IncludeBadRequestResponse({INVALID_PARAMETER, VIOLATION_BUSINESS_RULE})
     CommonApiResponse<Void> batchDelete(VookLoginUser user, TermBatchDeleteRequest request);
 
     @Operation(
@@ -190,18 +138,8 @@ public interface TermApi {
                             schema = @Schema(implementation = TermApiSearchResponse.class)
                     )
             ),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
-                            examples = {
-                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
-                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
-                            }
-                    )
-            ),
     })
+    @IncludeBadRequestResponse({INVALID_PARAMETER, VIOLATION_BUSINESS_RULE})
     CommonApiResponse<TermSearchResponse> search(VookLoginUser user, TermSearchRequest request);
 
     class TermApiSearchResponse extends CommonApiResponse<TermSearchResponse> {
