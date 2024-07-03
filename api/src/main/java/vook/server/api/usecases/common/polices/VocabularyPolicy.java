@@ -17,9 +17,11 @@ public class VocabularyPolicy {
     }
 
     public void validateOwner(List<String> userVocabularyUids, List<String> targetVocabularyUids) {
-        if (userVocabularyUids.stream().noneMatch(targetVocabularyUids::contains)) {
-            throw new NotValidVocabularyOwnerException();
-        }
+        targetVocabularyUids.forEach(uid -> {
+            if (!userVocabularyUids.contains(uid)) {
+                throw new NotValidVocabularyOwnerException();
+            }
+        });
     }
 
     public static class NotValidVocabularyOwnerException extends UseCaseException {
