@@ -79,7 +79,7 @@ public class TermRestController implements TermApi {
     @PostMapping("/batch-delete")
     public CommonApiResponse<Void> batchDelete(
             @AuthenticationPrincipal VookLoginUser user,
-            @RequestBody TermBatchDeleteRequest request
+            @Validated @RequestBody TermBatchDeleteRequest request
     ) {
         batchDeleteTermUseCase.execute(request.toCommand(user));
         return CommonApiResponse.ok();
@@ -89,7 +89,7 @@ public class TermRestController implements TermApi {
     @PostMapping("/search")
     public CommonApiResponse<TermSearchResponse> search(
             @AuthenticationPrincipal VookLoginUser user,
-            @RequestBody TermSearchRequest request
+            @Validated @RequestBody TermSearchRequest request
     ) {
         SearchTermUseCase.Result result = searchTermUseCase.execute(request.toCommand(user));
         TermSearchResponse response = TermSearchResponse.from(result);

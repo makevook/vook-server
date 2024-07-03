@@ -79,7 +79,7 @@ public class UserRestController implements UserApi {
     @PostMapping("/re-register")
     public CommonApiResponse<Void> reRegister(
             @AuthenticationPrincipal VookLoginUser user,
-            @RequestBody UserRegisterRequest request
+            @Validated @RequestBody UserRegisterRequest request
     ) {
         userService.reRegister(request.toCommand(user.getUid()));
         return CommonApiResponse.ok();
