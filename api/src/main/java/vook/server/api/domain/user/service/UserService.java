@@ -40,12 +40,6 @@ public class UserService {
         return getUserByUid(uid);
     }
 
-    public User getCompletedUserByUid(@NotBlank String uid) {
-        User user = getUserByUid(uid);
-        user.validateRegisterProcessCompleted();
-        return user;
-    }
-
     public void register(@Valid UserRegisterCommand command) {
         User user = getUserByUid(command.userUid());
         user.validateRegisterProcessReady();
@@ -89,6 +83,11 @@ public class UserService {
         user.reRegister(command.nickname(), command.marketingEmailOptIn());
     }
 
+    public void validateCompletedUserByUid(@NotBlank String uid) {
+        User user = getUserByUid(uid);
+        user.validateRegisterProcessCompleted();
+    }
+    
     private User getUserByUid(String uid) {
         return repository.findByUid(uid).orElseThrow(UserNotFoundException::new);
     }

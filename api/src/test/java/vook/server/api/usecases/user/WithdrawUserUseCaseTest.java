@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.UserRepository;
 import vook.server.api.domain.user.model.UserStatus;
 import vook.server.api.domain.vocabulary.model.TermRepository;
-import vook.server.api.domain.vocabulary.model.UserId;
+import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.model.VocabularyRepository;
 import vook.server.api.testhelper.IntegrationTestBase;
@@ -52,7 +52,7 @@ class WithdrawUserUseCaseTest extends IntegrationTestBase {
         var savedUser = userRepository.findByUid(user.getUid()).orElseThrow();
         assertThat(savedUser.getStatus()).isEqualTo(UserStatus.WITHDRAWN);
 
-        var savedVocabularies = vocabularyRepository.findAllByUserId(new UserId(savedUser.getId()));
+        var savedVocabularies = vocabularyRepository.findAllByUserUid(new UserUid(savedUser.getUid()));
         assertThat(savedVocabularies).isEmpty();
 
         var savedTerms = termRepository.findAll();

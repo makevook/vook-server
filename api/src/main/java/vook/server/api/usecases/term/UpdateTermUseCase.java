@@ -3,7 +3,6 @@ package vook.server.api.usecases.term;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.service.TermService;
@@ -22,9 +21,10 @@ public class UpdateTermUseCase {
     private final TermService termService;
 
     public void execute(Command command) {
-        User user = userService.getCompletedUserByUid(command.userUid());
+        userService.validateCompletedUserByUid(command.userUid());
+
         Term term = termService.getByUid(command.termUid());
-        vocabularyPolicy.validateOwner(user, term.getVocabulary());
+        vocabularyPolicy.validateOwner(command.userUid(), term.getVocabulary());
 
         termService.update(command.toServiceCommand());
     }

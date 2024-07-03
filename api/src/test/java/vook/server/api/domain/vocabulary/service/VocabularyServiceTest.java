@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
-import vook.server.api.domain.vocabulary.model.UserId;
+import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.data.VocabularyCreateCommand;
 import vook.server.api.infra.search.vocabulary.MeilisearchVocabularySearchService;
@@ -39,7 +39,7 @@ class VocabularyServiceTest extends IntegrationTestBase {
 
         VocabularyCreateCommand command = VocabularyCreateCommand.builder()
                 .name("단어장 이름")
-                .userId(new UserId(user.getId()))
+                .userUid(new UserUid(user.getUid()))
                 .build();
 
         // when
@@ -49,7 +49,7 @@ class VocabularyServiceTest extends IntegrationTestBase {
         assertThat(vocabulary.getId()).isNotNull();
         assertThat(vocabulary.getUid()).isNotNull();
         assertThat(vocabulary.getName()).isEqualTo("단어장 이름");
-        assertThat(vocabulary.getUserId()).isEqualTo(new UserId(user.getId()));
+        assertThat(vocabulary.getUserUid()).isEqualTo(new UserUid(user.getUid()));
 
         assertThat(searchService.isIndexExists(vocabulary.getUid())).isTrue();
     }
@@ -61,7 +61,7 @@ class VocabularyServiceTest extends IntegrationTestBase {
         User user = userCreator.createCompletedOnboardingUser();
         VocabularyCreateCommand command = VocabularyCreateCommand.builder()
                 .name("단어장 이름")
-                .userId(new UserId(user.getId()))
+                .userUid(new UserUid(user.getUid()))
                 .build();
         Vocabulary vocabulary = service.create(command);
 

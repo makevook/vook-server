@@ -3,7 +3,6 @@ package vook.server.api.usecases.vocabulary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
@@ -20,10 +19,10 @@ public class UpdateVocabularyUseCase {
     private final VocabularyPolicy vocabularyPolicy;
 
     public void execute(Command command) {
-        User user = userService.getCompletedUserByUid(command.userUid());
+        userService.validateCompletedUserByUid(command.userUid());
 
         Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
-        vocabularyPolicy.validateOwner(user, vocabulary);
+        vocabularyPolicy.validateOwner(command.userUid(), vocabulary);
 
         vocabularyService.update(command.toServiceCommand());
     }

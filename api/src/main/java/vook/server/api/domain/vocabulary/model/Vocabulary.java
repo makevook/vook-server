@@ -28,8 +28,8 @@ public class Vocabulary extends BaseEntity {
     private String name;
 
     @Embedded
-    @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
-    private UserId userId;
+    @AttributeOverride(name = "value", column = @Column(name = "user_uid", nullable = false))
+    private UserUid userUid;
 
     @OneToMany(mappedBy = "vocabulary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Term> terms = new HashSet<>();
@@ -40,17 +40,17 @@ public class Vocabulary extends BaseEntity {
 
     public static Vocabulary forCreateOf(
             String name,
-            UserId userId
+            UserUid userUid
     ) {
         Vocabulary result = new Vocabulary();
         result.uid = UUID.randomUUID().toString();
         result.name = name;
-        result.userId = userId;
+        result.userUid = userUid;
         return result;
     }
 
-    public boolean isValidOwner(UserId userId) {
-        return this.userId.equals(userId);
+    public boolean isValidOwner(UserUid userUid) {
+        return this.userUid.equals(userUid);
     }
 
     public void update(String name) {

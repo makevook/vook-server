@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import vook.server.api.domain.vocabulary.model.UserId;
+import vook.server.api.domain.vocabulary.model.UserUid;
 
 @Builder
 public record VocabularyCreateCommand(
@@ -13,6 +13,6 @@ public record VocabularyCreateCommand(
         String name,
 
         @NotNull
-        UserId userId
+        UserUid userUid
 ) {
 }

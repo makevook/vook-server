@@ -3,7 +3,6 @@ package vook.server.api.usecases.term;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.service.TermService;
@@ -26,10 +25,10 @@ public class BatchDeleteTermUseCase {
     }
 
     private void validate(String userUid, List<String> termUids) {
-        User user = userService.getCompletedUserByUid(userUid);
+        userService.validateCompletedUserByUid(userUid);
         termUids.forEach(termUid -> {
             Term term = termService.getByUid(termUid);
-            vocabularyPolicy.validateOwner(user, term.getVocabulary());
+            vocabularyPolicy.validateOwner(userUid, term.getVocabulary());
         });
     }
 

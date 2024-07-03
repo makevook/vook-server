@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserId {
-    private Long id;
+public class UserUid {
+    private String value;
 }

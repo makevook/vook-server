@@ -5,12 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.Funnel;
 import vook.server.api.domain.user.model.Job;
-import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
 import vook.server.api.domain.user.service.data.UserOnboardingCommand;
 import vook.server.api.domain.vocabulary.model.TemplateTerm;
 import vook.server.api.domain.vocabulary.model.TemplateVocabularyName;
-import vook.server.api.domain.vocabulary.model.UserId;
+import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.TemplateVocabularyService;
 import vook.server.api.domain.vocabulary.service.TermService;
@@ -33,12 +32,13 @@ public class OnboardingUserUseCase {
     public void execute(Command command) {
         userService.onboarding(command.toOnboardingCommand());
 
-        User user = userService.getCompletedUserByUid(command.userUid());
+        userService.validateCompletedUserByUid(command.userUid());
+
         TemplateVocabularyName vocabularyName = vocabularyNameFrom(command.job());
         Vocabulary vocabulary = vocabularyService.create(
                 VocabularyCreateCommand.builder()
                         .name(vocabularyName.name())
-                        .userId(new UserId(user.getId()))
+                        .userUid(new UserUid(command.userUid()))
                         .build()
         );
 

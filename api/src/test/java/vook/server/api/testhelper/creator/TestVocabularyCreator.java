@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.vocabulary.model.Term;
-import vook.server.api.domain.vocabulary.model.UserId;
+import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.TermService;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
@@ -34,7 +34,7 @@ public class TestVocabularyCreator {
         return vocabularyService.create(
                 VocabularyCreateCommand.builder()
                         .name("testVocabulary" + suffix)
-                        .userId(new UserId(user.getId()))
+                        .userUid(new UserUid(user.getUid()))
                         .build()
         );
     }

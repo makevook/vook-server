@@ -3,9 +3,8 @@ package vook.server.api.usecases.vocabulary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
-import vook.server.api.domain.vocabulary.model.UserId;
+import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
 import vook.server.api.domain.vocabulary.service.data.VocabularyCreateCommand;
 
@@ -18,10 +17,11 @@ public class CreateVocabularyUseCase {
     private final VocabularyService vocabularyService;
 
     public void execute(Command command) {
-        User user = userService.getCompletedUserByUid(command.userUid());
+        userService.validateCompletedUserByUid(command.userUid());
+
         vocabularyService.create(VocabularyCreateCommand.builder()
                 .name(command.name())
-                .userId(new UserId(user.getId()))
+                .userUid(new UserUid(command.userUid()))
                 .build()
         );
     }

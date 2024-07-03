@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import vook.server.api.domain.vocabulary.exception.VocabularyLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
-import vook.server.api.domain.vocabulary.model.UserId;
+import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.model.VocabularyRepository;
 import vook.server.api.domain.vocabulary.service.data.VocabularyCreateCommand;
@@ -22,17 +22,21 @@ public class VocabularyService {
     private final VocabularyRepository repository;
     private final SearchManagementService searchService;
 
-    public List<Vocabulary> findAllBy(@NotNull UserId userId) {
-        return repository.findAllByUserId(userId);
+    public List<Vocabulary> findAllBy(@NotNull UserUid userUid) {
+        return repository.findAllByUserUid(userUid);
+    }
+
+    public List<String> findAllUidsBy(@NotNull UserUid userUid) {
+        return repository.findAllUidsByUserUid(userUid);
     }
 
     public Vocabulary create(@Valid VocabularyCreateCommand command) {
-        UserId userId = command.userId();
-        if (repository.findAllByUserId(userId).size() >= 3) {
+        UserUid userUid = command.userUid();
+        if (repository.findAllByUserUid(userUid).size() >= 3) {
             throw new VocabularyLimitExceededException();
         }
 
-        Vocabulary saved = repository.save(Vocabulary.forCreateOf(command.name(), new UserId(userId.getId())));
+        Vocabulary saved = repository.save(Vocabulary.forCreateOf(command.name(), userUid));
         searchService.save(saved);
         return saved;
     }

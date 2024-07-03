@@ -28,6 +28,12 @@ services:
       - MEILI_MASTER_KEY=aSampleMasterKey
     mem_limit: 1000m
     restart: unless-stopped
+  redis:
+    image: redis:7.2.5
+    ports:
+      - "6379:6379"
+    mem_limit: 100m
+    restart: unless-stopped
 
 volumes:
   db-data: {}
