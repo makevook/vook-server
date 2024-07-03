@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface VocabularyRepository extends JpaRepository<Vocabulary, Long> {
-    List<Vocabulary> findAllByUserId(UserId userId);
+    List<Vocabulary> findAllByUserUid(UserUid userUid);
 
     Optional<Vocabulary> findByUid(String vocabularyUid);
 }

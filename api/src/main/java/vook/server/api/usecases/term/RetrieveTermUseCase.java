@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
@@ -26,9 +25,10 @@ public class RetrieveTermUseCase {
     private final TermSearchService termSearchService;
 
     public Result execute(Command command) {
-        User user = userService.getCompletedUserByUid(command.userUid());
+        userService.validateCompletedUserByUid(command.userUid());
+        
         Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
-        vocabularyPolicy.validateOwner(user, vocabulary);
+        vocabularyPolicy.validateOwner(command.userUid(), vocabulary);
 
         Page<Term> termPage = termSearchService.findAllBy(command.vocabularyUid(), command.pageable());
         Page<Result.Tuple> tuplePage = termPage.map(Result.Tuple::from);

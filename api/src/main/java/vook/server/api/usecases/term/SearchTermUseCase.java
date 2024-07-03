@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import vook.server.api.domain.user.model.User;
-import vook.server.api.domain.user.service.UserService;
-import vook.server.api.domain.vocabulary.model.UserId;
+import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
@@ -26,14 +24,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SearchTermUseCase {
 
-    private final UserService userService;
     private final VocabularyService vocabularyService;
     private final VocabularyPolicy vocabularyPolicy;
     private final SearchService searchService;
 
     public Result execute(@Valid Command command) {
-        User user = userService.getCompletedUserByUid(command.userUid());
-        List<Vocabulary> userVocabularies = vocabularyService.findAllBy(new UserId(user.getId()));
+        List<Vocabulary> userVocabularies = vocabularyService.findAllBy(new UserUid(command.userUid()));
         vocabularyPolicy.validateOwner(userVocabularies, command.vocabularyUids());
 
         SearchService.Result result = searchService.search(command.toSearchParams());

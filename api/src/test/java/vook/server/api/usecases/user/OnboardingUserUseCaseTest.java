@@ -9,7 +9,7 @@ import vook.server.api.domain.user.model.Job;
 import vook.server.api.domain.user.model.UserRepository;
 import vook.server.api.domain.vocabulary.model.TemplateVocabularyName;
 import vook.server.api.domain.vocabulary.model.TermRepository;
-import vook.server.api.domain.vocabulary.model.UserId;
+import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.VocabularyRepository;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestTemplateVocabularyCreator;
@@ -49,7 +49,7 @@ class OnboardingUserUseCaseTest extends IntegrationTestBase {
         var savedUser = userRepository.findByUid(user.getUid()).orElseThrow();
         assertThat(savedUser.getOnboardingCompleted()).isTrue();
 
-        var vocabularies = vocabularyRepository.findAllByUserId(new UserId(savedUser.getId()));
+        var vocabularies = vocabularyRepository.findAllByUserUid(new UserUid(savedUser.getUid()));
         assertThat(vocabularies).hasSize(1);
         var vocabulary = vocabularies.getFirst();
         assertThat(vocabulary.getName()).isEqualTo(TemplateVocabularyName.DESIGN.name());

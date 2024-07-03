@@ -1,8 +1,7 @@
 package vook.server.api.usecases.common.polices;
 
 import org.springframework.stereotype.Component;
-import vook.server.api.domain.user.model.User;
-import vook.server.api.domain.vocabulary.model.UserId;
+import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.usecases.common.exception.UseCaseException;
 
@@ -11,8 +10,8 @@ import java.util.List;
 @Component
 public class VocabularyPolicy {
 
-    public void validateOwner(User user, Vocabulary vocabulary) throws NotValidVocabularyOwnerException {
-        if (!vocabulary.isValidOwner(new UserId(user.getId()))) {
+    public void validateOwner(String userUid, Vocabulary vocabulary) throws NotValidVocabularyOwnerException {
+        if (!vocabulary.isValidOwner(new UserUid(userUid))) {
             throw new NotValidVocabularyOwnerException();
         }
     }
