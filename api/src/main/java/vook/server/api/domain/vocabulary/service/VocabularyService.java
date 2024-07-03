@@ -26,6 +26,10 @@ public class VocabularyService {
         return repository.findAllByUserUid(userUid);
     }
 
+    public List<String> findAllUidsBy(@NotNull UserUid userUid) {
+        return repository.findAllUidsByUserUid(userUid);
+    }
+
     public Vocabulary create(@Valid VocabularyCreateCommand command) {
         UserUid userUid = command.userUid();
         if (repository.findAllByUserUid(userUid).size() >= 3) {

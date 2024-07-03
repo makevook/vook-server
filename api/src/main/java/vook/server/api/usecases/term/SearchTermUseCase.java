@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import vook.server.api.domain.vocabulary.model.UserUid;
-import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
 import vook.server.api.usecases.common.polices.VocabularyPolicy;
 
@@ -29,8 +28,8 @@ public class SearchTermUseCase {
     private final SearchService searchService;
 
     public Result execute(@Valid Command command) {
-        List<Vocabulary> userVocabularies = vocabularyService.findAllBy(new UserUid(command.userUid()));
-        vocabularyPolicy.validateOwner(userVocabularies, command.vocabularyUids());
+        List<String> userVocabularyUids = vocabularyService.findAllUidsBy(new UserUid(command.userUid()));
+        vocabularyPolicy.validateOwner(userVocabularyUids, command.vocabularyUids());
 
         SearchService.Result result = searchService.search(command.toSearchParams());
         return SearchTermUseCase.Result.from(result);

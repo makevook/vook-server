@@ -9,10 +9,12 @@ import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
+import vook.server.api.usecases.common.polices.VocabularyPolicy;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class SearchTermUseCaseTest extends IntegrationTestBase {
@@ -66,5 +68,27 @@ class SearchTermUseCaseTest extends IntegrationTestBase {
                             assertThat(term.hits().getFirst().synonyms()).contains("하이브리드웹");
                         }
                 );
+    }
+
+    @Test
+    @DisplayName("용어 검색 - 실패; 사용자가 소유한 용어집이 아닌 경우")
+    void searchTerms_userDoesNotOwnVocabulary() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        testVocabularyCreator.createVocabulary(user);
+        testVocabularyCreator.createVocabulary(user);
+
+        User anotherUser = testUserCreator.createCompletedOnboardingUser();
+        Vocabulary anotherVocabulary = testVocabularyCreator.createVocabulary(anotherUser);
+
+        SearchTermUseCase.Command command = SearchTermUseCase.Command.builder()
+                .userUid(user.getUid())
+                .vocabularyUids(List.of(anotherVocabulary.getUid()))
+                .query("하이브리드")
+                .build();
+
+        // when, then
+        assertThatThrownBy(() -> searchTermUseCase.execute(command))
+                .isInstanceOf(VocabularyPolicy.NotValidVocabularyOwnerException.class);
     }
 }

@@ -16,7 +16,8 @@ import vook.server.api.domain.vocabulary.model.TermRepository;
 import vook.server.api.domain.vocabulary.service.TemplateVocabularyService;
 import vook.server.api.domain.vocabulary.service.data.TemplateVocabularyCreateCommand;
 import vook.server.api.infra.search.demo.MeilisearchDemoTermSearchService;
-import vook.server.api.infra.vocabulary.VocabularyJpaRepository;
+import vook.server.api.infra.vocabulary.cache.UserVocabularyCacheRepository;
+import vook.server.api.infra.vocabulary.jpa.VocabularyJpaRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +33,7 @@ public class InitService {
     private final TemplateVocabularyRepository templateVocabularyRepository;
     private final TermRepository termRepository;
     private final VocabularyJpaRepository vocabularyJpaRepository;
+    private final UserVocabularyCacheRepository userVocabularyCacheRepository;
     private final UserInfoRepository userInfoRepository;
     private final SocialUserRepository socialUserRepository;
     private final UserRepository userRepository;
@@ -80,6 +82,7 @@ public class InitService {
         // 용어집
         termRepository.deleteAllInBatch();
         vocabularyJpaRepository.deleteAllInBatch();
+        userVocabularyCacheRepository.deleteAll();
 
         // 사용자
         userInfoRepository.deleteAllInBatch();

@@ -6,6 +6,8 @@ import java.util.Optional;
 public interface VocabularyRepository {
     List<Vocabulary> findAllByUserUid(UserUid userUid);
 
+    List<String> findAllUidsByUserUid(UserUid userUid);
+
     Optional<Vocabulary> findByUid(String vocabularyUid);
 
     Vocabulary save(Vocabulary vocabulary);

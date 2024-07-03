@@ -16,8 +16,8 @@ public class VocabularyPolicy {
         }
     }
 
-    public void validateOwner(List<Vocabulary> userVocabularies, List<String> vocabularyUids) {
-        if (userVocabularies.stream().noneMatch(v -> vocabularyUids.contains(v.getUid()))) {
+    public void validateOwner(List<String> userVocabularyUids, List<String> targetVocabularyUids) {
+        if (userVocabularyUids.stream().noneMatch(targetVocabularyUids::contains)) {
             throw new NotValidVocabularyOwnerException();
         }
     }
