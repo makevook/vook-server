@@ -7,7 +7,7 @@ import vook.server.api.domain.user.model.Funnel;
 import vook.server.api.domain.user.model.Job;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
-import vook.server.api.domain.user.service.data.OnboardingCommand;
+import vook.server.api.domain.user.service.data.UserOnboardingCommand;
 import vook.server.api.domain.vocabulary.model.TemplateTerm;
 import vook.server.api.domain.vocabulary.model.TemplateVocabularyName;
 import vook.server.api.domain.vocabulary.model.UserId;
@@ -74,8 +74,8 @@ public class OnboardingUserUseCase {
             Funnel funnel,
             Job job
     ) {
-        public OnboardingCommand toOnboardingCommand() {
-            return OnboardingCommand.builder()
+        public UserOnboardingCommand toOnboardingCommand() {
+            return UserOnboardingCommand.builder()
                     .userUid(userUid)
                     .funnel(funnel)
                     .job(job)

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Builder
-public record RegisterCommand(
+public record UserRegisterCommand(
         @NotBlank
         String userUid,
 

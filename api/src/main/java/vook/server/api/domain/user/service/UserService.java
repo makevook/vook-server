@@ -6,9 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import vook.server.api.domain.user.exception.UserNotFoundException;
 import vook.server.api.domain.user.model.*;
-import vook.server.api.domain.user.service.data.OnboardingCommand;
-import vook.server.api.domain.user.service.data.RegisterCommand;
-import vook.server.api.domain.user.service.data.SignUpFromSocialCommand;
+import vook.server.api.domain.user.service.data.UserOnboardingCommand;
+import vook.server.api.domain.user.service.data.UserRegisterCommand;
+import vook.server.api.domain.user.service.data.UserSignUpFromSocialCommand;
 import vook.server.api.globalcommon.annotation.DomainService;
 
 import java.util.Optional;
@@ -25,7 +25,7 @@ public class UserService {
         return socialUserRepository.findByProviderAndProviderUserId(provider, providerUserId);
     }
 
-    public SocialUser signUpFromSocial(@Valid SignUpFromSocialCommand command) {
+    public SocialUser signUpFromSocial(@Valid UserSignUpFromSocialCommand command) {
         User user = repository
                 .findByEmail(command.email())
                 .orElseGet(() -> repository.save(command.toNewUser()));
@@ -46,7 +46,7 @@ public class UserService {
         return user;
     }
 
-    public void register(@Valid RegisterCommand command) {
+    public void register(@Valid UserRegisterCommand command) {
         User user = getUserByUid(command.userUid());
         user.validateRegisterProcessReady();
 
@@ -58,7 +58,7 @@ public class UserService {
         user.register(userInfo);
     }
 
-    public void onboarding(@Valid OnboardingCommand command) {
+    public void onboarding(@Valid UserOnboardingCommand command) {
         User user = getUserByUid(command.userUid());
         user.validateOnboardingProcessReady();
 
@@ -82,7 +82,7 @@ public class UserService {
         user.withdraw();
     }
 
-    public void reRegister(RegisterCommand command) {
+    public void reRegister(UserRegisterCommand command) {
         User user = getUserByUid(command.userUid());
         user.validateReRegisterProcessReady();
 

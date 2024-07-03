@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.SocialUser;
 import vook.server.api.domain.user.service.UserService;
-import vook.server.api.domain.user.service.data.SignUpFromSocialCommand;
+import vook.server.api.domain.user.service.data.UserSignUpFromSocialCommand;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 
 @Slf4j
@@ -46,7 +46,7 @@ public class VookOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private VookLoginUser signUpUser(OAuth2Response oAuth2Response) {
-        SignUpFromSocialCommand command = SignUpFromSocialCommand.builder()
+        UserSignUpFromSocialCommand command = UserSignUpFromSocialCommand.builder()
                 .provider(oAuth2Response.getProvider())
                 .providerUserId(oAuth2Response.getProviderId())
                 .email(oAuth2Response.getEmail())

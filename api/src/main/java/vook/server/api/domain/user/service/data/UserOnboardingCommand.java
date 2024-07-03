@@ -6,7 +6,7 @@ import vook.server.api.domain.user.model.Funnel;
 import vook.server.api.domain.user.model.Job;
 
 @Builder
-public record OnboardingCommand(
+public record UserOnboardingCommand(
         @NotBlank
         String userUid,
 
