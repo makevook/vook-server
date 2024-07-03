@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
-import vook.server.api.domain.vocabulary.service.TermSearchService;
-import vook.server.api.domain.vocabulary.service.VocabularySearchService;
+import vook.server.api.domain.vocabulary.service.TermService;
+import vook.server.api.domain.vocabulary.service.VocabularyService;
 import vook.server.api.infra.search.common.MeilisearchProperties;
 import vook.server.api.infra.search.common.MeilisearchService;
 import vook.server.api.usecases.term.SearchTermUseCase;
@@ -28,7 +28,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class MeilisearchVocabularySearchService extends MeilisearchService implements VocabularySearchService, TermSearchService, SearchTermUseCase.TermSearchService {
+public class MeilisearchVocabularySearchService
+        extends
+        MeilisearchService
+        implements
+        VocabularyService.SearchManagementService,
+        TermService.SearchManagementService,
+        SearchTermUseCase.SearchService {
 
     private final ObjectMapper objectMapper;
 
@@ -72,18 +78,18 @@ public class MeilisearchVocabularySearchService extends MeilisearchService imple
     }
 
     @Override
-    public void saveVocabulary(Vocabulary saved) {
+    public void save(Vocabulary saved) {
         createIndex(saved.getUid(), "uid");
     }
 
     @Override
-    public void deleteVocabulary(Vocabulary vocabulary) {
+    public void delete(Vocabulary vocabulary) {
         TaskInfo taskInfo = client.deleteIndex(vocabulary.getUid());
         client.waitForTask(taskInfo.getTaskUid());
     }
 
     @Override
-    public void saveTerm(Term term) {
+    public void save(Term term) {
         saveOrReplaceTerm(term);
     }
 

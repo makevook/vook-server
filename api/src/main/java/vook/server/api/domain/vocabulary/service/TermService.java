@@ -23,7 +23,7 @@ public class TermService {
 
     private final TermRepository termRepository;
     private final VocabularyRepository vocabularyRepository;
-    private final TermSearchService termSearchService;
+    private final SearchManagementService searchManagementService;
 
     public Term create(@Valid TermCreateCommand command) {
         Term term = command.toEntity(vocabularyRepository::findByUid);
@@ -32,7 +32,7 @@ public class TermService {
             throw new TermLimitExceededException();
         }
         Term saved = termRepository.save(term);
-        termSearchService.saveTerm(saved);
+        searchManagementService.save(saved);
         return saved;
     }
 
@@ -48,7 +48,7 @@ public class TermService {
                 .map(term -> term.toEntity(vocabulary))
                 .toList();
         termRepository.saveAll(terms);
-        termSearchService.saveAll(terms);
+        searchManagementService.saveAll(terms);
     }
 
     public Term getByUid(@NotBlank String uid) {
@@ -59,14 +59,14 @@ public class TermService {
         Term term = termRepository.findByUid(serviceCommand.uid()).orElseThrow(TermNotFoundException::new);
         Term updateTerm = serviceCommand.toEntity();
         term.update(updateTerm);
-        termSearchService.update(term);
+        searchManagementService.update(term);
     }
 
     public void delete(@NotBlank String uid) {
         Term term = termRepository.findByUid(uid).orElseThrow(TermNotFoundException::new);
         term.getVocabulary().removeTerm(term);
         termRepository.delete(term);
-        termSearchService.delete(term);
+        searchManagementService.delete(term);
     }
 
     public void batchDelete(
@@ -77,6 +77,18 @@ public class TermService {
         List<Term> terms = termRepository.findByUidIn(termUids);
         terms.forEach(term -> term.getVocabulary().removeTerm(term));
         termRepository.deleteAll(terms);
-        termSearchService.deleteAll(terms);
+        searchManagementService.deleteAll(terms);
+    }
+
+    public interface SearchManagementService {
+        void save(Term term);
+
+        void update(Term term);
+
+        void delete(Term term);
+
+        void saveAll(List<Term> terms);
+
+        void deleteAll(List<Term> terms);
     }
 }
