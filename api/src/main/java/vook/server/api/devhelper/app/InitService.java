@@ -9,10 +9,14 @@ import vook.server.api.domain.demo.model.DemoTermSynonymRepository;
 import vook.server.api.domain.user.model.SocialUserRepository;
 import vook.server.api.domain.user.model.UserInfoRepository;
 import vook.server.api.domain.user.model.UserRepository;
-import vook.server.api.domain.vocabulary.model.*;
+import vook.server.api.domain.vocabulary.model.TemplateTermRepository;
+import vook.server.api.domain.vocabulary.model.TemplateVocabularyName;
+import vook.server.api.domain.vocabulary.model.TemplateVocabularyRepository;
+import vook.server.api.domain.vocabulary.model.TermRepository;
 import vook.server.api.domain.vocabulary.service.TemplateVocabularyService;
 import vook.server.api.domain.vocabulary.service.data.TemplateVocabularyCreateCommand;
 import vook.server.api.infra.search.demo.MeilisearchDemoTermSearchService;
+import vook.server.api.infra.vocabulary.VocabularyJpaRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +31,7 @@ public class InitService {
     private final TemplateTermRepository templateTermRepository;
     private final TemplateVocabularyRepository templateVocabularyRepository;
     private final TermRepository termRepository;
-    private final VocabularyRepository vocabularyRepository;
+    private final VocabularyJpaRepository vocabularyJpaRepository;
     private final UserInfoRepository userInfoRepository;
     private final SocialUserRepository socialUserRepository;
     private final UserRepository userRepository;
@@ -75,7 +79,7 @@ public class InitService {
 
         // 용어집
         termRepository.deleteAllInBatch();
-        vocabularyRepository.deleteAllInBatch();
+        vocabularyJpaRepository.deleteAllInBatch();
 
         // 사용자
         userInfoRepository.deleteAllInBatch();
