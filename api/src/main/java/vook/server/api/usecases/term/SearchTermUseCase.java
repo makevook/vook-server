@@ -29,14 +29,14 @@ public class SearchTermUseCase {
     private final UserService userService;
     private final VocabularyService vocabularyService;
     private final VocabularyPolicy vocabularyPolicy;
-    private final TermSearchService termSearchService;
+    private final SearchService searchService;
 
     public Result execute(@Valid Command command) {
         User user = userService.getCompletedUserByUid(command.userUid());
         List<Vocabulary> userVocabularies = vocabularyService.findAllBy(new UserId(user.getId()));
         vocabularyPolicy.validateOwner(userVocabularies, command.vocabularyUids());
 
-        TermSearchService.Result result = termSearchService.search(command.toSearchParams());
+        SearchService.Result result = searchService.search(command.toSearchParams());
         return SearchTermUseCase.Result.from(result);
     }
 
@@ -56,8 +56,8 @@ public class SearchTermUseCase {
             String highlightPreTag,
             String highlightPostTag
     ) {
-        public TermSearchService.Params toSearchParams() {
-            return TermSearchService.Params.builder()
+        public SearchService.Params toSearchParams() {
+            return SearchService.Params.builder()
                     .vocabularyUids(vocabularyUids)
                     .query(query)
                     .withFormat(withFormat)
@@ -72,7 +72,7 @@ public class SearchTermUseCase {
             String query,
             List<Record> records
     ) {
-        public static Result from(TermSearchService.Result input) {
+        public static Result from(SearchService.Result input) {
             return Result.builder()
                     .query(input.query())
                     .records(Record.from(input.records()))
@@ -83,9 +83,9 @@ public class SearchTermUseCase {
                 String vocabularyUid,
                 List<Term> hits
         ) {
-            public static List<Record> from(List<TermSearchService.Result.Record> input) {
+            public static List<Record> from(List<SearchService.Result.Record> input) {
                 List<Record> result = new ArrayList<>();
-                for (TermSearchService.Result.Record record : input) {
+                for (SearchService.Result.Record record : input) {
                     result.add(new Record(record.vocabularyUid(), Term.from(record)));
                 }
                 return result;
@@ -99,7 +99,7 @@ public class SearchTermUseCase {
                 String meaning,
                 String synonyms
         ) {
-            private static List<Term> from(TermSearchService.Result.Record record) {
+            private static List<Term> from(SearchService.Result.Record record) {
                 return record.hits().stream()
                         .map(hit -> {
                             Object formatted = hit.get("_formatted");
@@ -124,7 +124,7 @@ public class SearchTermUseCase {
         }
     }
 
-    public interface TermSearchService {
+    public interface SearchService {
         Result search(Params params);
 
         @Builder

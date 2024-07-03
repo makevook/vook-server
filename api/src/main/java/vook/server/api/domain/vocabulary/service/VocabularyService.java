@@ -20,7 +20,7 @@ import java.util.List;
 public class VocabularyService {
 
     private final VocabularyRepository repository;
-    private final VocabularySearchService searchService;
+    private final SearchManagementService searchService;
 
     public List<Vocabulary> findAllBy(@NotNull UserId userId) {
         return repository.findAllByUserId(userId);
@@ -33,7 +33,7 @@ public class VocabularyService {
         }
 
         Vocabulary saved = repository.save(Vocabulary.forCreateOf(command.name(), new UserId(userId.getId())));
-        searchService.saveVocabulary(saved);
+        searchService.save(saved);
         return saved;
     }
 
@@ -45,10 +45,16 @@ public class VocabularyService {
     public void delete(@NotBlank String vocabularyUid) {
         Vocabulary vocabulary = repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
         repository.delete(vocabulary);
-        searchService.deleteVocabulary(vocabulary);
+        searchService.delete(vocabulary);
     }
 
     public Vocabulary getByUid(@NotBlank String vocabularyUid) {
         return repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
+    }
+
+    public interface SearchManagementService {
+        void save(Vocabulary saved);
+
+        void delete(Vocabulary vocabulary);
     }
 }
