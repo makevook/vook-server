@@ -7,7 +7,7 @@ import vook.server.api.domain.user.model.SocialUser;
 import vook.server.api.domain.user.model.User;
 
 @Builder
-public record SignUpFromSocialCommand(
+public record UserSignUpFromSocialCommand(
         @NotBlank
         String provider,
 

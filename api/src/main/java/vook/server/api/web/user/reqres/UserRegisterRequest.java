@@ -5,7 +5,7 @@ import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import vook.server.api.domain.user.service.data.RegisterCommand;
+import vook.server.api.domain.user.service.data.UserRegisterCommand;
 
 public record UserRegisterRequest(
         @NotBlank
@@ -20,8 +20,8 @@ public record UserRegisterRequest(
         @NotNull
         Boolean marketingEmailOptIn
 ) {
-    public RegisterCommand toCommand(String userUid) {
-        return RegisterCommand.builder()
+    public UserRegisterCommand toCommand(String userUid) {
+        return UserRegisterCommand.builder()
                 .userUid(userUid)
                 .nickname(nickname)
                 .marketingEmailOptIn(marketingEmailOptIn)

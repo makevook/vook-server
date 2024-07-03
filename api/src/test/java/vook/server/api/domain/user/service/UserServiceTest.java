@@ -11,9 +11,9 @@ import vook.server.api.domain.user.model.Funnel;
 import vook.server.api.domain.user.model.Job;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.model.UserStatus;
-import vook.server.api.domain.user.service.data.OnboardingCommand;
-import vook.server.api.domain.user.service.data.RegisterCommand;
-import vook.server.api.domain.user.service.data.SignUpFromSocialCommand;
+import vook.server.api.domain.user.service.data.UserOnboardingCommand;
+import vook.server.api.domain.user.service.data.UserRegisterCommand;
+import vook.server.api.domain.user.service.data.UserSignUpFromSocialCommand;
 import vook.server.api.globalcommon.exception.ParameterValidateException;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
@@ -61,31 +61,31 @@ class UserServiceTest extends IntegrationTestBase {
     Collection<DynamicTest> signUpFromSocial_ParameterError() {
         return List.of(
                 DynamicTest.dynamicTest("provider가 누락된 경우", () -> {
-                    assertThatThrownBy(() -> service.signUpFromSocial(new SignUpFromSocialCommand(null, "providerUserId", "email")))
+                    assertThatThrownBy(() -> service.signUpFromSocial(new UserSignUpFromSocialCommand(null, "providerUserId", "email")))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("provider가 빈 문자인 경우", () -> {
-                    assertThatThrownBy(() -> service.signUpFromSocial(new SignUpFromSocialCommand("", "providerUserId", "email")))
+                    assertThatThrownBy(() -> service.signUpFromSocial(new UserSignUpFromSocialCommand("", "providerUserId", "email")))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("providerUserId가 누락된 경우", () -> {
-                    assertThatThrownBy(() -> service.signUpFromSocial(new SignUpFromSocialCommand("provider", null, "email")))
+                    assertThatThrownBy(() -> service.signUpFromSocial(new UserSignUpFromSocialCommand("provider", null, "email")))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("providerUserId가 빈 문자열인 경우", () -> {
-                    assertThatThrownBy(() -> service.signUpFromSocial(new SignUpFromSocialCommand("provider", "", "email")))
+                    assertThatThrownBy(() -> service.signUpFromSocial(new UserSignUpFromSocialCommand("provider", "", "email")))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("email이 누락된 경우", () -> {
-                    assertThatThrownBy(() -> service.signUpFromSocial(new SignUpFromSocialCommand("provider", "providerUserId", null)))
+                    assertThatThrownBy(() -> service.signUpFromSocial(new UserSignUpFromSocialCommand("provider", "providerUserId", null)))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("email이 빈 문자열인 경우", () -> {
-                    assertThatThrownBy(() -> service.signUpFromSocial(new SignUpFromSocialCommand("provider", "providerUserId", "")))
+                    assertThatThrownBy(() -> service.signUpFromSocial(new UserSignUpFromSocialCommand("provider", "providerUserId", "")))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("email이 이메일 형식이 아닌 경우", () -> {
-                    assertThatThrownBy(() -> service.signUpFromSocial(new SignUpFromSocialCommand("provider", "providerUserId", "email")))
+                    assertThatThrownBy(() -> service.signUpFromSocial(new UserSignUpFromSocialCommand("provider", "providerUserId", "email")))
                             .isInstanceOf(ParameterValidateException.class);
                 })
         );
@@ -166,7 +166,7 @@ class UserServiceTest extends IntegrationTestBase {
         // given
         User unregisteredUser = testUserCreator.createUnregisteredUser();
 
-        RegisterCommand command = RegisterCommand.builder()
+        UserRegisterCommand command = UserRegisterCommand.builder()
                 .userUid(unregisteredUser.getUid())
                 .nickname("nickname")
                 .marketingEmailOptIn(true)
@@ -191,7 +191,7 @@ class UserServiceTest extends IntegrationTestBase {
         // given
         User registeredUser = testUserCreator.createRegisteredUser();
 
-        RegisterCommand command = RegisterCommand.builder()
+        UserRegisterCommand command = UserRegisterCommand.builder()
                 .userUid(registeredUser.getUid())
                 .nickname("nickname")
                 .marketingEmailOptIn(true)
@@ -208,7 +208,7 @@ class UserServiceTest extends IntegrationTestBase {
         // given
         User withdrawnUser = testUserCreator.createWithdrawnUser();
 
-        var command = RegisterCommand.builder()
+        var command = UserRegisterCommand.builder()
                 .userUid(withdrawnUser.getUid())
                 .nickname("nickname")
                 .marketingEmailOptIn(true)
@@ -224,27 +224,27 @@ class UserServiceTest extends IntegrationTestBase {
     Collection<DynamicTest> register_ParameterError() {
         return List.of(
                 DynamicTest.dynamicTest("유저 UID가 누락된 경우", () -> {
-                    assertThatThrownBy(() -> service.register(new RegisterCommand(null, "nickname", true)))
+                    assertThatThrownBy(() -> service.register(new UserRegisterCommand(null, "nickname", true)))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("유저 UID가 빈 문자열인 경우", () -> {
-                    assertThatThrownBy(() -> service.register(new RegisterCommand("", "nickname", true)))
+                    assertThatThrownBy(() -> service.register(new UserRegisterCommand("", "nickname", true)))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("닉네임이 누락된 경우", () -> {
-                    assertThatThrownBy(() -> service.register(new RegisterCommand("uid", null, true)))
+                    assertThatThrownBy(() -> service.register(new UserRegisterCommand("uid", null, true)))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("닉네임이 빈 문자열인 경우", () -> {
-                    assertThatThrownBy(() -> service.register(new RegisterCommand("uid", "", true)))
+                    assertThatThrownBy(() -> service.register(new UserRegisterCommand("uid", "", true)))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("닉네임 길이가 제한을 넘긴 경우", () -> {
-                    assertThatThrownBy(() -> service.register(new RegisterCommand("uid", "12345678901", true)))
+                    assertThatThrownBy(() -> service.register(new UserRegisterCommand("uid", "12345678901", true)))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("마케팅 이메일 수신 동의가 누락된 경우", () -> {
-                    assertThatThrownBy(() -> service.register(new RegisterCommand("uid", "nickname", null)))
+                    assertThatThrownBy(() -> service.register(new UserRegisterCommand("uid", "nickname", null)))
                             .isInstanceOf(ParameterValidateException.class);
                 })
         );
@@ -256,7 +256,7 @@ class UserServiceTest extends IntegrationTestBase {
         // given
         User registeredUser = testUserCreator.createRegisteredUser();
 
-        var command = OnboardingCommand.builder()
+        var command = UserOnboardingCommand.builder()
                 .userUid(registeredUser.getUid())
                 .funnel(Funnel.OTHER)
                 .job(Job.OTHER)
@@ -281,7 +281,7 @@ class UserServiceTest extends IntegrationTestBase {
         // given
         User unregisteredUser = testUserCreator.createUnregisteredUser();
 
-        var command = OnboardingCommand.builder()
+        var command = UserOnboardingCommand.builder()
                 .userUid(unregisteredUser.getUid())
                 .funnel(Funnel.OTHER)
                 .job(Job.OTHER)
@@ -298,7 +298,7 @@ class UserServiceTest extends IntegrationTestBase {
         // given
         User completedOnboardingUser = testUserCreator.createCompletedOnboardingUser();
 
-        var command = OnboardingCommand.builder()
+        var command = UserOnboardingCommand.builder()
                 .userUid(completedOnboardingUser.getUid())
                 .funnel(Funnel.OTHER)
                 .job(Job.OTHER)
@@ -314,11 +314,11 @@ class UserServiceTest extends IntegrationTestBase {
     Collection<DynamicTest> onboarding_ParameterError() {
         return List.of(
                 DynamicTest.dynamicTest("유저 UID가 누락된 경우", () -> {
-                    assertThatThrownBy(() -> service.onboarding(new OnboardingCommand(null, Funnel.OTHER, Job.OTHER)))
+                    assertThatThrownBy(() -> service.onboarding(new UserOnboardingCommand(null, Funnel.OTHER, Job.OTHER)))
                             .isInstanceOf(ParameterValidateException.class);
                 }),
                 DynamicTest.dynamicTest("유저 UID가 빈 문자열인 경우", () -> {
-                    assertThatThrownBy(() -> service.onboarding(new OnboardingCommand("", Funnel.OTHER, Job.OTHER)))
+                    assertThatThrownBy(() -> service.onboarding(new UserOnboardingCommand("", Funnel.OTHER, Job.OTHER)))
                             .isInstanceOf(ParameterValidateException.class);
                 })
         );
@@ -413,7 +413,7 @@ class UserServiceTest extends IntegrationTestBase {
         // given
         User withdrawnUser = testUserCreator.createWithdrawnUser();
 
-        RegisterCommand command = RegisterCommand.builder()
+        UserRegisterCommand command = UserRegisterCommand.builder()
                 .userUid(withdrawnUser.getUid())
                 .nickname("reRegister")
                 .marketingEmailOptIn(false)

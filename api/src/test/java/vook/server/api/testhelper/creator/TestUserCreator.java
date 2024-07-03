@@ -8,9 +8,9 @@ import vook.server.api.domain.user.model.Job;
 import vook.server.api.domain.user.model.SocialUser;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
-import vook.server.api.domain.user.service.data.OnboardingCommand;
-import vook.server.api.domain.user.service.data.RegisterCommand;
-import vook.server.api.domain.user.service.data.SignUpFromSocialCommand;
+import vook.server.api.domain.user.service.data.UserOnboardingCommand;
+import vook.server.api.domain.user.service.data.UserRegisterCommand;
+import vook.server.api.domain.user.service.data.UserSignUpFromSocialCommand;
 import vook.server.api.web.common.auth.app.TokenService;
 import vook.server.api.web.common.auth.data.GeneratedToken;
 
@@ -27,7 +27,7 @@ public class TestUserCreator {
 
     public User createUnregisteredUser() {
         SocialUser user = userService.signUpFromSocial(
-                SignUpFromSocialCommand.builder()
+                UserSignUpFromSocialCommand.builder()
                         .provider("testProvider")
                         .providerUserId("testProviderUserId" + userCounter.getAndIncrement())
                         .email("testEmail" + userCounter.getAndIncrement() + "@test.com")
@@ -39,7 +39,7 @@ public class TestUserCreator {
     public User createRegisteredUser() {
         User user = createUnregisteredUser();
         userService.register(
-                RegisterCommand.builder()
+                UserRegisterCommand.builder()
                         .userUid(user.getUid())
                         .nickname("testNick")
                         .marketingEmailOptIn(true)
@@ -51,7 +51,7 @@ public class TestUserCreator {
     public User createCompletedOnboardingUser() {
         User user = createRegisteredUser();
         userService.onboarding(
-                OnboardingCommand.builder()
+                UserOnboardingCommand.builder()
                         .userUid(user.getUid())
                         .funnel(Funnel.OTHER)
                         .job(Job.OTHER)

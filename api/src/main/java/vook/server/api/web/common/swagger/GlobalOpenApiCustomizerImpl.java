@@ -2,12 +2,8 @@ package vook.server.api.web.common.swagger;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.examples.Example;
-import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.media.StringSchema;
 import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import vook.server.api.web.common.response.ApiResponseCode;
-
-import java.util.Map;
 
 public class GlobalOpenApiCustomizerImpl implements GlobalOpenApiCustomizer {
     @Override
@@ -17,10 +13,6 @@ public class GlobalOpenApiCustomizerImpl implements GlobalOpenApiCustomizer {
 
     private static void applyCommonApiResponseSchema(OpenAPI openApi) {
         openApi.getComponents()
-                .addSchemas(getKey(ComponentRefConsts.Schema.COMMON_API_RESPONSE), new Schema<Map<String, Object>>()
-                        .addProperty("code", new StringSchema().description("결과 코드")).addRequiredItem("code")
-                        .addProperty("result", new Schema<>())
-                )
                 .addExamples(getKey(ComponentRefConsts.Example.SUCCESS), new Example()
                         .description("성공")
                         .value(String.format("""
