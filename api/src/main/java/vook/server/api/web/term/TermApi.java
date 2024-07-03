@@ -2,6 +2,7 @@ package vook.server.api.web.term;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -11,6 +12,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 import vook.server.api.web.common.response.CommonApiResponse;
+import vook.server.api.web.common.swagger.ComponentRefConsts;
 import vook.server.api.web.term.reqres.*;
 
 import java.util.List;
@@ -36,6 +38,17 @@ public interface TermApi {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = TermApiCreateResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
+                            examples = {
+                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
+                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
+                            }
                     )
             ),
     })
@@ -70,6 +83,16 @@ public interface TermApi {
                             schema = @Schema(implementation = TermApiRetrieveResponse.class)
                     )
             ),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
+                            examples = {
+                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
+                            }
+                    )
+            ),
     })
     CommonApiResponse<List<TermResponse>> retrieve(VookLoginUser user, @ParameterObject Pageable pageable, String vocabularyUid);
 
@@ -86,6 +109,19 @@ public interface TermApi {
                     - TermNotFound: 삭제하려는 용어가 존재하지 않는 경우
                     - NotValidVocabularyOwner: 조회하려는 용어가 속해있는 용어집에 대한 권한이 없는 경우"""
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
+                            examples = {
+                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
+                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
+                            }
+                    )
+            ),
+    })
     CommonApiResponse<Void> update(VookLoginUser user, String termUid, TermUpdateRequest request);
 
     @Operation(
@@ -98,6 +134,18 @@ public interface TermApi {
                     - TermNotFound: 삭제하려는 용어가 존재하지 않는 경우
                     - NotValidVocabularyOwner: 삭제하려는 용어가 속해있는 용어집에 대한 권한이 없는 경우"""
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
+                            examples = {
+                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
+                            }
+                    )
+            ),
+    })
     CommonApiResponse<Void> delete(VookLoginUser user, String termUid);
 
     @Operation(
@@ -110,6 +158,19 @@ public interface TermApi {
                     - TermNotFound: 삭제하려는 용어가 존재하지 않는 경우
                     - NotValidVocabularyOwner: 삭제하려는 용어가 속해있는 용어집에 대한 권한이 없는 경우"""
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
+                            examples = {
+                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
+                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
+                            }
+                    )
+            ),
+    })
     CommonApiResponse<Void> batchDelete(VookLoginUser user, TermBatchDeleteRequest request);
 
     @Operation(
@@ -127,6 +188,17 @@ public interface TermApi {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = TermApiSearchResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(ref = ComponentRefConsts.Schema.COMMON_API_RESPONSE),
+                            examples = {
+                                    @ExampleObject(name = "유효하지 않은 파라미터", ref = ComponentRefConsts.Example.INVALID_PARAMETER),
+                                    @ExampleObject(name = "비즈니스 규칙 위반", ref = ComponentRefConsts.Example.VIOLATION_BUSINESS_RULE)
+                            }
                     )
             ),
     })

@@ -40,7 +40,7 @@ public interface UserApi {
     }
 
     @Operation(
-            summary = "회원가입",
+            summary = "회원 가입",
             security = {
                     @SecurityRequirement(name = "AccessToken")
             },
@@ -65,7 +65,7 @@ public interface UserApi {
     CommonApiResponse<Void> register(VookLoginUser user, UserRegisterRequest request);
 
     @Operation(
-            summary = "온보딩 완료",
+            summary = "온보딩",
             security = {
                     @SecurityRequirement(name = "AccessToken")
             },
