@@ -58,7 +58,7 @@ public class CsvReader {
     }
 
     private <T> T createInstance(Class<T> clazz, List<String> fieldNames, String line) {
-        String[] values = line.split(DELIMITER);
+        String[] values = parseLine(line);
         T instance;
         try {
             instance = clazz.getDeclaredConstructor().newInstance();
@@ -71,5 +71,21 @@ public class CsvReader {
             throw new RuntimeException(e);
         }
         return instance;
+    }
+
+    private String[] parseLine(String line) {
+        return Arrays.stream(line.split(DELIMITER))
+                .map(String::trim)
+                .map(v -> processValue(v, v.startsWith("\"") && v.endsWith("\"")))
+                .toArray(String[]::new);
+    }
+
+    private String processValue(String value, boolean inQuotes) {
+        if (inQuotes) {
+            return value
+                    .substring(1, value.length() - 1) //앞 뒤 " 제거
+                    .replaceAll("\\\\n", "\n"); // \n -> 개행문자로 변환
+        }
+        return value;
     }
 }

@@ -15,7 +15,7 @@ CREATE TABLE `social_user` (
   PRIMARY KEY (`id`),
   KEY `FKcuirus7h2n9g0fp6rxtrkuiix` (`user_id`),
   CONSTRAINT `FKcuirus7h2n9g0fp6rxtrkuiix` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ```
 
 </details>
@@ -60,13 +60,12 @@ erDiagram
 }
 "users" {
   bigint_20_ id PK
-  datetime_6_ deleted_at
   varchar_255_ email
   datetime_6_ last_updated_at
   bit_1_ onboarding_completed
   datetime_6_ onboarding_completed_at
   datetime_6_ registered_at
-  enum__SOCIAL_LOGIN_COMPLETED___REGISTERED___WITHDRAWN__ status
+  varchar_30_ status
   varchar_255_ uid
   datetime_6_ withdrawn_at
 }

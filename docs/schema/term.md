@@ -8,11 +8,13 @@
 ```sql
 CREATE TABLE `term` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `meaning` varchar(2000) NOT NULL,
-  `term` varchar(100) NOT NULL,
-  `vocabulary_id` bigint(20) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
+  `meaning` varchar(2000) NOT NULL,
+  `synonym` varchar(255) DEFAULT NULL,
+  `term` varchar(100) NOT NULL,
+  `uid` varchar(255) DEFAULT NULL,
+  `vocabulary_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKk0u34gq7hfjfe9fnaqk90729c` (`vocabulary_id`),
   CONSTRAINT `FKk0u34gq7hfjfe9fnaqk90729c` FOREIGN KEY (`vocabulary_id`) REFERENCES `vocabulary` (`id`)
@@ -25,12 +27,14 @@ CREATE TABLE `term` (
 
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | bigint(20) |  | false | auto_increment | [term_synonym](term_synonym.md) |  |  |
-| meaning | varchar(2000) |  | false |  |  |  |  |
-| term | varchar(100) |  | false |  |  |  |  |
-| vocabulary_id | bigint(20) |  | false |  |  | [vocabulary](vocabulary.md) |  |
+| id | bigint(20) |  | false | auto_increment |  |  |  |
 | created_at | datetime(6) | NULL | true |  |  |  |  |
 | updated_at | datetime(6) | NULL | true |  |  |  |  |
+| meaning | varchar(2000) |  | false |  |  |  |  |
+| synonym | varchar(255) | NULL | true |  |  |  |  |
+| term | varchar(100) |  | false |  |  |  |  |
+| uid | varchar(255) | NULL | true |  |  |  |  |
+| vocabulary_id | bigint(20) |  | false |  |  | [vocabulary](vocabulary.md) |  |
 
 ## Constraints
 
@@ -51,29 +55,25 @@ CREATE TABLE `term` (
 ```mermaid
 erDiagram
 
-"term_synonym" }o--|| "term" : "FOREIGN KEY (term_id) REFERENCES term (id)"
 "term" }o--|| "vocabulary" : "FOREIGN KEY (vocabulary_id) REFERENCES vocabulary (id)"
 
 "term" {
   bigint_20_ id PK
-  varchar_2000_ meaning
-  varchar_100_ term
-  bigint_20_ vocabulary_id FK
   datetime_6_ created_at
   datetime_6_ updated_at
-}
-"term_synonym" {
-  bigint_20_ id PK
-  varchar_100_ synonym
-  bigint_20_ term_id FK
+  varchar_2000_ meaning
+  varchar_255_ synonym
+  varchar_100_ term
+  varchar_255_ uid
+  bigint_20_ vocabulary_id FK
 }
 "vocabulary" {
   bigint_20_ id PK
-  varchar_100_ name
   datetime_6_ created_at
   datetime_6_ updated_at
+  varchar_20_ name
   varchar_255_ uid
-  bigint_20_ user_id FK
+  bigint_20_ user_id
 }
 ```
 

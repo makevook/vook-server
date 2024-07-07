@@ -18,7 +18,7 @@ services:
     mem_limit: 300m
     restart: unless-stopped
   meilisearch:
-    image: getmeili/meilisearch:v1.8.0
+    image: getmeili/meilisearch:v1.8.3
     volumes:
       - meili_data:/meili_data
     ports:
@@ -27,6 +27,12 @@ services:
       - MEILI_ENV=development
       - MEILI_MASTER_KEY=aSampleMasterKey
     mem_limit: 1000m
+    restart: unless-stopped
+  redis:
+    image: redis:7.2.5
+    ports:
+      - "6379:6379"
+    mem_limit: 100m
     restart: unless-stopped
 
 volumes:

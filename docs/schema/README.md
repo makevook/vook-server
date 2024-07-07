@@ -6,10 +6,12 @@
 | ---- | ------- | ------- | ---- |
 | [demo_term](demo_term.md) | 5 |  | BASE TABLE |
 | [demo_term_synonym](demo_term_synonym.md) | 3 |  | BASE TABLE |
+| [event_publication](event_publication.md) | 6 |  | BASE TABLE |
 | [social_user](social_user.md) | 5 |  | BASE TABLE |
-| [term](term.md) | 6 |  | BASE TABLE |
-| [term_synonym](term_synonym.md) | 3 |  | BASE TABLE |
-| [users](users.md) | 10 |  | BASE TABLE |
+| [template_term](template_term.md) | 5 |  | BASE TABLE |
+| [template_vocabulary](template_vocabulary.md) | 2 |  | BASE TABLE |
+| [term](term.md) | 8 |  | BASE TABLE |
+| [users](users.md) | 9 |  | BASE TABLE |
 | [user_info](user_info.md) | 6 |  | BASE TABLE |
 | [vocabulary](vocabulary.md) | 6 |  | BASE TABLE |
 
@@ -20,10 +22,9 @@ erDiagram
 
 "demo_term_synonym" }o--|| "demo_term" : "FOREIGN KEY (demo_term_id) REFERENCES demo_term (id)"
 "social_user" }o--o| "users" : "FOREIGN KEY (user_id) REFERENCES users (id)"
+"template_term" }o--|| "template_vocabulary" : "FOREIGN KEY (template_vocabulary_id) REFERENCES template_vocabulary (id)"
 "term" }o--|| "vocabulary" : "FOREIGN KEY (vocabulary_id) REFERENCES vocabulary (id)"
-"term_synonym" }o--|| "term" : "FOREIGN KEY (term_id) REFERENCES term (id)"
 "user_info" |o--o| "users" : "FOREIGN KEY (user_id) REFERENCES users (id)"
-"vocabulary" }o--|| "users" : "FOREIGN KEY (user_id) REFERENCES users (id)"
 
 "demo_term" {
   bigint_20_ id PK
@@ -37,6 +38,14 @@ erDiagram
   varchar_100_ synonym
   bigint_20_ demo_term_id FK
 }
+"event_publication" {
+  uuid id PK
+  datetime_6_ completion_date
+  varchar_255_ event_type
+  varchar_255_ listener_id
+  datetime_6_ publication_date
+  varchar_255_ serialized_event
+}
 "social_user" {
   bigint_20_ id PK
   datetime_6_ created_at
@@ -44,46 +53,53 @@ erDiagram
   varchar_255_ provider_user_id
   bigint_20_ user_id FK
 }
-"term" {
+"template_term" {
   bigint_20_ id PK
   varchar_2000_ meaning
+  varchar_255_ synonym
   varchar_100_ term
-  bigint_20_ vocabulary_id FK
+  bigint_20_ template_vocabulary_id FK
+}
+"template_vocabulary" {
+  bigint_20_ id PK
+  varchar_20_ name
+}
+"term" {
+  bigint_20_ id PK
   datetime_6_ created_at
   datetime_6_ updated_at
-}
-"term_synonym" {
-  bigint_20_ id PK
-  varchar_100_ synonym
-  bigint_20_ term_id FK
+  varchar_2000_ meaning
+  varchar_255_ synonym
+  varchar_100_ term
+  varchar_255_ uid
+  bigint_20_ vocabulary_id FK
 }
 "users" {
   bigint_20_ id PK
-  datetime_6_ deleted_at
   varchar_255_ email
   datetime_6_ last_updated_at
   bit_1_ onboarding_completed
   datetime_6_ onboarding_completed_at
   datetime_6_ registered_at
-  enum__SOCIAL_LOGIN_COMPLETED___REGISTERED___WITHDRAWN__ status
+  varchar_30_ status
   varchar_255_ uid
   datetime_6_ withdrawn_at
 }
 "user_info" {
   bigint_20_ id PK
-  enum__X___FACEBOOK___LINKEDIN___INSTAGRAM___NAVER_BLOG___RECOMMENDATION___OTHER__ funnel
-  enum__PLANNER___DESIGNER___DEVELOPER___MARKETER___CEO___HR___OTHER__ job
+  varchar_20_ funnel
+  varchar_20_ job
   bit_1_ marketing_email_opt_in
-  varchar_255_ nickname
+  varchar_10_ nickname
   bigint_20_ user_id FK
 }
 "vocabulary" {
   bigint_20_ id PK
-  varchar_100_ name
   datetime_6_ created_at
   datetime_6_ updated_at
+  varchar_20_ name
   varchar_255_ uid
-  bigint_20_ user_id FK
+  bigint_20_ user_id
 }
 ```
 

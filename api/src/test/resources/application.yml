@@ -23,6 +23,8 @@ spring:
             scope:
               - profile
               - email
+  profiles:
+    include: modulith
 logging:
   level:
     org:
