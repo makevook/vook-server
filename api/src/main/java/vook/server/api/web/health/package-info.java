@@ -1,9 +1,8 @@
 @ApplicationModule(
         type = ApplicationModule.Type.OPEN,
-        allowedDependencies = {
-                "vook.server.api.web.common"
-        }
+        displayName = "Health Web",
+        allowedDependencies = {}
 )
-package vook.server.api.config;
+package vook.server.api.web.health;
 
 import org.springframework.modulith.ApplicationModule;

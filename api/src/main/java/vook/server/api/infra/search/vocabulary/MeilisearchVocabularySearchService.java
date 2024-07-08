@@ -19,7 +19,7 @@ import vook.server.api.domain.vocabulary.service.TermService;
 import vook.server.api.domain.vocabulary.service.VocabularyService;
 import vook.server.api.infra.search.common.MeilisearchProperties;
 import vook.server.api.infra.search.common.MeilisearchService;
-import vook.server.api.usecases.term.SearchTermUseCase;
+import vook.server.api.web.term.usecase.SearchTermUseCase;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;

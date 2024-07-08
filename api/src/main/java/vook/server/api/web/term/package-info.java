@@ -1,12 +1,12 @@
 @ApplicationModule(
         type = ApplicationModule.Type.OPEN,
-        displayName = "Infra",
+        displayName = "Term Web",
         allowedDependencies = {
-                "vook.server.api.domain.demo",
+                "vook.server.api.web.common",
+                "vook.server.api.domain.user",
                 "vook.server.api.domain.vocabulary",
-                "vook.server.api.web.term",
         }
 )
-package vook.server.api.infra;
+package vook.server.api.web.term;
 
 import org.springframework.modulith.ApplicationModule;
