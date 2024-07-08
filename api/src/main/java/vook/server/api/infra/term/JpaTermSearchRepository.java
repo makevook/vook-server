@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import vook.server.api.domain.vocabulary.model.QTerm;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.globalcommon.helper.querydsl.QuerydslHelper;
-import vook.server.api.usecases.term.RetrieveTermUseCase;
+import vook.server.api.web.term.usecase.RetrieveTermUseCase;
 
 import java.util.List;
 

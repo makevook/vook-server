@@ -7,14 +7,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.user.service.UserService;
-import vook.server.api.usecases.user.OnboardingUserUseCase;
-import vook.server.api.usecases.user.WithdrawUserUseCase;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 import vook.server.api.web.common.response.CommonApiResponse;
 import vook.server.api.web.user.reqres.UserInfoResponse;
 import vook.server.api.web.user.reqres.UserOnboardingRequest;
 import vook.server.api.web.user.reqres.UserRegisterRequest;
 import vook.server.api.web.user.reqres.UserUpdateInfoRequest;
+import vook.server.api.web.user.usecase.OnboardingUserUseCase;
+import vook.server.api.web.user.usecase.WithdrawUserUseCase;
 
 @Slf4j
 @RestController

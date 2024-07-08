@@ -1,7 +1,8 @@
 @ApplicationModule(
         type = ApplicationModule.Type.OPEN,
+        displayName = "User Domain",
         allowedDependencies = {
-                "common"
+                "vook.server.api.domain.common"
         }
 )
 package vook.server.api.domain.user;

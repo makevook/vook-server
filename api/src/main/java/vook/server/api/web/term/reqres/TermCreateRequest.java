@@ -3,8 +3,8 @@ package vook.server.api.web.term.reqres;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import vook.server.api.usecases.term.CreateTermUseCase;
 import vook.server.api.web.common.auth.data.VookLoginUser;
+import vook.server.api.web.term.usecase.CreateTermUseCase;
 
 import java.util.List;
 

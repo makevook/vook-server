@@ -1,7 +1,7 @@
 package vook.server.api.web.term.reqres;
 
 import lombok.Builder;
-import vook.server.api.usecases.term.CreateTermUseCase;
+import vook.server.api.web.term.usecase.CreateTermUseCase;
 
 @Builder
 public record TermCreateResponse(
