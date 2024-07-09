@@ -28,7 +28,7 @@ class TemplateVocabularyLogicTest extends IntegrationTestBase {
     void create() {
         // given
         TemplateVocabularyCreateCommand command = new TemplateVocabularyCreateCommand(
-                TemplateVocabularyName.DEVELOPMENT,
+                TemplateVocabularyType.DEVELOPMENT,
                 List.of(
                         new TemplateVocabularyCreateCommand.Term("term1", "meaning1", List.of("synonym1")),
                         new TemplateVocabularyCreateCommand.Term("term2", "meaning2", List.of("synonym2"))
@@ -44,7 +44,7 @@ class TemplateVocabularyLogicTest extends IntegrationTestBase {
 
         TemplateVocabulary vocabulary = vocabularies.getFirst();
         assertThat(vocabulary.getId()).isNotNull();
-        assertThat(vocabulary.getName()).isEqualTo(TemplateVocabularyName.DEVELOPMENT);
+        assertThat(vocabulary.getType()).isEqualTo(TemplateVocabularyType.DEVELOPMENT);
 
         List<TemplateTerm> terms = termRepository.findByTemplateVocabulary(vocabulary);
         assertThat(terms).hasSize(2);
@@ -58,10 +58,10 @@ class TemplateVocabularyLogicTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("템플릿 용어집 내 용어 조회 - 정상")
-    void getTermsByName() {
+    void getTermsByType() {
         // given
         TemplateVocabularyCreateCommand command = new TemplateVocabularyCreateCommand(
-                TemplateVocabularyName.DEVELOPMENT,
+                TemplateVocabularyType.DEVELOPMENT,
                 List.of(
                         new TemplateVocabularyCreateCommand.Term("term1", "meaning1", List.of("synonym1", "synonym2")),
                         new TemplateVocabularyCreateCommand.Term("term2", "meaning2", List.of("synonym3", "synonym4"))
@@ -70,7 +70,7 @@ class TemplateVocabularyLogicTest extends IntegrationTestBase {
         service.create(command);
 
         // when
-        List<TemplateTerm> terms = service.getTermsByName(TemplateVocabularyName.DEVELOPMENT);
+        List<TemplateTerm> terms = service.getTermsByType(TemplateVocabularyType.DEVELOPMENT);
 
         // then
         assertThat(terms).hasSize(2);

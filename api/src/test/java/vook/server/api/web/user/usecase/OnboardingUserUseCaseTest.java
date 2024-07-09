@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.Funnel;
 import vook.server.api.domain.user.model.Job;
 import vook.server.api.domain.user.model.UserRepository;
-import vook.server.api.domain.vocabulary.model.TemplateVocabularyName;
+import vook.server.api.domain.vocabulary.model.TemplateVocabularyType;
 import vook.server.api.domain.vocabulary.model.TermRepository;
 import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.VocabularyRepository;
@@ -52,7 +52,7 @@ class OnboardingUserUseCaseTest extends IntegrationTestBase {
         var vocabularies = vocabularyRepository.findAllByUserUid(new UserUid(savedUser.getUid()));
         assertThat(vocabularies).hasSize(1);
         var vocabulary = vocabularies.getFirst();
-        assertThat(vocabulary.getName()).isEqualTo(TemplateVocabularyName.DESIGN.name());
+        assertThat(vocabulary.getName()).isEqualTo(TemplateVocabularyType.DESIGN.getVocabularyName());
         assertThat(vocabulary.getTerms()).isNotEmpty();
     }
 }

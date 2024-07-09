@@ -13,7 +13,7 @@ import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
 import vook.server.api.domain.vocabulary.logic.dto.TermCreateAllCommand;
 import vook.server.api.domain.vocabulary.logic.dto.VocabularyCreateCommand;
 import vook.server.api.domain.vocabulary.model.TemplateTerm;
-import vook.server.api.domain.vocabulary.model.TemplateVocabularyName;
+import vook.server.api.domain.vocabulary.model.TemplateVocabularyType;
 import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 
@@ -34,15 +34,15 @@ public class OnboardingUserUseCase {
 
         userLogic.validateCompletedUserByUid(command.userUid());
 
-        TemplateVocabularyName vocabularyName = vocabularyNameFrom(command.job());
+        TemplateVocabularyType vocabularyType = vocabularyTypeFrom(command.job());
         Vocabulary vocabulary = vocabularyLogic.create(
                 VocabularyCreateCommand.builder()
-                        .name(vocabularyName.name())
+                        .name(vocabularyType.getVocabularyName())
                         .userUid(new UserUid(command.userUid()))
                         .build()
         );
 
-        List<TemplateTerm> terms = templateVocabularyLogic.getTermsByName(vocabularyName);
+        List<TemplateTerm> terms = templateVocabularyLogic.getTermsByType(vocabularyType);
         termLogic.createAll(
                 TermCreateAllCommand.builder()
                         .vocabularyUid(vocabulary.getUid())
@@ -59,13 +59,13 @@ public class OnboardingUserUseCase {
         );
     }
 
-    private TemplateVocabularyName vocabularyNameFrom(Job job) {
+    private TemplateVocabularyType vocabularyTypeFrom(Job job) {
         return switch (job) {
-            case PLANNER, DESIGNER -> TemplateVocabularyName.DEVELOPMENT;
-            case MARKETER -> TemplateVocabularyName.MARKETING;
-            case DEVELOPER -> TemplateVocabularyName.DESIGN;
-            case CEO, HR, OTHER -> TemplateVocabularyName.GENERAL_OFFICE;
-            case null -> TemplateVocabularyName.GENERAL_OFFICE;
+            case PLANNER, DESIGNER -> TemplateVocabularyType.DEVELOPMENT;
+            case MARKETER -> TemplateVocabularyType.MARKETING;
+            case DEVELOPER -> TemplateVocabularyType.DESIGN;
+            case CEO, HR, OTHER -> TemplateVocabularyType.GENERAL_OFFICE;
+            case null -> TemplateVocabularyType.GENERAL_OFFICE;
         };
     }
 
