@@ -7,10 +7,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import vook.server.api.usecases.term.*;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 import vook.server.api.web.common.response.CommonApiResponse;
 import vook.server.api.web.term.reqres.*;
+import vook.server.api.web.term.usecase.*;
 
 import java.util.List;
 

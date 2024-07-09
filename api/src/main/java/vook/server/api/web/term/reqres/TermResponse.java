@@ -2,7 +2,7 @@ package vook.server.api.web.term.reqres;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
-import vook.server.api.usecases.term.RetrieveTermUseCase;
+import vook.server.api.web.term.usecase.RetrieveTermUseCase;
 
 import java.time.LocalDateTime;
 import java.util.List;

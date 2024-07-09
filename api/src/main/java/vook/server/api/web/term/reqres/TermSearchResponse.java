@@ -1,7 +1,7 @@
 package vook.server.api.web.term.reqres;
 
 import lombok.Builder;
-import vook.server.api.usecases.term.SearchTermUseCase;
+import vook.server.api.web.term.usecase.SearchTermUseCase;
 
 import java.util.List;
 

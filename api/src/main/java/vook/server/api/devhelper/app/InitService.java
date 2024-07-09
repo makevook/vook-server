@@ -9,12 +9,12 @@ import vook.server.api.domain.demo.model.DemoTermSynonymRepository;
 import vook.server.api.domain.user.model.SocialUserRepository;
 import vook.server.api.domain.user.model.UserInfoRepository;
 import vook.server.api.domain.user.model.UserRepository;
+import vook.server.api.domain.vocabulary.logic.TemplateVocabularyLogic;
+import vook.server.api.domain.vocabulary.logic.dto.TemplateVocabularyCreateCommand;
 import vook.server.api.domain.vocabulary.model.TemplateTermRepository;
-import vook.server.api.domain.vocabulary.model.TemplateVocabularyName;
 import vook.server.api.domain.vocabulary.model.TemplateVocabularyRepository;
+import vook.server.api.domain.vocabulary.model.TemplateVocabularyType;
 import vook.server.api.domain.vocabulary.model.TermRepository;
-import vook.server.api.domain.vocabulary.service.TemplateVocabularyService;
-import vook.server.api.domain.vocabulary.service.data.TemplateVocabularyCreateCommand;
 import vook.server.api.infra.search.demo.MeilisearchDemoTermSearchService;
 import vook.server.api.infra.vocabulary.cache.UserVocabularyCacheRepository;
 import vook.server.api.infra.vocabulary.jpa.VocabularyJpaRepository;
@@ -41,7 +41,7 @@ public class InitService {
     private final TestTermsLoader testTermsLoader;
     private final MeilisearchDemoTermSearchService searchService;
 
-    private final TemplateVocabularyService templateVocabularyService;
+    private final TemplateVocabularyLogic templateVocabularyLogic;
 
     public void init() {
         deleteAll();
@@ -57,15 +57,15 @@ public class InitService {
         searchService.addTerms(demoTerms);
 
         // 템플릿 용어집
-        createTemplateVocabulary(TemplateVocabularyName.DEVELOPMENT, "classpath:init/템플릿용어집-개발.tsv");
-        createTemplateVocabulary(TemplateVocabularyName.MARKETING, "classpath:init/템플릿용어집-마케팅.tsv");
-        createTemplateVocabulary(TemplateVocabularyName.DESIGN, "classpath:init/템플릿용어집-디자인.tsv");
-        createTemplateVocabulary(TemplateVocabularyName.GENERAL_OFFICE, "classpath:init/템플릿용어집-일반사무.tsv");
+        createTemplateVocabulary(TemplateVocabularyType.DEVELOPMENT, "classpath:init/템플릿용어집-개발.tsv");
+        createTemplateVocabulary(TemplateVocabularyType.MARKETING, "classpath:init/템플릿용어집-마케팅.tsv");
+        createTemplateVocabulary(TemplateVocabularyType.DESIGN, "classpath:init/템플릿용어집-디자인.tsv");
+        createTemplateVocabulary(TemplateVocabularyType.GENERAL_OFFICE, "classpath:init/템플릿용어집-일반사무.tsv");
     }
 
-    private void createTemplateVocabulary(TemplateVocabularyName name, String location) {
-        templateVocabularyService.create(new TemplateVocabularyCreateCommand(
-                name,
+    private void createTemplateVocabulary(TemplateVocabularyType type, String location) {
+        templateVocabularyLogic.create(new TemplateVocabularyCreateCommand(
+                type,
                 testTermsLoader.getTerms(location, InitService::convertToTemplateTerm)
         ));
     }

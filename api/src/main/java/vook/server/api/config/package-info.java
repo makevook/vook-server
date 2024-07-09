@@ -1,5 +1,8 @@
 @ApplicationModule(
-        type = ApplicationModule.Type.OPEN
+        type = ApplicationModule.Type.OPEN,
+        allowedDependencies = {
+                "vook.server.api.web.common"
+        }
 )
 package vook.server.api.config;
 

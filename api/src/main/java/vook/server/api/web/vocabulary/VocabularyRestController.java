@@ -4,15 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import vook.server.api.usecases.vocabulary.CreateVocabularyUseCase;
-import vook.server.api.usecases.vocabulary.DeleteVocabularyUseCase;
-import vook.server.api.usecases.vocabulary.RetrieveVocabularyUseCase;
-import vook.server.api.usecases.vocabulary.UpdateVocabularyUseCase;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 import vook.server.api.web.common.response.CommonApiResponse;
 import vook.server.api.web.vocabulary.reqres.VocabularyCreateRequest;
 import vook.server.api.web.vocabulary.reqres.VocabularyResponse;
 import vook.server.api.web.vocabulary.reqres.VocabularyUpdateRequest;
+import vook.server.api.web.vocabulary.usecase.CreateVocabularyUseCase;
+import vook.server.api.web.vocabulary.usecase.DeleteVocabularyUseCase;
+import vook.server.api.web.vocabulary.usecase.RetrieveVocabularyUseCase;
+import vook.server.api.web.vocabulary.usecase.UpdateVocabularyUseCase;
 
 import java.util.List;
 

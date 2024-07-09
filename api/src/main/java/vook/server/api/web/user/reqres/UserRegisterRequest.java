@@ -5,7 +5,7 @@ import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import vook.server.api.domain.user.service.data.UserRegisterCommand;
+import vook.server.api.domain.user.logic.dto.UserRegisterCommand;
 
 public record UserRegisterRequest(
         @NotBlank

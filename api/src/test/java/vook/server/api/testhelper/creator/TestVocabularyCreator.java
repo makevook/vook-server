@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
+import vook.server.api.domain.vocabulary.logic.TermLogic;
+import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
+import vook.server.api.domain.vocabulary.logic.dto.TermCreateCommand;
+import vook.server.api.domain.vocabulary.logic.dto.VocabularyCreateCommand;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
-import vook.server.api.domain.vocabulary.service.TermService;
-import vook.server.api.domain.vocabulary.service.VocabularyService;
-import vook.server.api.domain.vocabulary.service.data.TermCreateCommand;
-import vook.server.api.domain.vocabulary.service.data.VocabularyCreateCommand;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,8 +20,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 public class TestVocabularyCreator {
 
-    private final VocabularyService vocabularyService;
-    private final TermService termService;
+    private final VocabularyLogic vocabularyLogic;
+    private final TermLogic termLogic;
     private final AtomicInteger vocabularyNameCounter = new AtomicInteger(0);
     private final AtomicInteger termNameCounter = new AtomicInteger(0);
 
@@ -31,7 +31,7 @@ public class TestVocabularyCreator {
     }
 
     public Vocabulary createVocabulary(User user, String suffix) {
-        return vocabularyService.create(
+        return vocabularyLogic.create(
                 VocabularyCreateCommand.builder()
                         .name("testVocabulary" + suffix)
                         .userUid(new UserUid(user.getUid()))
@@ -45,7 +45,7 @@ public class TestVocabularyCreator {
     }
 
     public Term createTerm(Vocabulary vocabulary, String suffix) {
-        return termService.create(TermCreateCommand.builder()
+        return termLogic.create(TermCreateCommand.builder()
                 .vocabularyUid(vocabulary.getUid())
                 .term("testTerm" + suffix)
                 .meaning("testMeaning" + suffix)

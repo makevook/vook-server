@@ -17,13 +17,13 @@ public class TemplateVocabulary {
      */
     @Column(nullable = false, unique = true, columnDefinition = "varchar(20)")
     @Enumerated(EnumType.STRING)
-    private TemplateVocabularyName name;
+    private TemplateVocabularyType type;
 
     public static TemplateVocabulary forCreateOf(
-            TemplateVocabularyName name
+            TemplateVocabularyType type
     ) {
         TemplateVocabulary result = new TemplateVocabulary();
-        result.name = name;
+        result.type = type;
         return result;
     }
 }
