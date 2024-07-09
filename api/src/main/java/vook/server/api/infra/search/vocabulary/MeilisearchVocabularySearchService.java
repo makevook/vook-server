@@ -13,10 +13,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import vook.server.api.domain.vocabulary.logic.TermLogic;
+import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
-import vook.server.api.domain.vocabulary.service.TermService;
-import vook.server.api.domain.vocabulary.service.VocabularyService;
 import vook.server.api.infra.search.common.MeilisearchProperties;
 import vook.server.api.infra.search.common.MeilisearchService;
 import vook.server.api.web.term.usecase.SearchTermUseCase;
@@ -32,8 +32,8 @@ public class MeilisearchVocabularySearchService
         extends
         MeilisearchService
         implements
-        VocabularyService.SearchManagementService,
-        TermService.SearchManagementService,
+        VocabularyLogic.SearchManagementService,
+        TermLogic.SearchManagementService,
         SearchTermUseCase.SearchService {
 
     private final ObjectMapper objectMapper;

@@ -3,12 +3,12 @@ package vook.server.api.web.term.usecase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.service.UserService;
+import vook.server.api.domain.user.logic.UserLogic;
+import vook.server.api.domain.vocabulary.logic.TermLogic;
+import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
+import vook.server.api.domain.vocabulary.logic.dto.TermCreateCommand;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
-import vook.server.api.domain.vocabulary.service.TermService;
-import vook.server.api.domain.vocabulary.service.VocabularyService;
-import vook.server.api.domain.vocabulary.service.data.TermCreateCommand;
 import vook.server.api.policy.VocabularyPolicy;
 
 import java.util.List;
@@ -18,18 +18,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CreateTermUseCase {
 
-    private final UserService userService;
-    private final VocabularyService vocabularyService;
-    private final TermService termService;
+    private final UserLogic userLogic;
+    private final VocabularyLogic vocabularyLogic;
+    private final TermLogic termLogic;
     private final VocabularyPolicy vocabularyPolicy;
 
     public Result execute(Command command) {
-        userService.validateCompletedUserByUid(command.userUid());
+        userLogic.validateCompletedUserByUid(command.userUid());
 
-        Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
+        Vocabulary vocabulary = vocabularyLogic.getByUid(command.vocabularyUid());
         vocabularyPolicy.validateOwner(command.userUid(), vocabulary);
 
-        Term term = termService.create(command.toTermCreateCommand());
+        Term term = termLogic.create(command.toTermCreateCommand());
 
         return Result.from(term);
     }

@@ -3,19 +3,19 @@ package vook.server.api.web.user.usecase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.domain.user.logic.UserLogic;
+import vook.server.api.domain.user.logic.dto.UserOnboardingCommand;
 import vook.server.api.domain.user.model.Funnel;
 import vook.server.api.domain.user.model.Job;
-import vook.server.api.domain.user.service.UserService;
-import vook.server.api.domain.user.service.data.UserOnboardingCommand;
+import vook.server.api.domain.vocabulary.logic.TemplateVocabularyLogic;
+import vook.server.api.domain.vocabulary.logic.TermLogic;
+import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
+import vook.server.api.domain.vocabulary.logic.dto.TermCreateAllCommand;
+import vook.server.api.domain.vocabulary.logic.dto.VocabularyCreateCommand;
 import vook.server.api.domain.vocabulary.model.TemplateTerm;
 import vook.server.api.domain.vocabulary.model.TemplateVocabularyName;
 import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
-import vook.server.api.domain.vocabulary.service.TemplateVocabularyService;
-import vook.server.api.domain.vocabulary.service.TermService;
-import vook.server.api.domain.vocabulary.service.VocabularyService;
-import vook.server.api.domain.vocabulary.service.data.TermCreateAllCommand;
-import vook.server.api.domain.vocabulary.service.data.VocabularyCreateCommand;
 
 import java.util.List;
 
@@ -24,26 +24,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OnboardingUserUseCase {
 
-    private final UserService userService;
-    private final VocabularyService vocabularyService;
-    private final TemplateVocabularyService templateVocabularyService;
-    private final TermService termService;
+    private final UserLogic userLogic;
+    private final VocabularyLogic vocabularyLogic;
+    private final TemplateVocabularyLogic templateVocabularyLogic;
+    private final TermLogic termLogic;
 
     public void execute(Command command) {
-        userService.onboarding(command.toOnboardingCommand());
+        userLogic.onboarding(command.toOnboardingCommand());
 
-        userService.validateCompletedUserByUid(command.userUid());
+        userLogic.validateCompletedUserByUid(command.userUid());
 
         TemplateVocabularyName vocabularyName = vocabularyNameFrom(command.job());
-        Vocabulary vocabulary = vocabularyService.create(
+        Vocabulary vocabulary = vocabularyLogic.create(
                 VocabularyCreateCommand.builder()
                         .name(vocabularyName.name())
                         .userUid(new UserUid(command.userUid()))
                         .build()
         );
 
-        List<TemplateTerm> terms = templateVocabularyService.getTermsByName(vocabularyName);
-        termService.createAll(
+        List<TemplateTerm> terms = templateVocabularyLogic.getTermsByName(vocabularyName);
+        termLogic.createAll(
                 TermCreateAllCommand.builder()
                         .vocabularyUid(vocabulary.getUid())
                         .termInfos(

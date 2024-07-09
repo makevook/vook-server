@@ -9,12 +9,12 @@ import vook.server.api.domain.demo.model.DemoTermSynonymRepository;
 import vook.server.api.domain.user.model.SocialUserRepository;
 import vook.server.api.domain.user.model.UserInfoRepository;
 import vook.server.api.domain.user.model.UserRepository;
+import vook.server.api.domain.vocabulary.logic.TemplateVocabularyLogic;
+import vook.server.api.domain.vocabulary.logic.dto.TemplateVocabularyCreateCommand;
 import vook.server.api.domain.vocabulary.model.TemplateTermRepository;
 import vook.server.api.domain.vocabulary.model.TemplateVocabularyName;
 import vook.server.api.domain.vocabulary.model.TemplateVocabularyRepository;
 import vook.server.api.domain.vocabulary.model.TermRepository;
-import vook.server.api.domain.vocabulary.service.TemplateVocabularyService;
-import vook.server.api.domain.vocabulary.service.data.TemplateVocabularyCreateCommand;
 import vook.server.api.infra.search.demo.MeilisearchDemoTermSearchService;
 import vook.server.api.infra.vocabulary.cache.UserVocabularyCacheRepository;
 import vook.server.api.infra.vocabulary.jpa.VocabularyJpaRepository;
@@ -41,7 +41,7 @@ public class InitService {
     private final TestTermsLoader testTermsLoader;
     private final MeilisearchDemoTermSearchService searchService;
 
-    private final TemplateVocabularyService templateVocabularyService;
+    private final TemplateVocabularyLogic templateVocabularyLogic;
 
     public void init() {
         deleteAll();
@@ -64,7 +64,7 @@ public class InitService {
     }
 
     private void createTemplateVocabulary(TemplateVocabularyName name, String location) {
-        templateVocabularyService.create(new TemplateVocabularyCreateCommand(
+        templateVocabularyLogic.create(new TemplateVocabularyCreateCommand(
                 name,
                 testTermsLoader.getTerms(location, InitService::convertToTemplateTerm)
         ));

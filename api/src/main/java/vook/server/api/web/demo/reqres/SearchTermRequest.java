@@ -1,7 +1,7 @@
 package vook.server.api.web.demo.reqres;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import vook.server.api.domain.demo.service.data.DemoTermSearchParams;
+import vook.server.api.domain.demo.logic.dto.DemoTermSearchCommand;
 
 import java.util.List;
 
@@ -31,8 +31,8 @@ public record SearchTermRequest(
         )
         List<String> sort
 ) {
-    public DemoTermSearchParams toSearchParam() {
-        return DemoTermSearchParams.builder()
+    public DemoTermSearchCommand toSearchParam() {
+        return DemoTermSearchCommand.builder()
                 .query(query)
                 .withFormat(withFormat)
                 .highlightPreTag(highlightPreTag)
