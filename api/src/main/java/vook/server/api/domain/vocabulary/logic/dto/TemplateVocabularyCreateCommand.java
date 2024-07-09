@@ -2,17 +2,17 @@ package vook.server.api.domain.vocabulary.logic.dto;
 
 import vook.server.api.domain.vocabulary.model.TemplateTerm;
 import vook.server.api.domain.vocabulary.model.TemplateVocabulary;
-import vook.server.api.domain.vocabulary.model.TemplateVocabularyName;
+import vook.server.api.domain.vocabulary.model.TemplateVocabularyType;
 
 import java.util.List;
 
 public record TemplateVocabularyCreateCommand(
-        TemplateVocabularyName name,
+        TemplateVocabularyType type,
         List<Term> terms
 ) {
 
     public TemplateVocabulary toVocabulary() {
-        return TemplateVocabulary.forCreateOf(name);
+        return TemplateVocabulary.forCreateOf(type);
     }
 
     public List<TemplateTerm> toTerms(TemplateVocabulary vocabulary) {

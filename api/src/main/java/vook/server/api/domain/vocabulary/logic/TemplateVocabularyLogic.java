@@ -20,8 +20,8 @@ public class TemplateVocabularyLogic {
         termRepository.saveAll(command.toTerms(vocabulary));
     }
 
-    public List<TemplateTerm> getTermsByName(@Valid TemplateVocabularyName name) {
-        TemplateVocabulary vocabulary = vocabularyRepository.findByName(name).orElseThrow();
+    public List<TemplateTerm> getTermsByType(@Valid TemplateVocabularyType type) {
+        TemplateVocabulary vocabulary = vocabularyRepository.findByType(type).orElseThrow();
         return termRepository.findByTemplateVocabulary(vocabulary);
     }
 }
