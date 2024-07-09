@@ -3,25 +3,25 @@ package vook.server.api.web.user.usecase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.service.UserService;
+import vook.server.api.domain.user.logic.UserLogic;
+import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
 import vook.server.api.domain.vocabulary.model.UserUid;
-import vook.server.api.domain.vocabulary.service.VocabularyService;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class WithdrawUserUseCase {
 
-    private final UserService userService;
-    private final VocabularyService vocabularyService;
+    private final UserLogic userLogic;
+    private final VocabularyLogic vocabularyLogic;
 
     public void execute(Command command) {
-        userService.validateCompletedUserByUid(command.userUid());
+        userLogic.validateCompletedUserByUid(command.userUid());
 
-        userService.withdraw(command.userUid());
+        userLogic.withdraw(command.userUid());
 
-        vocabularyService.findAllBy(new UserUid(command.userUid())).forEach(v -> {
-            vocabularyService.delete(v.getUid());
+        vocabularyLogic.findAllBy(new UserUid(command.userUid())).forEach(v -> {
+            vocabularyLogic.delete(v.getUid());
         });
     }
 

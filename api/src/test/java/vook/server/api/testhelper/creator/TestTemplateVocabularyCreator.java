@@ -3,9 +3,9 @@ package vook.server.api.testhelper.creator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.domain.vocabulary.logic.TemplateVocabularyLogic;
+import vook.server.api.domain.vocabulary.logic.dto.TemplateVocabularyCreateCommand;
 import vook.server.api.domain.vocabulary.model.TemplateVocabularyName;
-import vook.server.api.domain.vocabulary.service.TemplateVocabularyService;
-import vook.server.api.domain.vocabulary.service.data.TemplateVocabularyCreateCommand;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TestTemplateVocabularyCreator {
 
-    private final TemplateVocabularyService vocabularyService;
+    private final TemplateVocabularyLogic vocabularyService;
 
     public void createTemplateVocabulary() {
         createTemplateVocabulary(TemplateVocabularyName.DEVELOPMENT);

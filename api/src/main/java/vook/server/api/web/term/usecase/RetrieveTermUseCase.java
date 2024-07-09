@@ -5,10 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.service.UserService;
+import vook.server.api.domain.user.logic.UserLogic;
+import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
-import vook.server.api.domain.vocabulary.service.VocabularyService;
 import vook.server.api.policy.VocabularyPolicy;
 
 import java.time.LocalDateTime;
@@ -19,15 +19,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RetrieveTermUseCase {
 
-    private final UserService userService;
-    private final VocabularyService vocabularyService;
+    private final UserLogic userLogic;
+    private final VocabularyLogic vocabularyLogic;
     private final VocabularyPolicy vocabularyPolicy;
     private final TermSearchService termSearchService;
 
     public Result execute(Command command) {
-        userService.validateCompletedUserByUid(command.userUid());
+        userLogic.validateCompletedUserByUid(command.userUid());
 
-        Vocabulary vocabulary = vocabularyService.getByUid(command.vocabularyUid());
+        Vocabulary vocabulary = vocabularyLogic.getByUid(command.vocabularyUid());
         vocabularyPolicy.validateOwner(command.userUid(), vocabulary);
 
         Page<Term> termPage = termSearchService.findAllBy(command.vocabularyUid(), command.pageable());

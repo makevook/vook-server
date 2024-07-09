@@ -8,9 +8,9 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.domain.user.logic.UserLogic;
+import vook.server.api.domain.user.logic.dto.UserSignUpFromSocialCommand;
 import vook.server.api.domain.user.model.SocialUser;
-import vook.server.api.domain.user.service.UserService;
-import vook.server.api.domain.user.service.data.UserSignUpFromSocialCommand;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 
 @Slf4j
@@ -19,7 +19,7 @@ import vook.server.api.web.common.auth.data.VookLoginUser;
 @RequiredArgsConstructor
 public class VookOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserService userService;
+    private final UserLogic userLogic;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -33,7 +33,7 @@ public class VookOAuth2UserService extends DefaultOAuth2UserService {
             return null;
         }
 
-        return userService.findByProvider(oAuth2Response.getProvider(), oAuth2Response.getProviderId())
+        return userLogic.findByProvider(oAuth2Response.getProvider(), oAuth2Response.getProviderId())
                 .map(VookLoginUser::from)
                 .orElseGet(() -> signUpUser(oAuth2Response));
     }
@@ -51,7 +51,7 @@ public class VookOAuth2UserService extends DefaultOAuth2UserService {
                 .providerUserId(oAuth2Response.getProviderId())
                 .email(oAuth2Response.getEmail())
                 .build();
-        SocialUser saved = userService.signUpFromSocial(command);
+        SocialUser saved = userLogic.signUpFromSocial(command);
         return VookLoginUser.from(saved);
     }
 }

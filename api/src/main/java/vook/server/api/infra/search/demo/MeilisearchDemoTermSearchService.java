@@ -9,11 +9,11 @@ import com.meilisearch.sdk.model.TaskInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
+import vook.server.api.domain.demo.logic.DemoTermSearchService;
+import vook.server.api.domain.demo.logic.dto.DemoTermSearchCommand;
+import vook.server.api.domain.demo.logic.dto.DemoTermSearchResult;
 import vook.server.api.domain.demo.model.DemoTerm;
 import vook.server.api.domain.demo.model.DemoTermSynonym;
-import vook.server.api.domain.demo.service.DemoTermSearchService;
-import vook.server.api.domain.demo.service.data.DemoTermSearchParams;
-import vook.server.api.domain.demo.service.data.DemoTermSearchResult;
 import vook.server.api.infra.search.common.MeilisearchProperties;
 import vook.server.api.infra.search.common.MeilisearchService;
 
@@ -47,7 +47,7 @@ public class MeilisearchDemoTermSearchService extends MeilisearchService impleme
         client.waitForTask(taskInfo.getTaskUid());
     }
 
-    public DemoTermSearchResult search(DemoTermSearchParams params) {
+    public DemoTermSearchResult search(DemoTermSearchCommand params) {
         SearchRequest searchRequest = params.buildSearchRequest();
         Searchable search = this.client.getIndex(DEMO_TERMS_INDEX_UID).search(searchRequest);
         return DemoTermSearchResult.from(search);

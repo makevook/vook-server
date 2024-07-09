@@ -3,10 +3,10 @@ package vook.server.api.web.term.usecase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.service.UserService;
+import vook.server.api.domain.user.logic.UserLogic;
+import vook.server.api.domain.vocabulary.logic.TermLogic;
+import vook.server.api.domain.vocabulary.logic.dto.TermUpdateCommand;
 import vook.server.api.domain.vocabulary.model.Term;
-import vook.server.api.domain.vocabulary.service.TermService;
-import vook.server.api.domain.vocabulary.service.data.TermUpdateCommand;
 import vook.server.api.policy.VocabularyPolicy;
 
 import java.util.List;
@@ -16,17 +16,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UpdateTermUseCase {
 
-    private final UserService userService;
+    private final UserLogic userLogic;
     private final VocabularyPolicy vocabularyPolicy;
-    private final TermService termService;
+    private final TermLogic termLogic;
 
     public void execute(Command command) {
-        userService.validateCompletedUserByUid(command.userUid());
+        userLogic.validateCompletedUserByUid(command.userUid());
 
-        Term term = termService.getByUid(command.termUid());
+        Term term = termLogic.getByUid(command.termUid());
         vocabularyPolicy.validateOwner(command.userUid(), term.getVocabulary());
 
-        termService.update(command.toServiceCommand());
+        termLogic.update(command.toServiceCommand());
     }
 
     public record Command(

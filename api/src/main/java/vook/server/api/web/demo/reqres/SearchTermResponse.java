@@ -1,7 +1,7 @@
 package vook.server.api.web.demo.reqres;
 
 import lombok.Builder;
-import vook.server.api.domain.demo.service.data.DemoTermSearchResult;
+import vook.server.api.domain.demo.logic.dto.DemoTermSearchResult;
 
 import java.util.List;
 import java.util.Map;

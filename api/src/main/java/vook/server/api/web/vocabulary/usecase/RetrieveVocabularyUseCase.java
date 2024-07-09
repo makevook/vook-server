@@ -3,10 +3,10 @@ package vook.server.api.web.vocabulary.usecase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.service.UserService;
+import vook.server.api.domain.user.logic.UserLogic;
+import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
 import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
-import vook.server.api.domain.vocabulary.service.VocabularyService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,13 +16,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RetrieveVocabularyUseCase {
 
-    private final UserService userService;
-    private final VocabularyService vocabularyService;
+    private final UserLogic userLogic;
+    private final VocabularyLogic vocabularyLogic;
 
     public Result execute(Command command) {
-        userService.validateCompletedUserByUid(command.userUid());
+        userLogic.validateCompletedUserByUid(command.userUid());
 
-        List<Vocabulary> vocabularies = vocabularyService.findAllBy(new UserUid(command.userUid()));
+        List<Vocabulary> vocabularies = vocabularyLogic.findAllBy(new UserUid(command.userUid()));
         List<Result.Tuple> tupleList = vocabularies
                 .stream()
                 .map(Result.Tuple::from)
