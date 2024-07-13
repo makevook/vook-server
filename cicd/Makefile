@@ -24,11 +24,11 @@ deploy-stag:
 
 .PHONY:build-jar
 build-jar:
-	dagger call -v build-api-jar --dir=../api --test -o out/api.jar
+	dagger call -v build-api-jar --dir=../api --test export --path out/api.jar
 
 .PHONY:build-image
 build-image: build-jar
-	dagger call -v build-api-image --jar-file=out/api.jar -o out/api_linux_arm64.tar
+	dagger call -v build-api-image --jar-file=out/api.jar export --path out/api_linux_arm64.tar
 
 .PHONY:run-jar
 run-jar:
