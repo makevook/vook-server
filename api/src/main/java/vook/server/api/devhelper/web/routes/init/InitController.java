@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vook.server.api.devhelper.app.InitService;
 import vook.server.api.web.common.response.CommonApiResponse;
 
-@Profile({"local", "dev", "stag"})
+@Profile({"local", "dev", "stag", "prod"})
 @RestController
 @RequestMapping("/init")
 @RequiredArgsConstructor

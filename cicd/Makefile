@@ -22,6 +22,17 @@ deploy-stag:
 	--version=${VERSION} \
 	--command="make deploy-api"
 
+.PHONY:deploy-prod
+deploy-prod:
+	dagger call -v deploy \
+	--source-dir=../api \
+	--profile=prod \
+	--ssh-dest=file:./secrets/prod/dest.txt \
+	--ssh-key=file:./secrets/prod/ssh.key \
+	--target-path=~/repo/makevook/vook-deployment/prod \
+	--version=${VERSION} \
+	--command="make deploy-api"
+
 .PHONY:build-jar
 build-jar:
 	dagger call -v build-api-jar --dir=../api --test export --path out/api.jar
