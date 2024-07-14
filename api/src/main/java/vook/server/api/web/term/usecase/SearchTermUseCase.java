@@ -5,11 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
 import vook.server.api.domain.vocabulary.model.UserUid;
+import vook.server.api.globalcommon.annotation.UseCase;
 import vook.server.api.policy.VocabularyPolicy;
 
 import java.util.ArrayList;
@@ -17,9 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
-@Validated
-@Transactional
+@UseCase
 @RequiredArgsConstructor
 public class SearchTermUseCase {
 

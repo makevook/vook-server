@@ -3,19 +3,17 @@ package vook.server.api.web.term.usecase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.logic.UserLogic;
 import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
 import vook.server.api.domain.vocabulary.model.Term;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
+import vook.server.api.globalcommon.annotation.UseCase;
 import vook.server.api.policy.VocabularyPolicy;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
-@Transactional
+@UseCase
 @RequiredArgsConstructor
 public class RetrieveTermUseCase {
 
