@@ -68,6 +68,35 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
     }
 
     @Test
+    @DisplayName("용어 생성 - 정상; 동의어가 없어도 용어 생성이 가능")
+    void executeSuccessWithoutSynonyms() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        VookLoginUser vookLoginUser = VookLoginUser.of(user.getUid());
+        Vocabulary vocabulary = testVocabularyCreator.createVocabulary(user);
+
+        var command = new CreateTermUseCase.Command(
+                vookLoginUser.getUid(),
+                vocabulary.getUid(),
+                "테스트 용어",
+                "테스트 뜻",
+                List.of()
+        );
+
+        // when
+        var result = useCase.execute(command);
+
+        // then
+        assertThat(result.uid()).isNotNull();
+
+        Term term = termRepository.findByUid(result.uid()).orElseThrow();
+        assertThat(term.getTerm()).isEqualTo(command.term());
+        assertThat(term.getMeaning()).isEqualTo(command.meaning());
+        assertThat(term.getSynonyms()).isEmpty();
+        assertThat(term.getVocabulary().termCount()).isEqualTo(1);
+    }
+
+    @Test
     @DisplayName("용어 생성 - 실패; 용어집이 존재하지 않는 경우")
     void executeError1() {
         // given
