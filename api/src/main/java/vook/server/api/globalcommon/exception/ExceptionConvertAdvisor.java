@@ -1,18 +1,19 @@
-package vook.server.api.domain.common.exception;
+package vook.server.api.globalcommon.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
-import vook.server.api.globalcommon.exception.ParameterValidateException;
 
 @Aspect
 @Component
-public class ExceptionAdvisor {
-    
-    // vook.server.api.domain 패키지 이하의 모든 메서드에 대해 실행
-    @Around("execution(* vook.server.api.domain..*.*(..))")
+public class ExceptionConvertAdvisor {
+
+    @Around("""
+            @within(vook.server.api.globalcommon.annotation.DomainLogic) || 
+            @within(vook.server.api.globalcommon.annotation.UseCase)
+            """)
     public Object convertException(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
             return joinPoint.proceed();
