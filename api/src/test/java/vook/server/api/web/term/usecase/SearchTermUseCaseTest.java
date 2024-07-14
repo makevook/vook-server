@@ -43,19 +43,19 @@ class SearchTermUseCaseTest extends IntegrationTestBase {
         SearchTermUseCase.Command command = SearchTermUseCase.Command.builder()
                 .userUid(user.getUid())
                 .vocabularyUids(List.of(vocabulary1.getUid(), vocabulary2.getUid()))
-                .query("하이브리드")
+                .queries(List.of("하이브리드"))
                 .build();
 
         // when
         SearchTermUseCase.Result result = searchTermUseCase.execute(command);
 
         // then
-        assertThat(result.query()).isEqualTo("하이브리드");
         assertThat(result.records())
                 .isNotEmpty()
                 .satisfiesExactlyInAnyOrder(
                         term -> {
                             assertThat(term.vocabularyUid()).isEqualTo(vocabulary1.getUid());
+                            assertThat(term.query()).isEqualTo("하이브리드");
                             assertThat(term.hits()).hasSize(1);
                             assertThat(term.hits().getFirst().term()).contains("하이브리드앱");
                             assertThat(term.hits().getFirst().meaning()).contains("하이브리드앱");
@@ -63,6 +63,7 @@ class SearchTermUseCaseTest extends IntegrationTestBase {
                         },
                         term -> {
                             assertThat(term.vocabularyUid()).isEqualTo(vocabulary2.getUid());
+                            assertThat(term.query()).isEqualTo("하이브리드");
                             assertThat(term.hits()).hasSize(1);
                             assertThat(term.hits().getFirst().term()).contains("하이브리드웹");
                             assertThat(term.hits().getFirst().meaning()).contains("하이브리드웹");
@@ -85,7 +86,7 @@ class SearchTermUseCaseTest extends IntegrationTestBase {
         SearchTermUseCase.Command command = SearchTermUseCase.Command.builder()
                 .userUid(user.getUid())
                 .vocabularyUids(List.of(anotherVocabulary.getUid()))
-                .query("하이브리드")
+                .queries(List.of("하이브리드"))
                 .build();
 
         // when, then
@@ -108,20 +109,20 @@ class SearchTermUseCaseTest extends IntegrationTestBase {
         SearchTermUseCase.Command command = SearchTermUseCase.Command.builder()
                 .userUid(user.getUid())
                 .vocabularyUids(List.of(voca.getUid()))
-                .query("김치찌개와 비빔밥, 그리고 불고기")
+                .queries(List.of("김치찌개와 비빔밥, 그리고 불고기"))
                 .build();
 
         // when
         SearchTermUseCase.Result result = searchTermUseCase.execute(command);
 
         // then
-        assertThat(result.query()).isEqualTo("김치찌개와 비빔밥, 그리고 불고기");
         assertThat(result.records())
                 .isNotEmpty()
                 .satisfiesExactlyInAnyOrder(
                         term -> {
                             assertThat(term.vocabularyUid()).isEqualTo(voca.getUid());
                             assertThat(term.hits()).hasSize(1);
+                            assertThat(term.query()).isEqualTo("김치찌개와 비빔밥, 그리고 불고기");
                             assertThat(term.hits().getFirst().term()).contains("김치찌개");
                             assertThat(term.hits().getFirst().meaning()).contains("김치찌개");
                             assertThat(term.hits().getFirst().synonyms()).contains("김치찌개");

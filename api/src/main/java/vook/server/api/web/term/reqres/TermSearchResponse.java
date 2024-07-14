@@ -7,24 +7,23 @@ import java.util.List;
 
 @Builder
 public record TermSearchResponse(
-        String query,
         List<Record> records
 ) {
     public static TermSearchResponse from(SearchTermUseCase.Result result) {
         return TermSearchResponse.builder()
-                .query(result.query())
                 .records(Record.from(result.records()))
                 .build();
     }
 
     public record Record(
             String vocabularyUid,
+            String query,
             List<Term> hits
     ) {
 
-        public static List<Record> from(List<SearchTermUseCase.Result.Record> input) {
-            return input.stream()
-                    .map(input1 -> new Record(input1.vocabularyUid(), Term.from(input1.hits())))
+        public static List<Record> from(List<SearchTermUseCase.Result.Record> resultRecords) {
+            return resultRecords.stream()
+                    .map(resultRecord -> new Record(resultRecord.vocabularyUid(), resultRecord.query(), Term.from(resultRecord.hits())))
                     .toList();
         }
     }

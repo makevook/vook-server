@@ -3,7 +3,6 @@ package vook.server.api.infra.search.vocabulary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meilisearch.sdk.Index;
-import com.meilisearch.sdk.IndexSearchRequest;
 import com.meilisearch.sdk.MultiSearchRequest;
 import com.meilisearch.sdk.exceptions.MeilisearchApiException;
 import com.meilisearch.sdk.model.MultiSearchResult;
@@ -26,6 +25,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.meilisearch.sdk.IndexSearchRequest.IndexSearchRequestBuilder;
+import static com.meilisearch.sdk.IndexSearchRequest.builder;
 
 @Service
 public class MeilisearchVocabularySearchService
@@ -155,7 +157,7 @@ public class MeilisearchVocabularySearchService
     public Result search(Params params) {
         MultiSearchRequest request = new RequestBuilder(params).buildMultiSearchRequest();
         Results<MultiSearchResult> results = this.client.multiSearch(request);
-        return new ResultBuilder(params.query(), results).build();
+        return new ResultBuilder(results).build();
     }
 
     private record RequestBuilder(Params params) {
@@ -164,38 +166,33 @@ public class MeilisearchVocabularySearchService
         private static final String DEFAULT_HIGHLIGHT_POST_TAG = "</em>";
 
         public MultiSearchRequest buildMultiSearchRequest() {
-            MultiSearchRequest request = new MultiSearchRequest();
-            params.vocabularyUids().forEach(uid -> request.addQuery(buildIndexSearchRequest(uid)));
-            return request;
-        }
-
-        private IndexSearchRequest buildIndexSearchRequest(String uid) {
-            IndexSearchRequest.IndexSearchRequestBuilder builder = IndexSearchRequest.builder();
-            builder.indexUid(uid);
+            IndexSearchRequestBuilder builder = builder();
             if (params.withFormat()) {
                 builder.attributesToHighlight(new String[]{"*"});
                 builder.highlightPreTag(StringUtils.hasText(params.highlightPreTag()) ? params.highlightPreTag() : DEFAULT_HIGHLIGHT_PRE_TAG);
                 builder.highlightPostTag(StringUtils.hasText(params.highlightPostTag()) ? params.highlightPostTag() : DEFAULT_HIGHLIGHT_POST_TAG);
             }
+            builder.limit(Integer.MAX_VALUE);
 
-            return builder
-                    .q(params.query())
-                    .limit(Integer.MAX_VALUE)
-                    .build();
+            MultiSearchRequest request = new MultiSearchRequest();
+            params.vocabularyUids().forEach(uid -> {
+                params.queries().forEach(query -> {
+                    request.addQuery(builder.indexUid(uid).q(query).build());
+                });
+            });
+            return request;
         }
     }
 
     private record ResultBuilder(
-            String query,
             Results<MultiSearchResult> results
     ) {
         public Result build() {
-            return Result.builder()
-                    .query(query)
-                    .records(Arrays.stream(results.getResults())
-                            .map(result -> new Result.Record(result.getIndexUid(), result.getHits()))
-                            .toList())
-                    .build();
+            return new Result(
+                    Arrays.stream(results.getResults())
+                            .map(result -> new Result.Record(result.getIndexUid(), result.getQuery(), result.getHits()))
+                            .toList()
+            );
         }
     }
 
