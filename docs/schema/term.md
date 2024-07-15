@@ -73,7 +73,7 @@ erDiagram
   datetime_6_ updated_at
   varchar_20_ name
   varchar_255_ uid
-  bigint_20_ user_id
+  varchar_255_ user_uid
 }
 ```
 

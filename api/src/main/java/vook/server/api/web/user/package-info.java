@@ -5,6 +5,7 @@
                 "vook.server.api.web.common",
                 "vook.server.api.domain.user",
                 "vook.server.api.domain.vocabulary",
+                "vook.server.api.domain.template_vocabulary"
         }
 )
 package vook.server.api.web.user;

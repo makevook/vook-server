@@ -17,7 +17,7 @@ CREATE TABLE `users` (
   `uid` varchar(255) DEFAULT NULL,
   `withdrawn_at` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_6dotkott2kjsp8vw4d0m25fb7` (`email`)
+  UNIQUE KEY `UK6dotkott2kjsp8vw4d0m25fb7` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ```
 
@@ -42,14 +42,14 @@ CREATE TABLE `users` (
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
-| UK_6dotkott2kjsp8vw4d0m25fb7 | UNIQUE | UNIQUE KEY UK_6dotkott2kjsp8vw4d0m25fb7 (email) |
+| UK6dotkott2kjsp8vw4d0m25fb7 | UNIQUE | UNIQUE KEY UK6dotkott2kjsp8vw4d0m25fb7 (email) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
-| UK_6dotkott2kjsp8vw4d0m25fb7 | UNIQUE KEY UK_6dotkott2kjsp8vw4d0m25fb7 (email) USING BTREE |
+| UK6dotkott2kjsp8vw4d0m25fb7 | UNIQUE KEY UK6dotkott2kjsp8vw4d0m25fb7 (email) USING BTREE |
 
 ## Relations
 

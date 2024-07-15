@@ -1,8 +1,9 @@
-package vook.server.api.domain.vocabulary.model;
+package vook.server.api.domain.template_vocabulary.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import vook.server.api.domain.common.model.Synonym;
 
 import java.util.List;
 

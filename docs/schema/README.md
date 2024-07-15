@@ -6,7 +6,6 @@
 | ---- | ------- | ------- | ---- |
 | [demo_term](demo_term.md) | 5 |  | BASE TABLE |
 | [demo_term_synonym](demo_term_synonym.md) | 3 |  | BASE TABLE |
-| [event_publication](event_publication.md) | 6 |  | BASE TABLE |
 | [social_user](social_user.md) | 5 |  | BASE TABLE |
 | [template_term](template_term.md) | 5 |  | BASE TABLE |
 | [template_vocabulary](template_vocabulary.md) | 2 |  | BASE TABLE |
@@ -38,14 +37,6 @@ erDiagram
   varchar_100_ synonym
   bigint_20_ demo_term_id FK
 }
-"event_publication" {
-  uuid id PK
-  datetime_6_ completion_date
-  varchar_255_ event_type
-  varchar_255_ listener_id
-  datetime_6_ publication_date
-  varchar_255_ serialized_event
-}
 "social_user" {
   bigint_20_ id PK
   datetime_6_ created_at
@@ -62,7 +53,7 @@ erDiagram
 }
 "template_vocabulary" {
   bigint_20_ id PK
-  varchar_20_ name
+  varchar_20_ type
 }
 "term" {
   bigint_20_ id PK
@@ -99,7 +90,7 @@ erDiagram
   datetime_6_ updated_at
   varchar_20_ name
   varchar_255_ uid
-  bigint_20_ user_id
+  varchar_255_ user_uid
 }
 ```
 

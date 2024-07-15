@@ -14,7 +14,7 @@ CREATE TABLE `user_info` (
   `nickname` varchar(10) NOT NULL,
   `user_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_hixwjgx0ynne0cq4tqvoawoda` (`user_id`),
+  UNIQUE KEY `UKhixwjgx0ynne0cq4tqvoawoda` (`user_id`),
   CONSTRAINT `FKr1b96ca4asuvrhwoqkdmbo7nj` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ```
@@ -38,14 +38,14 @@ CREATE TABLE `user_info` (
 | ---- | ---- | ---------- |
 | FKr1b96ca4asuvrhwoqkdmbo7nj | FOREIGN KEY | FOREIGN KEY (user_id) REFERENCES users (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
-| UK_hixwjgx0ynne0cq4tqvoawoda | UNIQUE | UNIQUE KEY UK_hixwjgx0ynne0cq4tqvoawoda (user_id) |
+| UKhixwjgx0ynne0cq4tqvoawoda | UNIQUE | UNIQUE KEY UKhixwjgx0ynne0cq4tqvoawoda (user_id) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
-| UK_hixwjgx0ynne0cq4tqvoawoda | UNIQUE KEY UK_hixwjgx0ynne0cq4tqvoawoda (user_id) USING BTREE |
+| UKhixwjgx0ynne0cq4tqvoawoda | UNIQUE KEY UKhixwjgx0ynne0cq4tqvoawoda (user_id) USING BTREE |
 
 ## Relations
 

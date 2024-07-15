@@ -60,7 +60,7 @@ erDiagram
 }
 "template_vocabulary" {
   bigint_20_ id PK
-  varchar_20_ name
+  varchar_20_ type
 }
 ```
 
