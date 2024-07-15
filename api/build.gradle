@@ -42,7 +42,6 @@ dependencies {
 
     // spring modulith
     implementation 'org.springframework.modulith:spring-modulith-starter-core'
-    implementation 'org.springframework.modulith:spring-modulith-starter-jpa'
     testImplementation 'org.springframework.modulith:spring-modulith-starter-test'
 
     // lombok
