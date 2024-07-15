@@ -12,7 +12,7 @@ CREATE TABLE `vocabulary` (
   `updated_at` datetime(6) DEFAULT NULL,
   `name` varchar(20) NOT NULL,
   `uid` varchar(255) DEFAULT NULL,
-  `user_id` bigint(20) NOT NULL,
+  `user_uid` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ```
@@ -28,7 +28,7 @@ CREATE TABLE `vocabulary` (
 | updated_at | datetime(6) | NULL | true |  |  |  |  |
 | name | varchar(20) |  | false |  |  |  |  |
 | uid | varchar(255) | NULL | true |  |  |  |  |
-| user_id | bigint(20) |  | false |  |  |  |  |
+| user_uid | varchar(255) |  | false |  |  |  |  |
 
 ## Constraints
 
@@ -55,7 +55,7 @@ erDiagram
   datetime_6_ updated_at
   varchar_20_ name
   varchar_255_ uid
-  bigint_20_ user_id
+  varchar_255_ user_uid
 }
 "term" {
   bigint_20_ id PK
