@@ -1,4 +1,4 @@
-package vook.server.api.domain.vocabulary.model;
+package vook.server.api.domain.template_vocabulary.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

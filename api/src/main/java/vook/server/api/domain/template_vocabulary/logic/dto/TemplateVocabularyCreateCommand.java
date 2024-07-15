@@ -1,8 +1,8 @@
-package vook.server.api.domain.vocabulary.logic.dto;
+package vook.server.api.domain.template_vocabulary.logic.dto;
 
-import vook.server.api.domain.vocabulary.model.TemplateTerm;
-import vook.server.api.domain.vocabulary.model.TemplateVocabulary;
-import vook.server.api.domain.vocabulary.model.TemplateVocabularyType;
+import vook.server.api.domain.template_vocabulary.model.TemplateTerm;
+import vook.server.api.domain.template_vocabulary.model.TemplateVocabulary;
+import vook.server.api.domain.template_vocabulary.model.TemplateVocabularyType;
 
 import java.util.List;
 
