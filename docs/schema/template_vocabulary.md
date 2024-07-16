@@ -8,9 +8,9 @@
 ```sql
 CREATE TABLE `template_vocabulary` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
+  `type` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_7smfim1klyuu5rh21994clsl4` (`name`)
+  UNIQUE KEY `UKaqlv8ks5rgqvc9wbcoahewmpm` (`type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ```
 
@@ -21,21 +21,21 @@ CREATE TABLE `template_vocabulary` (
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
 | id | bigint(20) |  | false | auto_increment | [template_term](template_term.md) |  |  |
-| name | varchar(20) |  | false |  |  |  |  |
+| type | varchar(20) |  | false |  |  |  |  |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
-| UK_7smfim1klyuu5rh21994clsl4 | UNIQUE | UNIQUE KEY UK_7smfim1klyuu5rh21994clsl4 (name) |
+| UKaqlv8ks5rgqvc9wbcoahewmpm | UNIQUE | UNIQUE KEY UKaqlv8ks5rgqvc9wbcoahewmpm (type) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
-| UK_7smfim1klyuu5rh21994clsl4 | UNIQUE KEY UK_7smfim1klyuu5rh21994clsl4 (name) USING BTREE |
+| UKaqlv8ks5rgqvc9wbcoahewmpm | UNIQUE KEY UKaqlv8ks5rgqvc9wbcoahewmpm (type) USING BTREE |
 
 ## Relations
 
@@ -46,7 +46,7 @@ erDiagram
 
 "template_vocabulary" {
   bigint_20_ id PK
-  varchar_20_ name
+  varchar_20_ type
 }
 "template_term" {
   bigint_20_ id PK

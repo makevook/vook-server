@@ -8,9 +8,7 @@ import vook.server.api.domain.vocabulary.exception.VocabularyLimitExceededExcept
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
 import vook.server.api.domain.vocabulary.logic.dto.VocabularyCreateCommand;
 import vook.server.api.domain.vocabulary.logic.dto.VocabularyUpdateCommand;
-import vook.server.api.domain.vocabulary.model.UserUid;
-import vook.server.api.domain.vocabulary.model.Vocabulary;
-import vook.server.api.domain.vocabulary.model.VocabularyRepository;
+import vook.server.api.domain.vocabulary.model.*;
 import vook.server.api.globalcommon.annotation.DomainLogic;
 
 import java.util.List;
@@ -20,6 +18,7 @@ import java.util.List;
 public class VocabularyLogic {
 
     private final VocabularyRepository repository;
+    private final TermRepository termRepository;
     private final SearchManagementService searchService;
 
     public List<Vocabulary> findAllBy(@NotNull UserUid userUid) {
@@ -48,6 +47,8 @@ public class VocabularyLogic {
 
     public void delete(@NotBlank String vocabularyUid) {
         Vocabulary vocabulary = repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
+        List<String> termUids = termRepository.findByVocabulary(vocabulary).stream().map(Term::getUid).toList();
+        termRepository.deleteAllByUids(termUids);
         repository.delete(vocabulary);
         searchService.delete(vocabulary);
     }

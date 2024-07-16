@@ -5,11 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
 import vook.server.api.domain.vocabulary.model.UserUid;
+import vook.server.api.globalcommon.annotation.UseCase;
 import vook.server.api.policy.VocabularyPolicy;
 
 import java.util.ArrayList;
@@ -17,9 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
-@Validated
-@Transactional
+@UseCase
 @RequiredArgsConstructor
 public class SearchTermUseCase {
 
@@ -44,8 +40,9 @@ public class SearchTermUseCase {
             @NotEmpty
             List<@NotBlank String> vocabularyUids,
 
-            @NotBlank
-            String query,
+            @Valid
+            @NotEmpty
+            List<@NotBlank String> queries,
 
             boolean withFormat,
             String highlightPreTag,
@@ -54,7 +51,7 @@ public class SearchTermUseCase {
         public SearchService.Params toSearchParams() {
             return SearchService.Params.builder()
                     .vocabularyUids(vocabularyUids)
-                    .query(query)
+                    .queries(queries)
                     .withFormat(withFormat)
                     .highlightPreTag(highlightPreTag)
                     .highlightPostTag(highlightPostTag)
@@ -64,24 +61,23 @@ public class SearchTermUseCase {
 
     @Builder
     public record Result(
-            String query,
             List<Record> records
     ) {
         public static Result from(SearchService.Result input) {
             return Result.builder()
-                    .query(input.query())
                     .records(Record.from(input.records()))
                     .build();
         }
 
         public record Record(
                 String vocabularyUid,
+                String query,
                 List<Term> hits
         ) {
             public static List<Record> from(List<SearchService.Result.Record> input) {
                 List<Record> result = new ArrayList<>();
                 for (SearchService.Result.Record record : input) {
-                    result.add(new Record(record.vocabularyUid(), Term.from(record)));
+                    result.add(new Record(record.vocabularyUid(), record.query(), Term.from(record)));
                 }
                 return result;
             }
@@ -125,7 +121,7 @@ public class SearchTermUseCase {
         @Builder
         record Params(
                 List<String> vocabularyUids,
-                String query,
+                List<String> queries,
                 boolean withFormat,
                 String highlightPreTag,
                 String highlightPostTag
@@ -134,11 +130,11 @@ public class SearchTermUseCase {
 
         @Builder
         record Result(
-                String query,
                 List<Record> records
         ) {
             public record Record(
                     String vocabularyUid,
+                    String query,
                     ArrayList<HashMap<String, Object>> hits
             ) {
             }

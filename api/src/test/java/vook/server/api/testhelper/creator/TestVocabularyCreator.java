@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.vocabulary.logic.TermLogic;
 import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
+import vook.server.api.domain.vocabulary.logic.dto.TermCreateAllCommand;
 import vook.server.api.domain.vocabulary.logic.dto.TermCreateCommand;
 import vook.server.api.domain.vocabulary.logic.dto.VocabularyCreateCommand;
 import vook.server.api.domain.vocabulary.model.Term;
@@ -51,5 +52,25 @@ public class TestVocabularyCreator {
                 .meaning("testMeaning" + suffix)
                 .synonyms(List.of("testSynonymA" + suffix, "testSynonymB" + suffix))
                 .build());
+    }
+
+    public void createTerms(Vocabulary vocabulary, List<TermInfo> termInfos) {
+        termLogic.createAll(TermCreateAllCommand.builder()
+                .vocabularyUid(vocabulary.getUid())
+                .termInfos(termInfos.stream()
+                        .map(termInfo -> new TermCreateAllCommand.TermInfo(
+                                termInfo.term(),
+                                termInfo.meaning(),
+                                termInfo.synonyms()
+                        ))
+                        .toList())
+                .build());
+    }
+
+    public record TermInfo(
+            String term,
+            String meaning,
+            List<String> synonyms
+    ) {
     }
 }

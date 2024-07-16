@@ -13,8 +13,9 @@ public record TermSearchRequest(
         @NotEmpty
         List<@NotBlank String> vocabularyUids,
 
-        @NotBlank
-        String query,
+        @Valid
+        @NotEmpty
+        List<@NotBlank String> queries,
 
         Boolean withFormat,
 
@@ -26,7 +27,7 @@ public record TermSearchRequest(
         return SearchTermUseCase.Command.builder()
                 .userUid(loginUser.getUid())
                 .vocabularyUids(vocabularyUids)
-                .query(query)
+                .queries(queries)
                 .withFormat(withFormat != null && withFormat)
                 .highlightPreTag(highlightPreTag)
                 .highlightPostTag(highlightPostTag)

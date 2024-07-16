@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static vook.server.api.testhelper.creator.TestVocabularyCreator.TermInfo;
 
 @Transactional
 class SearchTermUseCaseTest extends IntegrationTestBase {
@@ -25,36 +26,36 @@ class SearchTermUseCaseTest extends IntegrationTestBase {
     @Autowired
     TestUserCreator testUserCreator;
     @Autowired
-    TestVocabularyCreator testVocabularyCreator;
+    TestVocabularyCreator vocaCreator;
 
     @Test
     @DisplayName("용어 검색 - 정상")
     void searchTerms() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
-        Vocabulary vocabulary1 = testVocabularyCreator.createVocabulary(user);
-        testVocabularyCreator.createTerm(vocabulary1, "하이브리드앱");
-        testVocabularyCreator.createTerm(vocabulary1, "네이티브앱");
-        Vocabulary vocabulary2 = testVocabularyCreator.createVocabulary(user);
-        testVocabularyCreator.createTerm(vocabulary2, "하이브리드웹");
-        testVocabularyCreator.createTerm(vocabulary2, "네이티브웹");
+        Vocabulary vocabulary1 = vocaCreator.createVocabulary(user);
+        vocaCreator.createTerm(vocabulary1, "하이브리드앱");
+        vocaCreator.createTerm(vocabulary1, "네이티브앱");
+        Vocabulary vocabulary2 = vocaCreator.createVocabulary(user);
+        vocaCreator.createTerm(vocabulary2, "하이브리드웹");
+        vocaCreator.createTerm(vocabulary2, "네이티브웹");
 
         SearchTermUseCase.Command command = SearchTermUseCase.Command.builder()
                 .userUid(user.getUid())
                 .vocabularyUids(List.of(vocabulary1.getUid(), vocabulary2.getUid()))
-                .query("하이브리드")
+                .queries(List.of("하이브리드"))
                 .build();
 
         // when
         SearchTermUseCase.Result result = searchTermUseCase.execute(command);
 
         // then
-        assertThat(result.query()).isEqualTo("하이브리드");
         assertThat(result.records())
                 .isNotEmpty()
                 .satisfiesExactlyInAnyOrder(
                         term -> {
                             assertThat(term.vocabularyUid()).isEqualTo(vocabulary1.getUid());
+                            assertThat(term.query()).isEqualTo("하이브리드");
                             assertThat(term.hits()).hasSize(1);
                             assertThat(term.hits().getFirst().term()).contains("하이브리드앱");
                             assertThat(term.hits().getFirst().meaning()).contains("하이브리드앱");
@@ -62,6 +63,7 @@ class SearchTermUseCaseTest extends IntegrationTestBase {
                         },
                         term -> {
                             assertThat(term.vocabularyUid()).isEqualTo(vocabulary2.getUid());
+                            assertThat(term.query()).isEqualTo("하이브리드");
                             assertThat(term.hits()).hasSize(1);
                             assertThat(term.hits().getFirst().term()).contains("하이브리드웹");
                             assertThat(term.hits().getFirst().meaning()).contains("하이브리드웹");
@@ -75,20 +77,56 @@ class SearchTermUseCaseTest extends IntegrationTestBase {
     void searchTerms_userDoesNotOwnVocabulary() {
         // given
         User user = testUserCreator.createCompletedOnboardingUser();
-        testVocabularyCreator.createVocabulary(user);
-        testVocabularyCreator.createVocabulary(user);
+        vocaCreator.createVocabulary(user);
+        vocaCreator.createVocabulary(user);
 
         User anotherUser = testUserCreator.createCompletedOnboardingUser();
-        Vocabulary anotherVocabulary = testVocabularyCreator.createVocabulary(anotherUser);
+        Vocabulary anotherVocabulary = vocaCreator.createVocabulary(anotherUser);
 
         SearchTermUseCase.Command command = SearchTermUseCase.Command.builder()
                 .userUid(user.getUid())
                 .vocabularyUids(List.of(anotherVocabulary.getUid()))
-                .query("하이브리드")
+                .queries(List.of("하이브리드"))
                 .build();
 
         // when, then
         assertThatThrownBy(() -> searchTermUseCase.execute(command))
                 .isInstanceOf(VocabularyPolicy.NotValidVocabularyOwnerException.class);
+    }
+
+    @Test
+    @DisplayName("용어 검색 - 검색 쿼리내 단어가 몇 개이던, 첫번째 단어 기준으로 검색이 된다.")
+    void searchTerms_queryIsTooLong() {
+        // given
+        User user = testUserCreator.createCompletedOnboardingUser();
+        Vocabulary voca = vocaCreator.createVocabulary(user);
+        vocaCreator.createTerms(voca, List.of(
+                new TermInfo("비빔밥", "비빔밥", List.of("비빔밥")),
+                new TermInfo("김치찌개", "김치찌개", List.of("김치찌개")),
+                new TermInfo("불고기", "불고기", List.of("불고기"))
+        ));
+
+        SearchTermUseCase.Command command = SearchTermUseCase.Command.builder()
+                .userUid(user.getUid())
+                .vocabularyUids(List.of(voca.getUid()))
+                .queries(List.of("김치찌개와 비빔밥, 그리고 불고기"))
+                .build();
+
+        // when
+        SearchTermUseCase.Result result = searchTermUseCase.execute(command);
+
+        // then
+        assertThat(result.records())
+                .isNotEmpty()
+                .satisfiesExactlyInAnyOrder(
+                        term -> {
+                            assertThat(term.vocabularyUid()).isEqualTo(voca.getUid());
+                            assertThat(term.hits()).hasSize(1);
+                            assertThat(term.query()).isEqualTo("김치찌개와 비빔밥, 그리고 불고기");
+                            assertThat(term.hits().getFirst().term()).contains("김치찌개");
+                            assertThat(term.hits().getFirst().meaning()).contains("김치찌개");
+                            assertThat(term.hits().getFirst().synonyms()).contains("김치찌개");
+                        }
+                );
     }
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import vook.server.api.domain.common.model.BaseEntity;
+import vook.server.api.domain.common.model.Synonym;
 
 import java.util.List;
 import java.util.UUID;

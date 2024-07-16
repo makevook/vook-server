@@ -1,15 +1,13 @@
 package vook.server.api.web.vocabulary.usecase;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.logic.UserLogic;
 import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
 import vook.server.api.domain.vocabulary.logic.dto.VocabularyCreateCommand;
 import vook.server.api.domain.vocabulary.model.UserUid;
+import vook.server.api.globalcommon.annotation.UseCase;
 
-@Service
-@Transactional
+@UseCase
 @RequiredArgsConstructor
 public class CreateVocabularyUseCase {
 

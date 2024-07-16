@@ -1,26 +1,24 @@
 package vook.server.api.web.user.usecase;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.domain.template_vocabulary.logic.TemplateVocabularyLogic;
+import vook.server.api.domain.template_vocabulary.model.TemplateTerm;
+import vook.server.api.domain.template_vocabulary.model.TemplateVocabularyType;
 import vook.server.api.domain.user.logic.UserLogic;
 import vook.server.api.domain.user.logic.dto.UserOnboardingCommand;
 import vook.server.api.domain.user.model.Funnel;
 import vook.server.api.domain.user.model.Job;
-import vook.server.api.domain.vocabulary.logic.TemplateVocabularyLogic;
 import vook.server.api.domain.vocabulary.logic.TermLogic;
 import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
 import vook.server.api.domain.vocabulary.logic.dto.TermCreateAllCommand;
 import vook.server.api.domain.vocabulary.logic.dto.VocabularyCreateCommand;
-import vook.server.api.domain.vocabulary.model.TemplateTerm;
-import vook.server.api.domain.vocabulary.model.TemplateVocabularyType;
 import vook.server.api.domain.vocabulary.model.UserUid;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
+import vook.server.api.globalcommon.annotation.UseCase;
 
 import java.util.List;
 
-@Service
-@Transactional
+@UseCase
 @RequiredArgsConstructor
 public class OnboardingUserUseCase {
 

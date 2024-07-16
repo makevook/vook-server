@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"dagger/vook-server/internal/dagger"
 	"errors"
 	"fmt"
 	"strings"
@@ -12,10 +13,10 @@ type VookServer struct{}
 func (v *VookServer) BuildApiJar(
 	ctx context.Context,
 	// 빌드 대상의 디렉토리
-	dir *Directory,
+	dir *dagger.Directory,
 	// +optional
 	test bool,
-) (*File, error) {
+) (*dagger.File, error) {
 	c := dag.Java().
 		Init().
 		WithGradleCache().
@@ -41,11 +42,11 @@ func (v *VookServer) BuildApiJar(
 
 func (v *VookServer) BuildApiImage(
 	// jar 파일
-	jarFile *File,
+	jarFile *dagger.File,
 	// profile
 	// +optional
 	profile []string,
-) *File {
+) *dagger.File {
 	if profile == nil {
 		profile = []string{"default"}
 	}
@@ -64,10 +65,10 @@ ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=` + strings.Join(profile, 
 		WithNewFile("Dockerfile", dockerfile)
 
 	return dag.Docker().
-		Build(sourceDir, DockerBuildOpts{
-			Platform: []Platform{"linux/arm64"},
+		Build(sourceDir, dagger.DockerBuildOpts{
+			Platform: []dagger.Platform{"linux/arm64"},
 		}).
-		Save(DockerBuildSaveOpts{
+		Save(dagger.DockerBuildSaveOpts{
 			Name: "api",
 		}).
 		File("api_linux_arm64.tar")
@@ -75,10 +76,10 @@ ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=` + strings.Join(profile, 
 
 func (v *VookServer) SendImage(
 	ctx context.Context,
-	sshDest *Secret,
-	sshKey *Secret,
+	sshDest *dagger.Secret,
+	sshKey *dagger.Secret,
 	path string,
-	imageTar *File,
+	imageTar *dagger.File,
 ) error {
 	sshDestText, err := sshDest.Plaintext(ctx)
 	if err != nil {
@@ -88,7 +89,7 @@ func (v *VookServer) SendImage(
 	_, err = dag.Scp().
 		Config(strings.TrimSpace(sshDestText)).
 		WithIdentityFile(sshKey).
-		FileToRemote(imageTar, ScpCommanderFileToRemoteOpts{
+		FileToRemote(imageTar, dagger.ScpCommanderFileToRemoteOpts{
 			Target: path,
 		}).
 		Sync(ctx)
@@ -101,9 +102,9 @@ func (v *VookServer) SendImage(
 
 func (v *VookServer) Apply(
 	ctx context.Context,
-	destination *Secret,
-	sshKey *Secret,
-	imageTar *File,
+	destination *dagger.Secret,
+	sshKey *dagger.Secret,
+	imageTar *dagger.File,
 	path string,
 	version string,
 	command string,
@@ -137,10 +138,10 @@ API_FILENAME=%s API_VERSION=%s %s
 
 func (v *VookServer) Deploy(
 	ctx context.Context,
-	sourceDir *Directory,
+	sourceDir *dagger.Directory,
 	profile string,
-	sshDest *Secret,
-	sshKey *Secret,
+	sshDest *dagger.Secret,
+	sshKey *dagger.Secret,
 	targetPath string,
 	version string,
 	command string,

@@ -1,4 +1,4 @@
-package vook.server.api.domain.vocabulary.model;
+package vook.server.api.domain.common.model;
 
 import jakarta.persistence.Embeddable;
 
