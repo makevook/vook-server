@@ -2,20 +2,22 @@
 
 ## Description
 
+소셜 사용자
+
 <details>
 <summary><strong>Table Definition</strong></summary>
 
 ```sql
 CREATE TABLE `social_user` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `provider` varchar(255) DEFAULT NULL,
-  `provider_user_id` varchar(255) DEFAULT NULL,
-  `user_id` bigint(20) DEFAULT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `provider` varchar(255) DEFAULT NULL COMMENT '제공자',
+  `provider_user_id` varchar(255) DEFAULT NULL COMMENT '제공자 사용자 ID',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '사용자 ID',
+  `created_at` datetime(6) DEFAULT NULL COMMENT '생성일시',
   PRIMARY KEY (`id`),
-  KEY `FKcuirus7h2n9g0fp6rxtrkuiix` (`user_id`),
-  CONSTRAINT `FKcuirus7h2n9g0fp6rxtrkuiix` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  KEY `fk_social_user_users` (`user_id`),
+  CONSTRAINT `fk_social_user_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='소셜 사용자'
 ```
 
 </details>
@@ -24,24 +26,24 @@ CREATE TABLE `social_user` (
 
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | bigint(20) |  | false | auto_increment |  |  |  |
-| created_at | datetime(6) | NULL | true |  |  |  |  |
-| provider | varchar(255) | NULL | true |  |  |  |  |
-| provider_user_id | varchar(255) | NULL | true |  |  |  |  |
-| user_id | bigint(20) | NULL | true |  |  | [users](users.md) |  |
+| id | bigint(20) |  | false | auto_increment |  |  | ID |
+| provider | varchar(255) | NULL | true |  |  |  | 제공자 |
+| provider_user_id | varchar(255) | NULL | true |  |  |  | 제공자 사용자 ID |
+| user_id | bigint(20) | NULL | true |  |  | [users](users.md) | 사용자 ID |
+| created_at | datetime(6) | NULL | true |  |  |  | 생성일시 |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
-| FKcuirus7h2n9g0fp6rxtrkuiix | FOREIGN KEY | FOREIGN KEY (user_id) REFERENCES users (id) |
+| fk_social_user_users | FOREIGN KEY | FOREIGN KEY (user_id) REFERENCES users (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
-| FKcuirus7h2n9g0fp6rxtrkuiix | KEY FKcuirus7h2n9g0fp6rxtrkuiix (user_id) USING BTREE |
+| fk_social_user_users | KEY fk_social_user_users (user_id) USING BTREE |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
 
 ## Relations
@@ -53,21 +55,21 @@ erDiagram
 
 "social_user" {
   bigint_20_ id PK
-  datetime_6_ created_at
   varchar_255_ provider
   varchar_255_ provider_user_id
   bigint_20_ user_id FK
+  datetime_6_ created_at
 }
 "users" {
   bigint_20_ id PK
+  varchar_255_ uid
   varchar_255_ email
-  datetime_6_ last_updated_at
+  varchar_30_ status
+  datetime_6_ registered_at
   bit_1_ onboarding_completed
   datetime_6_ onboarding_completed_at
-  datetime_6_ registered_at
-  varchar_30_ status
-  varchar_255_ uid
   datetime_6_ withdrawn_at
+  datetime_6_ last_updated_at
 }
 ```
 

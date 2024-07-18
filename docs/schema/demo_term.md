@@ -2,18 +2,20 @@
 
 ## Description
 
+데모 용어
+
 <details>
 <summary><strong>Table Definition</strong></summary>
 
 ```sql
 CREATE TABLE `demo_term` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `meaning` varchar(2000) NOT NULL,
-  `term` varchar(100) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `term` varchar(100) NOT NULL COMMENT '용어',
+  `meaning` varchar(2000) NOT NULL COMMENT '뜻',
+  `created_at` datetime(6) DEFAULT NULL COMMENT '생성일시',
+  `updated_at` datetime(6) DEFAULT NULL COMMENT '수정일시',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='데모 용어'
 ```
 
 </details>
@@ -22,11 +24,11 @@ CREATE TABLE `demo_term` (
 
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | bigint(20) |  | false | auto_increment | [demo_term_synonym](demo_term_synonym.md) |  |  |
-| created_at | datetime(6) | NULL | true |  |  |  |  |
-| updated_at | datetime(6) | NULL | true |  |  |  |  |
-| meaning | varchar(2000) |  | false |  |  |  |  |
-| term | varchar(100) |  | false |  |  |  |  |
+| id | bigint(20) |  | false | auto_increment | [demo_term_synonym](demo_term_synonym.md) |  | ID |
+| term | varchar(100) |  | false |  |  |  | 용어 |
+| meaning | varchar(2000) |  | false |  |  |  | 뜻 |
+| created_at | datetime(6) | NULL | true |  |  |  | 생성일시 |
+| updated_at | datetime(6) | NULL | true |  |  |  | 수정일시 |
 
 ## Constraints
 
@@ -49,10 +51,10 @@ erDiagram
 
 "demo_term" {
   bigint_20_ id PK
+  varchar_100_ term
+  varchar_2000_ meaning
   datetime_6_ created_at
   datetime_6_ updated_at
-  varchar_2000_ meaning
-  varchar_100_ term
 }
 "demo_term_synonym" {
   bigint_20_ id PK

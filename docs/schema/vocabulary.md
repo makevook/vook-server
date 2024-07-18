@@ -2,19 +2,21 @@
 
 ## Description
 
+용어집
+
 <details>
 <summary><strong>Table Definition</strong></summary>
 
 ```sql
 CREATE TABLE `vocabulary` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `name` varchar(20) NOT NULL,
-  `uid` varchar(255) DEFAULT NULL,
-  `user_uid` varchar(255) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `uid` varchar(255) DEFAULT NULL COMMENT 'UID',
+  `name` varchar(20) NOT NULL COMMENT '이름',
+  `user_uid` varchar(255) NOT NULL COMMENT '사용자 UID',
+  `created_at` datetime(6) DEFAULT NULL COMMENT '생성일시',
+  `updated_at` datetime(6) DEFAULT NULL COMMENT '수정일시',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='용어집'
 ```
 
 </details>
@@ -23,12 +25,12 @@ CREATE TABLE `vocabulary` (
 
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | bigint(20) |  | false | auto_increment | [term](term.md) |  |  |
-| created_at | datetime(6) | NULL | true |  |  |  |  |
-| updated_at | datetime(6) | NULL | true |  |  |  |  |
-| name | varchar(20) |  | false |  |  |  |  |
-| uid | varchar(255) | NULL | true |  |  |  |  |
-| user_uid | varchar(255) |  | false |  |  |  |  |
+| id | bigint(20) |  | false | auto_increment | [term](term.md) |  | ID |
+| uid | varchar(255) | NULL | true |  |  |  | UID |
+| name | varchar(20) |  | false |  |  |  | 이름 |
+| user_uid | varchar(255) |  | false |  |  |  | 사용자 UID |
+| created_at | datetime(6) | NULL | true |  |  |  | 생성일시 |
+| updated_at | datetime(6) | NULL | true |  |  |  | 수정일시 |
 
 ## Constraints
 
@@ -51,21 +53,21 @@ erDiagram
 
 "vocabulary" {
   bigint_20_ id PK
+  varchar_255_ uid
+  varchar_20_ name
+  varchar_255_ user_uid
   datetime_6_ created_at
   datetime_6_ updated_at
-  varchar_20_ name
-  varchar_255_ uid
-  varchar_255_ user_uid
 }
 "term" {
   bigint_20_ id PK
-  datetime_6_ created_at
-  datetime_6_ updated_at
+  varchar_255_ uid
+  varchar_100_ term
   varchar_2000_ meaning
   varchar_255_ synonym
-  varchar_100_ term
-  varchar_255_ uid
   bigint_20_ vocabulary_id FK
+  datetime_6_ created_at
+  datetime_6_ updated_at
 }
 ```
 
