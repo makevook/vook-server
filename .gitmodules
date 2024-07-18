@@ -1,0 +1,6 @@
+[submodule "devenv/sql"]
+	path = devenv/sql
+	url = git@github.com:makevook/vook-sql.git
+[submodule "api/src/test/resources/migrate/sql"]
+	path = api/src/test/resources/migrate/sql
+	url = git@github.com:makevook/vook-sql.git
