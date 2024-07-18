@@ -2,21 +2,23 @@
 
 ## Description
 
+사용자 정보
+
 <details>
 <summary><strong>Table Definition</strong></summary>
 
 ```sql
 CREATE TABLE `user_info` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `funnel` varchar(20) DEFAULT NULL,
-  `job` varchar(20) DEFAULT NULL,
-  `marketing_email_opt_in` bit(1) DEFAULT NULL,
-  `nickname` varchar(10) NOT NULL,
-  `user_id` bigint(20) DEFAULT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `nickname` varchar(10) NOT NULL COMMENT '닉네임',
+  `marketing_email_opt_in` bit(1) DEFAULT NULL COMMENT '마케팅 이메일 수신 여부',
+  `funnel` varchar(20) DEFAULT NULL COMMENT '유입 경로',
+  `job` varchar(20) DEFAULT NULL COMMENT '직업',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '사용자 ID',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UKhixwjgx0ynne0cq4tqvoawoda` (`user_id`),
-  CONSTRAINT `FKr1b96ca4asuvrhwoqkdmbo7nj` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  UNIQUE KEY `uk_user_info_user_id` (`user_id`),
+  CONSTRAINT `fk_user_info_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 정보'
 ```
 
 </details>
@@ -25,27 +27,27 @@ CREATE TABLE `user_info` (
 
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | bigint(20) |  | false | auto_increment |  |  |  |
-| funnel | varchar(20) | NULL | true |  |  |  |  |
-| job | varchar(20) | NULL | true |  |  |  |  |
-| marketing_email_opt_in | bit(1) | NULL | true |  |  |  |  |
-| nickname | varchar(10) |  | false |  |  |  |  |
-| user_id | bigint(20) | NULL | true |  |  | [users](users.md) |  |
+| id | bigint(20) |  | false | auto_increment |  |  | ID |
+| nickname | varchar(10) |  | false |  |  |  | 닉네임 |
+| marketing_email_opt_in | bit(1) | NULL | true |  |  |  | 마케팅 이메일 수신 여부 |
+| funnel | varchar(20) | NULL | true |  |  |  | 유입 경로 |
+| job | varchar(20) | NULL | true |  |  |  | 직업 |
+| user_id | bigint(20) | NULL | true |  |  | [users](users.md) | 사용자 ID |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
-| FKr1b96ca4asuvrhwoqkdmbo7nj | FOREIGN KEY | FOREIGN KEY (user_id) REFERENCES users (id) |
+| fk_user_info_users | FOREIGN KEY | FOREIGN KEY (user_id) REFERENCES users (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
-| UKhixwjgx0ynne0cq4tqvoawoda | UNIQUE | UNIQUE KEY UKhixwjgx0ynne0cq4tqvoawoda (user_id) |
+| uk_user_info_user_id | UNIQUE | UNIQUE KEY uk_user_info_user_id (user_id) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
-| UKhixwjgx0ynne0cq4tqvoawoda | UNIQUE KEY UKhixwjgx0ynne0cq4tqvoawoda (user_id) USING BTREE |
+| uk_user_info_user_id | UNIQUE KEY uk_user_info_user_id (user_id) USING BTREE |
 
 ## Relations
 
@@ -56,22 +58,22 @@ erDiagram
 
 "user_info" {
   bigint_20_ id PK
+  varchar_10_ nickname
+  bit_1_ marketing_email_opt_in
   varchar_20_ funnel
   varchar_20_ job
-  bit_1_ marketing_email_opt_in
-  varchar_10_ nickname
   bigint_20_ user_id FK
 }
 "users" {
   bigint_20_ id PK
+  varchar_255_ uid
   varchar_255_ email
-  datetime_6_ last_updated_at
+  varchar_30_ status
+  datetime_6_ registered_at
   bit_1_ onboarding_completed
   datetime_6_ onboarding_completed_at
-  datetime_6_ registered_at
-  varchar_30_ status
-  varchar_255_ uid
   datetime_6_ withdrawn_at
+  datetime_6_ last_updated_at
 }
 ```
 

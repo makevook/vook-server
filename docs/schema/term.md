@@ -2,23 +2,25 @@
 
 ## Description
 
+용어
+
 <details>
 <summary><strong>Table Definition</strong></summary>
 
 ```sql
 CREATE TABLE `term` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `meaning` varchar(2000) NOT NULL,
-  `synonym` varchar(255) DEFAULT NULL,
-  `term` varchar(100) NOT NULL,
-  `uid` varchar(255) DEFAULT NULL,
-  `vocabulary_id` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `uid` varchar(255) DEFAULT NULL COMMENT 'UID',
+  `term` varchar(100) NOT NULL COMMENT '용어',
+  `meaning` varchar(2000) NOT NULL COMMENT '뜻',
+  `synonym` varchar(255) DEFAULT NULL COMMENT '동의어',
+  `vocabulary_id` bigint(20) NOT NULL COMMENT '용어집 ID',
+  `created_at` datetime(6) DEFAULT NULL COMMENT '생성일시',
+  `updated_at` datetime(6) DEFAULT NULL COMMENT '수정일시',
   PRIMARY KEY (`id`),
-  KEY `FKk0u34gq7hfjfe9fnaqk90729c` (`vocabulary_id`),
-  CONSTRAINT `FKk0u34gq7hfjfe9fnaqk90729c` FOREIGN KEY (`vocabulary_id`) REFERENCES `vocabulary` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  KEY `fk_term_vocabulary` (`vocabulary_id`),
+  CONSTRAINT `fk_term_vocabulary` FOREIGN KEY (`vocabulary_id`) REFERENCES `vocabulary` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='용어'
 ```
 
 </details>
@@ -27,27 +29,27 @@ CREATE TABLE `term` (
 
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | bigint(20) |  | false | auto_increment |  |  |  |
-| created_at | datetime(6) | NULL | true |  |  |  |  |
-| updated_at | datetime(6) | NULL | true |  |  |  |  |
-| meaning | varchar(2000) |  | false |  |  |  |  |
-| synonym | varchar(255) | NULL | true |  |  |  |  |
-| term | varchar(100) |  | false |  |  |  |  |
-| uid | varchar(255) | NULL | true |  |  |  |  |
-| vocabulary_id | bigint(20) |  | false |  |  | [vocabulary](vocabulary.md) |  |
+| id | bigint(20) |  | false | auto_increment |  |  | ID |
+| uid | varchar(255) | NULL | true |  |  |  | UID |
+| term | varchar(100) |  | false |  |  |  | 용어 |
+| meaning | varchar(2000) |  | false |  |  |  | 뜻 |
+| synonym | varchar(255) | NULL | true |  |  |  | 동의어 |
+| vocabulary_id | bigint(20) |  | false |  |  | [vocabulary](vocabulary.md) | 용어집 ID |
+| created_at | datetime(6) | NULL | true |  |  |  | 생성일시 |
+| updated_at | datetime(6) | NULL | true |  |  |  | 수정일시 |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
-| FKk0u34gq7hfjfe9fnaqk90729c | FOREIGN KEY | FOREIGN KEY (vocabulary_id) REFERENCES vocabulary (id) |
+| fk_term_vocabulary | FOREIGN KEY | FOREIGN KEY (vocabulary_id) REFERENCES vocabulary (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
-| FKk0u34gq7hfjfe9fnaqk90729c | KEY FKk0u34gq7hfjfe9fnaqk90729c (vocabulary_id) USING BTREE |
+| fk_term_vocabulary | KEY fk_term_vocabulary (vocabulary_id) USING BTREE |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
 
 ## Relations
@@ -59,21 +61,21 @@ erDiagram
 
 "term" {
   bigint_20_ id PK
-  datetime_6_ created_at
-  datetime_6_ updated_at
+  varchar_255_ uid
+  varchar_100_ term
   varchar_2000_ meaning
   varchar_255_ synonym
-  varchar_100_ term
-  varchar_255_ uid
   bigint_20_ vocabulary_id FK
+  datetime_6_ created_at
+  datetime_6_ updated_at
 }
 "vocabulary" {
   bigint_20_ id PK
+  varchar_255_ uid
+  varchar_20_ name
+  varchar_255_ user_uid
   datetime_6_ created_at
   datetime_6_ updated_at
-  varchar_20_ name
-  varchar_255_ uid
-  varchar_255_ user_uid
 }
 ```
 

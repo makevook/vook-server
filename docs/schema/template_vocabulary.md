@@ -2,16 +2,18 @@
 
 ## Description
 
+템플릿 용어집
+
 <details>
 <summary><strong>Table Definition</strong></summary>
 
 ```sql
 CREATE TABLE `template_vocabulary` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `type` varchar(20) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `type` varchar(20) NOT NULL COMMENT '템플릿 용어집 타입',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UKaqlv8ks5rgqvc9wbcoahewmpm` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  UNIQUE KEY `uk_template_vocabulary_type` (`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='템플릿 용어집'
 ```
 
 </details>
@@ -20,22 +22,22 @@ CREATE TABLE `template_vocabulary` (
 
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | bigint(20) |  | false | auto_increment | [template_term](template_term.md) |  |  |
-| type | varchar(20) |  | false |  |  |  |  |
+| id | bigint(20) |  | false | auto_increment | [template_term](template_term.md) |  | ID |
+| type | varchar(20) |  | false |  |  |  | 템플릿 용어집 타입 |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
-| UKaqlv8ks5rgqvc9wbcoahewmpm | UNIQUE | UNIQUE KEY UKaqlv8ks5rgqvc9wbcoahewmpm (type) |
+| uk_template_vocabulary_type | UNIQUE | UNIQUE KEY uk_template_vocabulary_type (type) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
-| UKaqlv8ks5rgqvc9wbcoahewmpm | UNIQUE KEY UKaqlv8ks5rgqvc9wbcoahewmpm (type) USING BTREE |
+| uk_template_vocabulary_type | UNIQUE KEY uk_template_vocabulary_type (type) USING BTREE |
 
 ## Relations
 
@@ -50,9 +52,9 @@ erDiagram
 }
 "template_term" {
   bigint_20_ id PK
+  varchar_100_ term
   varchar_2000_ meaning
   varchar_255_ synonym
-  varchar_100_ term
   bigint_20_ template_vocabulary_id FK
 }
 ```
