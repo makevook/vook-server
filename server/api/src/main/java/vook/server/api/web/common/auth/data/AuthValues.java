@@ -1,0 +1,6 @@
+package vook.server.api.web.common.auth.data;
+
+public class AuthValues {
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String REFRESH_AUTHORIZATION_HEADER = "X-Refresh-Authorization";
+}
