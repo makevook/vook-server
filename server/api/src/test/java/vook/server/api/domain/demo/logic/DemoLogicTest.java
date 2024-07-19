@@ -35,7 +35,7 @@ class DemoLogicTest extends IntegrationTestBase {
     @BeforeAll
     void beforeAll() {
         List<DemoTerm> terms = testTermsLoader.getTerms(
-                "classpath:init/데모.tsv",
+                "classpath:init/demo.tsv",
                 InitService::convertToDemoTerm
         );
         demoTermRepository.saveAll(terms);
