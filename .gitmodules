@@ -4,3 +4,6 @@
 [submodule "api/src/test/resources/migrate/sql"]
 	path = api/src/test/resources/migrate/sql
 	url = git@github.com:makevook/vook-sql.git
+[submodule "server/api/src/test/resources/migrate/sql"]
+	path = server/api/src/test/resources/migrate/sql
+	url = git@github.com:makevook/vook-sql.git

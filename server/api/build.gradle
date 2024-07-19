@@ -1,30 +1,5 @@
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.3.1'
-    id 'io.spring.dependency-management' version '1.1.5'
-}
-
 ext {
     springModulithVersion = "1.2.1"
-}
-
-group = 'vook.server'
-version = '0.0.1-SNAPSHOT'
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {
@@ -72,17 +47,8 @@ dependencies {
     testImplementation 'org.testcontainers:mariadb'
 }
 
-bootJar {
-    destinationDirectory = file(rootDir.absolutePath + '/jar')
-    archiveFileName = "${project.name}.jar"
-}
-
 dependencyManagement {
     imports {
         mavenBom "org.springframework.modulith:spring-modulith-bom:$springModulithVersion"
     }
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
 }
