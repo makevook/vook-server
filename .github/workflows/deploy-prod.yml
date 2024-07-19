@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - "api/**"
+      - "server/**"
 
 jobs:
   deploy:
@@ -27,7 +27,7 @@ jobs:
           module: ./cicd
           args: >-
             deploy
-            --source-dir=api
+            --source-dir=server
             --profile=prod
             --ssh-dest=env:SSH_DEST
             --ssh-key=env:SSH_KEY

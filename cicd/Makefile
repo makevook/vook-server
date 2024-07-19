@@ -3,7 +3,7 @@ VERSION := $(shell git describe --tags --always --dirty)
 .PHONY:deploy-dev
 deploy-dev:
 	dagger call -v deploy \
-	--source-dir=../api \
+	--source-dir=../server \
 	--profile=dev \
 	--ssh-dest=file:./secrets/dev/dest.txt \
 	--ssh-key=file:./secrets/dev/ssh.key \
@@ -14,7 +14,7 @@ deploy-dev:
 .PHONY:deploy-stag
 deploy-stag:
 	dagger call -v deploy \
-	--source-dir=../api \
+	--source-dir=../server \
 	--profile=stag \
 	--ssh-dest=file:./secrets/stag/dest.txt \
 	--ssh-key=file:./secrets/stag/ssh.key \
@@ -25,7 +25,7 @@ deploy-stag:
 .PHONY:deploy-prod
 deploy-prod:
 	dagger call -v deploy \
-	--source-dir=../api \
+	--source-dir=../server \
 	--profile=prod \
 	--ssh-dest=file:./secrets/prod/dest.txt \
 	--ssh-key=file:./secrets/prod/ssh.key \
@@ -35,7 +35,7 @@ deploy-prod:
 
 .PHONY:build-jar
 build-jar:
-	dagger call -v build-api-jar --dir=../api --test export --path out/api.jar
+	dagger call -v build-api-jar --dir=../server --test --sub-module=api export --path out/api.jar
 
 .PHONY:build-image
 build-image: build-jar
