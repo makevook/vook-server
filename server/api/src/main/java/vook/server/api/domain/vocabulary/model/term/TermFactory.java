@@ -1,4 +1,4 @@
-package vook.server.api.domain.vocabulary.model;
+package vook.server.api.domain.vocabulary.model.term;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
-import vook.server.api.domain.vocabulary.model.UserUid;
+import vook.server.api.domain.vocabulary.logic.vocabulary.VocabularyLogic;
+import vook.server.api.domain.vocabulary.model.vocabulary.UserUid;
 import vook.server.api.globalcommon.annotation.UseCase;
 import vook.server.api.policy.VocabularyPolicy;
 

@@ -1,9 +1,10 @@
-package vook.server.api.domain.vocabulary.model;
+package vook.server.api.domain.vocabulary.model.term;
 
 import jakarta.persistence.*;
 import lombok.*;
 import vook.server.api.domain.common.model.BaseEntity;
 import vook.server.api.domain.common.model.Synonym;
+import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
 
 import java.util.List;
 

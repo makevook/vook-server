@@ -1,4 +1,4 @@
-package vook.server.api.domain.vocabulary.logic;
+package vook.server.api.domain.vocabulary.logic.term;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -6,12 +6,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import vook.server.api.domain.vocabulary.exception.TermNotFoundException;
-import vook.server.api.domain.vocabulary.logic.dto.TermCreateAllCommand;
-import vook.server.api.domain.vocabulary.logic.dto.TermCreateCommand;
-import vook.server.api.domain.vocabulary.logic.dto.TermUpdateCommand;
-import vook.server.api.domain.vocabulary.model.Term;
-import vook.server.api.domain.vocabulary.model.TermFactory;
-import vook.server.api.domain.vocabulary.model.TermRepository;
+import vook.server.api.domain.vocabulary.model.term.Term;
+import vook.server.api.domain.vocabulary.model.term.TermFactory;
+import vook.server.api.domain.vocabulary.model.term.TermRepository;
 import vook.server.api.globalcommon.annotation.DomainLogic;
 
 import java.util.List;

@@ -1,9 +1,10 @@
-package vook.server.api.domain.vocabulary.model;
+package vook.server.api.domain.vocabulary.model.term;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
 
 import java.util.List;
 import java.util.Optional;

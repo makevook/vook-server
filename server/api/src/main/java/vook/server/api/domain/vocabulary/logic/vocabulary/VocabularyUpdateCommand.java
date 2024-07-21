@@ -1,4 +1,4 @@
-package vook.server.api.domain.vocabulary.logic.dto;
+package vook.server.api.domain.vocabulary.logic.vocabulary;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

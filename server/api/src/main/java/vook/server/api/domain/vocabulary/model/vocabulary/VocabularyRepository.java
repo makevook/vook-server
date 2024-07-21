@@ -1,4 +1,4 @@
-package vook.server.api.domain.vocabulary.model;
+package vook.server.api.domain.vocabulary.model.vocabulary;
 
 import java.util.List;
 import java.util.Optional;

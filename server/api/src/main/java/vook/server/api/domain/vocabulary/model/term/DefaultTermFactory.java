@@ -1,4 +1,4 @@
-package vook.server.api.domain.vocabulary.model;
+package vook.server.api.domain.vocabulary.model.term;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import vook.server.api.domain.common.model.Synonym;
 import vook.server.api.domain.vocabulary.exception.TermLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
+import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
+import vook.server.api.domain.vocabulary.model.vocabulary.VocabularyRepository;
 import vook.server.api.globalcommon.annotation.ModelFactory;
 
 import java.util.List;

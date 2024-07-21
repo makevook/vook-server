@@ -1,8 +1,8 @@
-package vook.server.api.domain.vocabulary.logic.dto;
+package vook.server.api.domain.vocabulary.logic.term;
 
 import lombok.Builder;
-import vook.server.api.domain.vocabulary.model.Term;
-import vook.server.api.domain.vocabulary.model.TermFactory;
+import vook.server.api.domain.vocabulary.model.term.Term;
+import vook.server.api.domain.vocabulary.model.term.TermFactory;
 
 import java.util.List;
 
