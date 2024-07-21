@@ -3,17 +3,15 @@ package vook.server.api.domain.vocabulary.model;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 import vook.server.api.domain.common.model.Synonym;
 import vook.server.api.domain.vocabulary.exception.TermLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
+import vook.server.api.globalcommon.annotation.ModelFactory;
 
 import java.util.List;
 import java.util.UUID;
 
-@Component
-@Validated
+@ModelFactory
 @RequiredArgsConstructor
 public class DefaultTermFactory implements TermFactory {
 
