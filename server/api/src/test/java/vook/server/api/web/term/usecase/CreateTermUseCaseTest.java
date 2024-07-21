@@ -9,6 +9,7 @@ import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.vocabulary.exception.TermLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
 import vook.server.api.domain.vocabulary.model.Term;
+import vook.server.api.domain.vocabulary.model.TermFactory;
 import vook.server.api.domain.vocabulary.model.TermRepository;
 import vook.server.api.domain.vocabulary.model.Vocabulary;
 import vook.server.api.policy.VocabularyPolicy;
@@ -35,6 +36,8 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
     TestVocabularyCreator testVocabularyCreator;
     @Autowired
     TermRepository termRepository;
+    @Autowired
+    TermFactory termFactory;
     @Autowired
     EntityManager em;
 
@@ -126,12 +129,12 @@ class CreateTermUseCaseTest extends IntegrationTestBase {
 
         termRepository.saveAll(
                 IntStream.range(0, 100)
-                        .mapToObj(i -> Term.forCreateOf(
-                                "테스트 용어" + i,
-                                "테스트 뜻" + i,
-                                List.of(),
-                                vocabulary
-                        ))
+                        .mapToObj(i -> termFactory.create(
+                                        new TermFactory.CreateCommand(
+                                                vocabulary.getUid(),
+                                                new TermFactory.TermInfo("테스트 용어" + i, "테스트 뜻" + i, List.of()))
+                                )
+                        )
                         .toList()
         );
         em.flush();

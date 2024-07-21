@@ -1,17 +1,18 @@
 package vook.server.api.domain.vocabulary.model;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
+import lombok.*;
 import vook.server.api.domain.common.model.BaseEntity;
 import vook.server.api.domain.common.model.Synonym;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Entity
 @Table(name = "term")
+@Builder(access = AccessLevel.PACKAGE)
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Term extends BaseEntity {
 
     @Id
@@ -42,34 +43,6 @@ public class Term extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "vocabulary_id", nullable = false)
     private Vocabulary vocabulary;
-
-    public static Term forCreateOf(
-            String term,
-            String meaning,
-            List<String> synonyms,
-            Vocabulary vocabulary
-    ) {
-        Term result = new Term();
-        result.uid = UUID.randomUUID().toString();
-        result.term = term;
-        result.meaning = meaning;
-        result.synonym = Synonym.from(synonyms);
-        result.vocabulary = vocabulary;
-        vocabulary.addTerm(result);
-        return result;
-    }
-
-    public static Term forUpdateOf(
-            String term,
-            String meaning,
-            List<String> synonyms
-    ) {
-        Term result = new Term();
-        result.term = term;
-        result.meaning = meaning;
-        result.synonym = Synonym.from(synonyms);
-        return result;
-    }
 
     public void update(Term term) {
         this.term = term.getTerm();

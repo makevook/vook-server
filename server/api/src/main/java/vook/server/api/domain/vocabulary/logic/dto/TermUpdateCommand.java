@@ -1,34 +1,22 @@
 package vook.server.api.domain.vocabulary.logic.dto;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import vook.server.api.domain.vocabulary.model.Term;
+import vook.server.api.domain.vocabulary.model.TermFactory;
 
 import java.util.List;
 
 @Builder
 public record TermUpdateCommand(
-        @NotNull
         String uid,
-
-        @NotBlank
-        @Size(min = 1, max = 100)
         String term,
-
-        @NotBlank
-        @Size(min = 1, max = 2000)
         String meaning,
-
-        @NotNull
-        @Valid
-        @Size(max = 10)
-        List<@Size(min = 1, max = 100) String> synonyms
+        List<String> synonyms
 ) {
 
-    public Term toEntity() {
-        return Term.forUpdateOf(term, meaning, synonyms);
+    public Term toEntity(TermFactory termFactory) {
+        return termFactory.createForUpdate(
+                new TermFactory.UpdateCommand(new TermFactory.TermInfo(term, meaning, synonyms))
+        );
     }
 }
