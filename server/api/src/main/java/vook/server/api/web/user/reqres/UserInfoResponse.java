@@ -1,8 +1,8 @@
 package vook.server.api.web.user.reqres;
 
 import lombok.Builder;
-import vook.server.api.domain.user.model.User;
-import vook.server.api.domain.user.model.UserStatus;
+import vook.server.api.domain.user.model.user.User;
+import vook.server.api.domain.user.model.user.UserStatus;
 
 @Builder
 public record UserInfoResponse(

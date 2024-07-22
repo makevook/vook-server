@@ -1,4 +1,4 @@
-package vook.server.api.domain.user.logic.dto;
+package vook.server.api.domain.user.logic;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

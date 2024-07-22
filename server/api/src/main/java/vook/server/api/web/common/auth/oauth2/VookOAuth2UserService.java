@@ -9,8 +9,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.logic.UserLogic;
-import vook.server.api.domain.user.logic.dto.UserSignUpFromSocialCommand;
-import vook.server.api.domain.user.model.SocialUser;
+import vook.server.api.domain.user.logic.UserSignUpFromSocialCommand;
+import vook.server.api.domain.user.model.social_user.SocialUser;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 
 @Slf4j

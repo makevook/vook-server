@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import vook.server.api.domain.user.model.SocialUser;
+import vook.server.api.domain.user.model.social_user.SocialUser;
 
 import java.util.Collection;
 import java.util.List;

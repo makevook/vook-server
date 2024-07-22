@@ -1,9 +1,9 @@
-package vook.server.api.domain.user.logic.dto;
+package vook.server.api.domain.user.logic;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
-import vook.server.api.domain.user.model.Funnel;
-import vook.server.api.domain.user.model.Job;
+import vook.server.api.domain.user.model.user_info.Funnel;
+import vook.server.api.domain.user.model.user_info.Job;
 
 @Builder
 public record UserOnboardingCommand(

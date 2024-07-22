@@ -1,4 +1,4 @@
-package vook.server.api.domain.user.model;
+package vook.server.api.domain.user.model.social_user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

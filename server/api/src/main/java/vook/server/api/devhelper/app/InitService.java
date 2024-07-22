@@ -11,9 +11,9 @@ import vook.server.api.domain.template_vocabulary.logic.dto.TemplateVocabularyCr
 import vook.server.api.domain.template_vocabulary.model.TemplateTermRepository;
 import vook.server.api.domain.template_vocabulary.model.TemplateVocabularyRepository;
 import vook.server.api.domain.template_vocabulary.model.TemplateVocabularyType;
-import vook.server.api.domain.user.model.SocialUserRepository;
-import vook.server.api.domain.user.model.UserInfoRepository;
-import vook.server.api.domain.user.model.UserRepository;
+import vook.server.api.domain.user.model.social_user.SocialUserRepository;
+import vook.server.api.domain.user.model.user.UserRepository;
+import vook.server.api.domain.user.model.user_info.UserInfoRepository;
 import vook.server.api.domain.vocabulary.model.term.TermRepository;
 import vook.server.api.infra.search.demo.MeilisearchDemoTermSearchService;
 import vook.server.api.infra.vocabulary.cache.UserVocabularyCacheRepository;

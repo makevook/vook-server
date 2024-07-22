@@ -2,13 +2,19 @@ package vook.server.api.domain.user.logic;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import vook.server.api.domain.user.exception.UserNotFoundException;
-import vook.server.api.domain.user.logic.dto.UserOnboardingCommand;
-import vook.server.api.domain.user.logic.dto.UserRegisterCommand;
-import vook.server.api.domain.user.logic.dto.UserSignUpFromSocialCommand;
-import vook.server.api.domain.user.model.*;
+import vook.server.api.domain.user.model.social_user.SocialUser;
+import vook.server.api.domain.user.model.social_user.SocialUserFactory;
+import vook.server.api.domain.user.model.social_user.SocialUserRepository;
+import vook.server.api.domain.user.model.user.User;
+import vook.server.api.domain.user.model.user.UserFactory;
+import vook.server.api.domain.user.model.user.UserRepository;
+import vook.server.api.domain.user.model.user_info.UserInfo;
+import vook.server.api.domain.user.model.user_info.UserInfoFactory;
+import vook.server.api.domain.user.model.user_info.UserInfoRepository;
 import vook.server.api.globalcommon.annotation.DomainLogic;
 
 import java.util.Optional;
@@ -17,6 +23,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserLogic {
 
+    private final UserFactory userFactory;
+    private final SocialUserFactory socialUserFactory;
+    private final UserInfoFactory userInfoFactory;
     private final UserRepository repository;
     private final SocialUserRepository socialUserRepository;
     private final UserInfoRepository userInfoRepository;
@@ -25,37 +34,30 @@ public class UserLogic {
         return socialUserRepository.findByProviderAndProviderUserId(provider, providerUserId);
     }
 
-    public SocialUser signUpFromSocial(@Valid UserSignUpFromSocialCommand command) {
+    public SocialUser signUpFromSocial(@NotNull @Valid UserSignUpFromSocialCommand command) {
         User user = repository
                 .findByEmail(command.email())
-                .orElseGet(() -> repository.save(command.toNewUser()));
+                .orElseGet(() -> repository.save(command.toNewUser(userFactory)));
 
-        SocialUser savedSocialUser = socialUserRepository.save(command.toSocialUser(user));
-        user.addSocialUser(savedSocialUser);
-
-        return savedSocialUser;
+        return socialUserRepository.save(command.toSocialUser(socialUserFactory, user));
     }
 
     public User getByUid(@NotBlank String uid) {
         return getUserByUid(uid);
     }
 
-    public void register(@Valid UserRegisterCommand command) {
+    public void register(@NotNull @Valid UserRegisterCommand command) {
         User user = getUserByUid(command.userUid());
-        user.validateRegisterProcessReady();
-
-        UserInfo userInfo = userInfoRepository.save(UserInfo.forRegisterOf(
+        UserInfo userInfo = userInfoFactory.createForRegisterOf(
                 command.nickname(),
-                user,
-                command.marketingEmailOptIn()
-        ));
-        user.register(userInfo);
+                command.marketingEmailOptIn(),
+                user
+        );
+        userInfoRepository.save(userInfo);
     }
 
-    public void onboarding(@Valid UserOnboardingCommand command) {
+    public void onboarding(@NotNull @Valid UserOnboardingCommand command) {
         User user = getUserByUid(command.userUid());
-        user.validateOnboardingProcessReady();
-
         user.onboarding(command.funnel(), command.job());
     }
 
@@ -64,22 +66,16 @@ public class UserLogic {
             @NotBlank @Size(min = 1, max = 10) String nickname
     ) {
         User user = getUserByUid(uid);
-        user.validateRegisterProcessCompleted();
         user.update(nickname);
     }
 
     public void withdraw(@NotBlank String uid) {
         User user = getUserByUid(uid);
-        if (user.getStatus() == UserStatus.WITHDRAWN) {
-            return;
-        }
         user.withdraw();
     }
 
-    public void reRegister(UserRegisterCommand command) {
+    public void reRegister(@NotNull @Valid UserRegisterCommand command) {
         User user = getUserByUid(command.userUid());
-        user.validateReRegisterProcessReady();
-
         user.reRegister(command.nickname(), command.marketingEmailOptIn());
     }
 

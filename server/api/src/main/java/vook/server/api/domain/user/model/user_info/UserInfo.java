@@ -1,11 +1,15 @@
-package vook.server.api.domain.user.model;
+package vook.server.api.domain.user.model.user_info;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
+import vook.server.api.domain.user.model.user.User;
 
 @Getter
 @Entity
 @Table(name = "user_info")
+@Builder(access = AccessLevel.PACKAGE)
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class UserInfo {
 
     @Id
@@ -28,18 +32,6 @@ public class UserInfo {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    public static UserInfo forRegisterOf(
-            String nickname,
-            User user,
-            Boolean marketingEmailOptIn
-    ) {
-        UserInfo result = new UserInfo();
-        result.nickname = nickname;
-        result.user = user;
-        result.marketingEmailOptIn = marketingEmailOptIn;
-        return result;
-    }
 
     public void addOnboardingInfo(Funnel funnel, Job job) {
         this.funnel = funnel;

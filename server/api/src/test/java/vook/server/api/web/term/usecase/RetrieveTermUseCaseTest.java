@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.model.User;
+import vook.server.api.domain.user.model.user.User;
 import vook.server.api.domain.vocabulary.model.term.Term;
 import vook.server.api.domain.vocabulary.model.term.TermRepository;
 import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;

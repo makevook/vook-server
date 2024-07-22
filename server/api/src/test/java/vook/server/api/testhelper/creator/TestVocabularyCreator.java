@@ -3,7 +3,7 @@ package vook.server.api.testhelper.creator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.model.User;
+import vook.server.api.domain.user.model.user.User;
 import vook.server.api.domain.vocabulary.logic.term.TermCreateAllCommand;
 import vook.server.api.domain.vocabulary.logic.term.TermCreateCommand;
 import vook.server.api.domain.vocabulary.logic.term.TermLogic;
