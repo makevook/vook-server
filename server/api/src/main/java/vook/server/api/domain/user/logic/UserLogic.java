@@ -20,6 +20,7 @@ public class UserLogic {
 
     private final UserFactory userFactory;
     private final SocialUserFactory socialUserFactory;
+    private final UserInfoFactory userInfoFactory;
     private final UserRepository repository;
     private final SocialUserRepository socialUserRepository;
     private final UserInfoRepository userInfoRepository;
@@ -42,14 +43,12 @@ public class UserLogic {
 
     public void register(@Valid UserRegisterCommand command) {
         User user = getUserByUid(command.userUid());
-        user.validateRegisterProcessReady();
-
-        UserInfo userInfo = userInfoRepository.save(UserInfo.forRegisterOf(
+        UserInfo userInfo = userInfoFactory.createForRegisterOf(
                 command.nickname(),
-                user,
-                command.marketingEmailOptIn()
-        ));
-        user.register(userInfo);
+                command.marketingEmailOptIn(),
+                user
+        );
+        userInfoRepository.save(userInfo);
     }
 
     public void onboarding(@Valid UserOnboardingCommand command) {
