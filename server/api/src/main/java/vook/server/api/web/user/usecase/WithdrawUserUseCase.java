@@ -2,8 +2,8 @@ package vook.server.api.web.user.usecase;
 
 import lombok.RequiredArgsConstructor;
 import vook.server.api.domain.user.logic.UserLogic;
-import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
-import vook.server.api.domain.vocabulary.model.UserUid;
+import vook.server.api.domain.vocabulary.logic.vocabulary.VocabularyLogic;
+import vook.server.api.domain.vocabulary.model.vocabulary.UserUid;
 import vook.server.api.globalcommon.annotation.UseCase;
 
 @UseCase

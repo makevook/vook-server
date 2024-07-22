@@ -1,8 +1,8 @@
 package vook.server.api.policy;
 
 import org.springframework.stereotype.Component;
-import vook.server.api.domain.vocabulary.model.UserUid;
-import vook.server.api.domain.vocabulary.model.Vocabulary;
+import vook.server.api.domain.vocabulary.model.vocabulary.UserUid;
+import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
 
 import java.util.List;
 

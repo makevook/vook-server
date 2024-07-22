@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
-import vook.server.api.domain.vocabulary.model.Vocabulary;
+import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
 import vook.server.api.policy.VocabularyPolicy;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;

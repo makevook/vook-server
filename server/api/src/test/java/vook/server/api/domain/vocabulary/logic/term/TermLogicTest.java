@@ -1,16 +1,13 @@
-package vook.server.api.domain.vocabulary.logic;
+package vook.server.api.domain.vocabulary.logic.term;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.vocabulary.exception.TermNotFoundException;
-import vook.server.api.domain.vocabulary.logic.dto.TermCreateAllCommand;
-import vook.server.api.domain.vocabulary.logic.dto.TermCreateCommand;
-import vook.server.api.domain.vocabulary.logic.dto.TermUpdateCommand;
-import vook.server.api.domain.vocabulary.model.Term;
-import vook.server.api.domain.vocabulary.model.TermRepository;
-import vook.server.api.domain.vocabulary.model.Vocabulary;
+import vook.server.api.domain.vocabulary.model.term.Term;
+import vook.server.api.domain.vocabulary.model.term.TermRepository;
+import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
 import vook.server.api.globalcommon.exception.ParameterValidateException;
 import vook.server.api.infra.search.vocabulary.MeilisearchVocabularySearchService;
 import vook.server.api.testhelper.IntegrationTestBase;

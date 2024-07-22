@@ -1,6 +1,5 @@
 package vook.server.api.web.term.reqres;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import vook.server.api.web.common.auth.data.VookLoginUser;
@@ -20,9 +19,7 @@ public record TermCreateRequest(
         @Size(min = 1, max = 2000)
         String meaning,
 
-        @Valid
-        @Size(max = 10)
-        List<@Size(min = 1, max = 100) String> synonyms
+        List<String> synonyms
 ) {
     public CreateTermUseCase.Command toCommand(VookLoginUser loginUser) {
         return new CreateTermUseCase.Command(

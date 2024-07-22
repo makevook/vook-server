@@ -8,12 +8,12 @@ import vook.server.api.domain.user.logic.UserLogic;
 import vook.server.api.domain.user.logic.dto.UserOnboardingCommand;
 import vook.server.api.domain.user.model.Funnel;
 import vook.server.api.domain.user.model.Job;
-import vook.server.api.domain.vocabulary.logic.TermLogic;
-import vook.server.api.domain.vocabulary.logic.VocabularyLogic;
-import vook.server.api.domain.vocabulary.logic.dto.TermCreateAllCommand;
-import vook.server.api.domain.vocabulary.logic.dto.VocabularyCreateCommand;
-import vook.server.api.domain.vocabulary.model.UserUid;
-import vook.server.api.domain.vocabulary.model.Vocabulary;
+import vook.server.api.domain.vocabulary.logic.term.TermCreateAllCommand;
+import vook.server.api.domain.vocabulary.logic.term.TermLogic;
+import vook.server.api.domain.vocabulary.logic.vocabulary.VocabularyCreateCommand;
+import vook.server.api.domain.vocabulary.logic.vocabulary.VocabularyLogic;
+import vook.server.api.domain.vocabulary.model.vocabulary.UserUid;
+import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
 import vook.server.api.globalcommon.annotation.UseCase;
 
 import java.util.List;

@@ -1,5 +1,6 @@
 package vook.server.api.domain.common.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.util.Arrays;
@@ -10,6 +11,7 @@ public class Synonym {
 
     private static final String SYNONYM_DELIMITER = ":,:";
 
+    @Column(length = 4000)
     private String synonym;
 
     public static Synonym from(List<String> input) {

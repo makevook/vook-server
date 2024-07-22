@@ -12,7 +12,8 @@ public class ExceptionConvertAdvisor {
 
     @Around("""
             @within(vook.server.api.globalcommon.annotation.DomainLogic) || 
-            @within(vook.server.api.globalcommon.annotation.UseCase)
+            @within(vook.server.api.globalcommon.annotation.UseCase) ||
+            @within(vook.server.api.globalcommon.annotation.ModelFactory)
             """)
     public Object convertException(ProceedingJoinPoint joinPoint) throws Throwable {
         try {

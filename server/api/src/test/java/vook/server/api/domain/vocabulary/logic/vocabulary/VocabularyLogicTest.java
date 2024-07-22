@@ -1,4 +1,4 @@
-package vook.server.api.domain.vocabulary.logic;
+package vook.server.api.domain.vocabulary.logic.vocabulary;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -7,11 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.user.model.User;
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
-import vook.server.api.domain.vocabulary.logic.dto.VocabularyCreateCommand;
-import vook.server.api.domain.vocabulary.model.Term;
-import vook.server.api.domain.vocabulary.model.TermRepository;
-import vook.server.api.domain.vocabulary.model.UserUid;
-import vook.server.api.domain.vocabulary.model.Vocabulary;
+import vook.server.api.domain.vocabulary.model.term.Term;
+import vook.server.api.domain.vocabulary.model.term.TermRepository;
+import vook.server.api.domain.vocabulary.model.vocabulary.UserUid;
+import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
 import vook.server.api.infra.search.vocabulary.MeilisearchVocabularySearchService;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;

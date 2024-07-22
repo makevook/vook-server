@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
-import vook.server.api.domain.vocabulary.model.QTerm;
-import vook.server.api.domain.vocabulary.model.Term;
+import vook.server.api.domain.vocabulary.model.term.QTerm;
+import vook.server.api.domain.vocabulary.model.term.Term;
 import vook.server.api.globalcommon.helper.querydsl.QuerydslHelper;
 import vook.server.api.web.term.usecase.RetrieveTermUseCase;
 
