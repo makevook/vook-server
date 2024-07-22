@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import vook.server.api.domain.user.model.SocialUser;
 import vook.server.api.domain.user.model.User;
+import vook.server.api.domain.user.model.UserFactory;
 
 @Builder
 public record UserSignUpFromSocialCommand(
@@ -22,7 +23,7 @@ public record UserSignUpFromSocialCommand(
         return SocialUser.forNewOf(provider, providerUserId, user);
     }
 
-    public User toNewUser() {
-        return User.forSignUpFromSocialOf(email);
+    public User toNewUser(UserFactory userFactory) {
+        return userFactory.createForSignUpFromSocialOf(email);
     }
 }

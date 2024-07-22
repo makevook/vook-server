@@ -17,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserLogic {
 
+    private final UserFactory userFactory;
     private final UserRepository repository;
     private final SocialUserRepository socialUserRepository;
     private final UserInfoRepository userInfoRepository;
@@ -28,7 +29,7 @@ public class UserLogic {
     public SocialUser signUpFromSocial(@Valid UserSignUpFromSocialCommand command) {
         User user = repository
                 .findByEmail(command.email())
-                .orElseGet(() -> repository.save(command.toNewUser()));
+                .orElseGet(() -> repository.save(command.toNewUser(userFactory)));
 
         SocialUser savedSocialUser = socialUserRepository.save(command.toSocialUser(user));
         user.addSocialUser(savedSocialUser);
