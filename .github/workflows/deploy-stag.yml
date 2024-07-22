@@ -1,0 +1,36 @@
+name: Deploy to Stag Environment
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release
+    paths:
+      - "server/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+      - name: Deploy
+        uses: dagger/dagger-for-github@v5
+        env:
+          SSH_DEST: ${{ secrets.STAG_SSH_DEST }}
+          SSH_KEY: ${{ secrets.STAG_SSH_KEY }}
+        with:
+          version: 0.12.0
+          verb: call
+          module: ./cicd
+          args: >-
+            deploy
+            --source-dir=server
+            --profile=stag
+            --ssh-dest=env:SSH_DEST
+            --ssh-key=env:SSH_KEY
+            --target-path=~/repo/makevook/vook-deployment/stag
+            --version=${{ github.sha }}
+            --command="make deploy-api"
