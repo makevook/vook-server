@@ -2,6 +2,7 @@ package vook.server.api.domain.user.logic;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import vook.server.api.domain.user.exception.UserNotFoundException;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class UserLogic {
 
     private final UserFactory userFactory;
+    private final SocialUserFactory socialUserFactory;
     private final UserRepository repository;
     private final SocialUserRepository socialUserRepository;
     private final UserInfoRepository userInfoRepository;
@@ -26,15 +28,12 @@ public class UserLogic {
         return socialUserRepository.findByProviderAndProviderUserId(provider, providerUserId);
     }
 
-    public SocialUser signUpFromSocial(@Valid UserSignUpFromSocialCommand command) {
+    public SocialUser signUpFromSocial(@NotNull @Valid UserSignUpFromSocialCommand command) {
         User user = repository
                 .findByEmail(command.email())
                 .orElseGet(() -> repository.save(command.toNewUser(userFactory)));
 
-        SocialUser savedSocialUser = socialUserRepository.save(command.toSocialUser(user));
-        user.addSocialUser(savedSocialUser);
-
-        return savedSocialUser;
+        return socialUserRepository.save(command.toSocialUser(socialUserFactory, user));
     }
 
     public User getByUid(@NotBlank String uid) {

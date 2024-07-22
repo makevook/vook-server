@@ -1,7 +1,7 @@
 package vook.server.api.domain.user.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "social_user")
 @EntityListeners(AuditingEntityListener.class)
+@Builder(access = AccessLevel.PACKAGE)
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class SocialUser {
 
     @Id
@@ -28,16 +31,4 @@ public class SocialUser {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    public static SocialUser forNewOf(
-            String provider,
-            String providerUserId,
-            User user
-    ) {
-        SocialUser socialUser = new SocialUser();
-        socialUser.provider = provider;
-        socialUser.providerUserId = providerUserId;
-        socialUser.user = user;
-        return socialUser;
-    }
 }

@@ -2,14 +2,12 @@ package vook.server.api.domain.user.model;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.RequiredArgsConstructor;
 import vook.server.api.globalcommon.annotation.ModelFactory;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 @ModelFactory
-@RequiredArgsConstructor
 public class DefaultUserFactory implements UserFactory {
 
     @Override
