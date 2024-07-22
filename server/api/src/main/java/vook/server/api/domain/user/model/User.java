@@ -58,22 +58,32 @@ public class User {
     }
 
     public void onboarding(Funnel funnel, Job job) {
+        validateOnboardingProcessReady();
+
         this.onboardingCompleted = true;
         this.userInfo.addOnboardingInfo(funnel, job);
         this.onboardingCompletedAt = LocalDateTime.now();
     }
 
     public void update(String nickname) {
+        validateRegisterProcessCompleted();
+
         this.userInfo.update(nickname);
         this.lastUpdatedAt = LocalDateTime.now();
     }
 
     public void withdraw() {
+        if (this.status == UserStatus.WITHDRAWN) {
+            return;
+        }
+
         this.status = UserStatus.WITHDRAWN;
         this.withdrawnAt = LocalDateTime.now();
     }
 
     public void reRegister(String nickname, Boolean marketingEmailOptIn) {
+        validateReRegisterProcessReady();
+
         this.status = UserStatus.REGISTERED;
         this.onboardingCompleted = false;
         this.userInfo.reRegister(nickname, marketingEmailOptIn);

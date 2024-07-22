@@ -41,7 +41,7 @@ public class UserLogic {
         return getUserByUid(uid);
     }
 
-    public void register(@Valid UserRegisterCommand command) {
+    public void register(@NotNull @Valid UserRegisterCommand command) {
         User user = getUserByUid(command.userUid());
         UserInfo userInfo = userInfoFactory.createForRegisterOf(
                 command.nickname(),
@@ -51,10 +51,8 @@ public class UserLogic {
         userInfoRepository.save(userInfo);
     }
 
-    public void onboarding(@Valid UserOnboardingCommand command) {
+    public void onboarding(@NotNull @Valid UserOnboardingCommand command) {
         User user = getUserByUid(command.userUid());
-        user.validateOnboardingProcessReady();
-
         user.onboarding(command.funnel(), command.job());
     }
 
@@ -63,22 +61,16 @@ public class UserLogic {
             @NotBlank @Size(min = 1, max = 10) String nickname
     ) {
         User user = getUserByUid(uid);
-        user.validateRegisterProcessCompleted();
         user.update(nickname);
     }
 
     public void withdraw(@NotBlank String uid) {
         User user = getUserByUid(uid);
-        if (user.getStatus() == UserStatus.WITHDRAWN) {
-            return;
-        }
         user.withdraw();
     }
 
-    public void reRegister(UserRegisterCommand command) {
+    public void reRegister(@NotNull @Valid UserRegisterCommand command) {
         User user = getUserByUid(command.userUid());
-        user.validateReRegisterProcessReady();
-
         user.reRegister(command.nickname(), command.marketingEmailOptIn());
     }
 
