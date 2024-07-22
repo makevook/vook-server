@@ -3,8 +3,7 @@
         displayName = "Infra",
         allowedDependencies = {
                 "vook.server.api.domain.demo",
-                "vook.server.api.domain.vocabulary",
-                "vook.server.api.web.term",
+                "vook.server.api.domain.vocabulary"
         }
 )
 package vook.server.api.infra;

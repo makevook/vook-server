@@ -11,9 +11,9 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 import vook.server.api.domain.demo.logic.DemoTermSearchCommand;
 import vook.server.api.domain.demo.logic.DemoTermSearchResult;
-import vook.server.api.domain.demo.logic.DemoTermSearchService;
 import vook.server.api.domain.demo.model.DemoTerm;
 import vook.server.api.domain.demo.model.DemoTermSynonym;
+import vook.server.api.domain.demo.service.DemoTermSearchService;
 import vook.server.api.infra.search.common.MeilisearchProperties;
 import vook.server.api.infra.search.common.MeilisearchService;
 

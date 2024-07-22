@@ -9,14 +9,14 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import vook.server.api.domain.vocabulary.model.term.QTerm;
 import vook.server.api.domain.vocabulary.model.term.Term;
+import vook.server.api.domain.vocabulary.service.TermQueryService;
 import vook.server.api.globalcommon.helper.querydsl.QuerydslHelper;
-import vook.server.api.web.term.usecase.RetrieveTermUseCase;
 
 import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class JpaTermSearchRepository implements RetrieveTermUseCase.TermSearchService {
+public class JpaTermQueryRepository implements TermQueryService {
 
     private final JPAQueryFactory queryFactory;
 

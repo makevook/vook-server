@@ -3,44 +3,28 @@ package vook.server.api.infra.search.vocabulary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meilisearch.sdk.Index;
-import com.meilisearch.sdk.MultiSearchRequest;
 import com.meilisearch.sdk.exceptions.MeilisearchApiException;
-import com.meilisearch.sdk.model.MultiSearchResult;
-import com.meilisearch.sdk.model.Results;
 import com.meilisearch.sdk.model.TaskInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import vook.server.api.domain.vocabulary.logic.term.TermLogic;
-import vook.server.api.domain.vocabulary.logic.vocabulary.VocabularyLogic;
 import vook.server.api.domain.vocabulary.model.term.Term;
 import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
+import vook.server.api.domain.vocabulary.service.SearchManagementService;
 import vook.server.api.infra.search.common.MeilisearchProperties;
 import vook.server.api.infra.search.common.MeilisearchService;
-import vook.server.api.web.term.usecase.SearchTermUseCase;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.meilisearch.sdk.IndexSearchRequest.IndexSearchRequestBuilder;
-import static com.meilisearch.sdk.IndexSearchRequest.builder;
-
 @Service
-public class MeilisearchVocabularySearchService
-        extends
-        MeilisearchService
-        implements
-        VocabularyLogic.SearchManagementService,
-        TermLogic.SearchManagementService,
-        SearchTermUseCase.SearchService {
+public class MeilisearchSearchManagementService extends MeilisearchService implements SearchManagementService {
 
     private final ObjectMapper objectMapper;
 
-    public MeilisearchVocabularySearchService(MeilisearchProperties properties, ObjectMapper objectMapper) {
+    public MeilisearchSearchManagementService(MeilisearchProperties properties, ObjectMapper objectMapper) {
         super(properties);
         this.objectMapper = objectMapper;
     }
@@ -150,49 +134,6 @@ public class MeilisearchVocabularySearchService
             return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public Result search(Params params) {
-        MultiSearchRequest request = new RequestBuilder(params).buildMultiSearchRequest();
-        Results<MultiSearchResult> results = this.client.multiSearch(request);
-        return new ResultBuilder(results).build();
-    }
-
-    private record RequestBuilder(Params params) {
-
-        private static final String DEFAULT_HIGHLIGHT_PRE_TAG = "<em>";
-        private static final String DEFAULT_HIGHLIGHT_POST_TAG = "</em>";
-
-        public MultiSearchRequest buildMultiSearchRequest() {
-            IndexSearchRequestBuilder builder = builder();
-            if (params.withFormat()) {
-                builder.attributesToHighlight(new String[]{"*"});
-                builder.highlightPreTag(StringUtils.hasText(params.highlightPreTag()) ? params.highlightPreTag() : DEFAULT_HIGHLIGHT_PRE_TAG);
-                builder.highlightPostTag(StringUtils.hasText(params.highlightPostTag()) ? params.highlightPostTag() : DEFAULT_HIGHLIGHT_POST_TAG);
-            }
-            builder.limit(Integer.MAX_VALUE);
-
-            MultiSearchRequest request = new MultiSearchRequest();
-            params.vocabularyUids().forEach(uid -> {
-                params.queries().forEach(query -> {
-                    request.addQuery(builder.indexUid(uid).q(query).build());
-                });
-            });
-            return request;
-        }
-    }
-
-    private record ResultBuilder(
-            Results<MultiSearchResult> results
-    ) {
-        public Result build() {
-            return new Result(
-                    Arrays.stream(results.getResults())
-                            .map(result -> new Result.Record(result.getIndexUid(), result.getQuery(), result.getHits()))
-                            .toList()
-            );
         }
     }
 

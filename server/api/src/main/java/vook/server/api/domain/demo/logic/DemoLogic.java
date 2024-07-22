@@ -1,6 +1,7 @@
 package vook.server.api.domain.demo.logic;
 
 import lombok.RequiredArgsConstructor;
+import vook.server.api.domain.demo.service.DemoTermSearchService;
 import vook.server.api.globalcommon.annotation.DomainLogic;
 
 @DomainLogic

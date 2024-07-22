@@ -11,6 +11,7 @@ import vook.server.api.domain.vocabulary.model.vocabulary.UserUid;
 import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
 import vook.server.api.domain.vocabulary.model.vocabulary.VocabularyFactory;
 import vook.server.api.domain.vocabulary.model.vocabulary.VocabularyRepository;
+import vook.server.api.domain.vocabulary.service.SearchManagementService;
 import vook.server.api.globalcommon.annotation.DomainLogic;
 
 import java.util.List;
@@ -59,9 +60,4 @@ public class VocabularyLogic {
         return repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
     }
 
-    public interface SearchManagementService {
-        void save(Vocabulary saved);
-
-        void delete(Vocabulary vocabulary);
-    }
 }

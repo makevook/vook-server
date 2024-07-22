@@ -7,11 +7,11 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import vook.server.api.domain.vocabulary.logic.vocabulary.VocabularyLogic;
 import vook.server.api.domain.vocabulary.model.vocabulary.UserUid;
+import vook.server.api.domain.vocabulary.service.SearchService;
 import vook.server.api.globalcommon.annotation.UseCase;
 import vook.server.api.policy.VocabularyPolicy;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -115,29 +115,4 @@ public class SearchTermUseCase {
         }
     }
 
-    public interface SearchService {
-        Result search(Params params);
-
-        @Builder
-        record Params(
-                List<String> vocabularyUids,
-                List<String> queries,
-                boolean withFormat,
-                String highlightPreTag,
-                String highlightPostTag
-        ) {
-        }
-
-        @Builder
-        record Result(
-                List<Record> records
-        ) {
-            public record Record(
-                    String vocabularyUid,
-                    String query,
-                    ArrayList<HashMap<String, Object>> hits
-            ) {
-            }
-        }
-    }
 }
