@@ -1,6 +1,7 @@
 package vook.server.api.domain.vocabulary.model.term;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -53,5 +54,12 @@ public interface TermFactory {
             @NotNull
             List<String> synonyms
     ) {
+        @AssertTrue(message = "동의어는 콤마(,)포함 2000자 이내로 입력해주세요.")
+        boolean isSynonymsSizeValid() {
+            if (synonyms == null) {
+                return true;
+            }
+            return String.join(",", synonyms).length() <= 2000;
+        }
     }
 }

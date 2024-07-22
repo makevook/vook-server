@@ -38,7 +38,6 @@ public class Term extends BaseEntity {
      * 동의어
      */
     @Getter(AccessLevel.PRIVATE)
-    @Column(length = 1100)
     private Synonym synonym;
 
     @ManyToOne

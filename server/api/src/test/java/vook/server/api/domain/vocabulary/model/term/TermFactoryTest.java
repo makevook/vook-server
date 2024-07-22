@@ -18,6 +18,7 @@ import vook.server.api.domain.vocabulary.model.vocabulary.VocabularyRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -90,8 +91,8 @@ class TermFactoryTest {
 
     @TestFactory
     @DisplayName("용어 생성; 예외 - 용어 생성 시 유효성 검사 실패")
-    List<DynamicTest> createFail3() {
-        return List.of(
+    Stream<DynamicTest> createFail3() {
+        return Stream.of(
                 dynamicTest("용어가 없는 경우", () -> {
                     assertThatThrownBy(() -> factory.create(
                             new TermFactory.CreateCommand(
@@ -129,6 +130,21 @@ class TermFactoryTest {
                             new TermFactory.CreateCommand(
                                     "vocabularyUid",
                                     new TermFactory.TermInfo("term", "meaning", null)
+                            )
+                    )).isInstanceOf(ConstraintViolationException.class);
+                }),
+                dynamicTest("동의어가 합쳤을 때 콤마 포함 2000자가 넘는 경우", () -> {
+                    assertThatThrownBy(() -> factory.create(
+                            new TermFactory.CreateCommand(
+                                    "vocabularyUid",
+                                    new TermFactory.TermInfo("term", "meaning", List.of("a".repeat(2001)))
+                            )
+                    )).isInstanceOf(ConstraintViolationException.class);
+
+                    assertThatThrownBy(() -> factory.create(
+                            new TermFactory.CreateCommand(
+                                    "vocabularyUid",
+                                    new TermFactory.TermInfo("term", "meaning", List.of("a".repeat(1000), "b".repeat(1000)))
                             )
                     )).isInstanceOf(ConstraintViolationException.class);
                 })
@@ -200,8 +216,8 @@ class TermFactoryTest {
 
     @TestFactory
     @DisplayName("배치 생성을 위한 용어 생성; 예외 - 용어 생성 시 유효성 검사 실패")
-    List<DynamicTest> createForBatchCreateFail3() {
-        return List.of(
+    Stream<DynamicTest> createForBatchCreateFail3() {
+        return Stream.of(
                 dynamicTest("용어가 없는 경우", () -> {
                     assertThatThrownBy(() -> factory.createForBatchCreate(
                             new TermFactory.CreateForBatchCommand(
@@ -251,7 +267,29 @@ class TermFactoryTest {
                             new TermFactory.CreateForBatchCommand(
                                     "vocabularyUid",
                                     List.of(
-                                            new TermFactory.TermInfo("term", "meaning", null)
+                                            new TermFactory.TermInfo("term1", "meaning2", null),
+                                            new TermFactory.TermInfo("term2", "meaning2", List.of())
+                                    )
+                            )
+                    )).isInstanceOf(ConstraintViolationException.class);
+                }),
+                dynamicTest("동의어가 합쳤을 때 콤마 포함 2000자가 넘는 경우", () -> {
+                    assertThatThrownBy(() -> factory.createForBatchCreate(
+                            new TermFactory.CreateForBatchCommand(
+                                    "vocabularyUid",
+                                    List.of(
+                                            new TermFactory.TermInfo("term1", "meaning1", List.of("a".repeat(2001))),
+                                            new TermFactory.TermInfo("term2", "meaning2", List.of("synonym2"))
+                                    )
+                            )
+                    )).isInstanceOf(ConstraintViolationException.class);
+
+                    assertThatThrownBy(() -> factory.createForBatchCreate(
+                            new TermFactory.CreateForBatchCommand(
+                                    "vocabularyUid",
+                                    List.of(
+                                            new TermFactory.TermInfo("term1", "meaning1", List.of("a".repeat(1000), "b".repeat(1000))),
+                                            new TermFactory.TermInfo("term2", "meaning2", List.of("synonym2"))
                                     )
                             )
                     )).isInstanceOf(ConstraintViolationException.class);
@@ -279,8 +317,8 @@ class TermFactoryTest {
 
     @TestFactory
     @DisplayName("용어 수정을 위한 용어 생성; 예외 - 용어 생성 시 유효성 검사 실패")
-    List<DynamicTest> createForUpdateFail1() {
-        return List.of(
+    Stream<DynamicTest> createForUpdateFail1() {
+        return Stream.of(
                 dynamicTest("용어가 없는 경우", () -> {
                     assertThatThrownBy(() -> factory.createForUpdate(
                             new TermFactory.UpdateCommand(
@@ -313,6 +351,19 @@ class TermFactoryTest {
                     assertThatThrownBy(() -> factory.createForUpdate(
                             new TermFactory.UpdateCommand(
                                     new TermFactory.TermInfo("term", "meaning", null)
+                            )
+                    )).isInstanceOf(ConstraintViolationException.class);
+                }),
+                dynamicTest("동의어가 합쳤을 때 콤마 포함 2000자가 넘는 경우", () -> {
+                    assertThatThrownBy(() -> factory.createForUpdate(
+                            new TermFactory.UpdateCommand(
+                                    new TermFactory.TermInfo("term", "meaning", List.of("a".repeat(2001)))
+                            )
+                    )).isInstanceOf(ConstraintViolationException.class);
+
+                    assertThatThrownBy(() -> factory.createForUpdate(
+                            new TermFactory.UpdateCommand(
+                                    new TermFactory.TermInfo("term", "meaning", List.of("a".repeat(1000), "b".repeat(1000)))
                             )
                     )).isInstanceOf(ConstraintViolationException.class);
                 })
