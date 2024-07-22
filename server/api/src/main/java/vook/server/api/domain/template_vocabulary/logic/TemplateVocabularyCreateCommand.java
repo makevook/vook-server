@@ -1,4 +1,4 @@
-package vook.server.api.domain.template_vocabulary.logic.dto;
+package vook.server.api.domain.template_vocabulary.logic;
 
 import vook.server.api.domain.template_vocabulary.model.TemplateTerm;
 import vook.server.api.domain.template_vocabulary.model.TemplateVocabulary;

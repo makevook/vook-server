@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.devhelper.app.InitService;
 import vook.server.api.devhelper.app.TestTermsLoader;
-import vook.server.api.domain.demo.logic.dto.DemoTermSearchCommand;
-import vook.server.api.domain.demo.logic.dto.DemoTermSearchResult;
 import vook.server.api.domain.demo.model.DemoTerm;
 import vook.server.api.domain.demo.model.DemoTermRepository;
 import vook.server.api.infra.search.demo.MeilisearchDemoTermSearchService;

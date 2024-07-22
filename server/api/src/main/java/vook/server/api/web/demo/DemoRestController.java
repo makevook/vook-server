@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vook.server.api.domain.demo.logic.DemoLogic;
-import vook.server.api.domain.demo.logic.dto.DemoTermSearchResult;
+import vook.server.api.domain.demo.logic.DemoTermSearchResult;
 import vook.server.api.web.common.response.CommonApiResponse;
 import vook.server.api.web.demo.reqres.SearchTermRequest;
 import vook.server.api.web.demo.reqres.SearchTermResponse;

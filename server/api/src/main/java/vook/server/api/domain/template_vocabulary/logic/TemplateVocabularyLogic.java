@@ -2,7 +2,6 @@ package vook.server.api.domain.template_vocabulary.logic;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import vook.server.api.domain.template_vocabulary.logic.dto.TemplateVocabularyCreateCommand;
 import vook.server.api.domain.template_vocabulary.model.*;
 import vook.server.api.globalcommon.annotation.DomainLogic;
 

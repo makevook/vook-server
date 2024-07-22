@@ -3,8 +3,8 @@ package vook.server.api.testhelper.creator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import vook.server.api.domain.template_vocabulary.logic.TemplateVocabularyCreateCommand;
 import vook.server.api.domain.template_vocabulary.logic.TemplateVocabularyLogic;
-import vook.server.api.domain.template_vocabulary.logic.dto.TemplateVocabularyCreateCommand;
 import vook.server.api.domain.template_vocabulary.model.TemplateVocabularyType;
 
 import java.util.List;

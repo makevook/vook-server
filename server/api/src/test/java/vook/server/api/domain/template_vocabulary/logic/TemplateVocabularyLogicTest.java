@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.template_vocabulary.logic.dto.TemplateVocabularyCreateCommand;
 import vook.server.api.domain.template_vocabulary.model.*;
 import vook.server.api.testhelper.IntegrationTestBase;
 

@@ -1,4 +1,4 @@
-package vook.server.api.domain.demo.logic.dto;
+package vook.server.api.domain.demo.logic;
 
 import com.meilisearch.sdk.model.Searchable;
 
