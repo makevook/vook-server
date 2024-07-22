@@ -2,20 +2,22 @@
 
 ## Description
 
+템플릿 용어
+
 <details>
 <summary><strong>Table Definition</strong></summary>
 
 ```sql
 CREATE TABLE `template_term` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `meaning` varchar(2000) NOT NULL,
-  `synonym` varchar(255) DEFAULT NULL,
-  `term` varchar(100) NOT NULL,
-  `template_vocabulary_id` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `term` varchar(100) NOT NULL COMMENT '용어',
+  `meaning` varchar(2000) NOT NULL COMMENT '뜻',
+  `synonym` varchar(255) DEFAULT NULL COMMENT '동의어',
+  `template_vocabulary_id` bigint(20) NOT NULL COMMENT '템플릿 용어집 ID',
   PRIMARY KEY (`id`),
-  KEY `FKkywu6lcoquw0sprusuftdubp9` (`template_vocabulary_id`),
-  CONSTRAINT `FKkywu6lcoquw0sprusuftdubp9` FOREIGN KEY (`template_vocabulary_id`) REFERENCES `template_vocabulary` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  KEY `fk_template_term_template_vocabulary` (`template_vocabulary_id`),
+  CONSTRAINT `fk_template_term_template_vocabulary` FOREIGN KEY (`template_vocabulary_id`) REFERENCES `template_vocabulary` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='템플릿 용어'
 ```
 
 </details>
@@ -24,24 +26,24 @@ CREATE TABLE `template_term` (
 
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | bigint(20) |  | false | auto_increment |  |  |  |
-| meaning | varchar(2000) |  | false |  |  |  |  |
-| synonym | varchar(255) | NULL | true |  |  |  |  |
-| term | varchar(100) |  | false |  |  |  |  |
-| template_vocabulary_id | bigint(20) |  | false |  |  | [template_vocabulary](template_vocabulary.md) |  |
+| id | bigint(20) |  | false | auto_increment |  |  | ID |
+| term | varchar(100) |  | false |  |  |  | 용어 |
+| meaning | varchar(2000) |  | false |  |  |  | 뜻 |
+| synonym | varchar(255) | NULL | true |  |  |  | 동의어 |
+| template_vocabulary_id | bigint(20) |  | false |  |  | [template_vocabulary](template_vocabulary.md) | 템플릿 용어집 ID |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
-| FKkywu6lcoquw0sprusuftdubp9 | FOREIGN KEY | FOREIGN KEY (template_vocabulary_id) REFERENCES template_vocabulary (id) |
+| fk_template_term_template_vocabulary | FOREIGN KEY | FOREIGN KEY (template_vocabulary_id) REFERENCES template_vocabulary (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
-| FKkywu6lcoquw0sprusuftdubp9 | KEY FKkywu6lcoquw0sprusuftdubp9 (template_vocabulary_id) USING BTREE |
+| fk_template_term_template_vocabulary | KEY fk_template_term_template_vocabulary (template_vocabulary_id) USING BTREE |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
 
 ## Relations
@@ -53,9 +55,9 @@ erDiagram
 
 "template_term" {
   bigint_20_ id PK
+  varchar_100_ term
   varchar_2000_ meaning
   varchar_255_ synonym
-  varchar_100_ term
   bigint_20_ template_vocabulary_id FK
 }
 "template_vocabulary" {

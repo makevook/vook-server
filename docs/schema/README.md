@@ -4,15 +4,16 @@
 
 | Name | Columns | Comment | Type |
 | ---- | ------- | ------- | ---- |
-| [demo_term](demo_term.md) | 5 |  | BASE TABLE |
-| [demo_term_synonym](demo_term_synonym.md) | 3 |  | BASE TABLE |
-| [social_user](social_user.md) | 5 |  | BASE TABLE |
-| [template_term](template_term.md) | 5 |  | BASE TABLE |
-| [template_vocabulary](template_vocabulary.md) | 2 |  | BASE TABLE |
-| [term](term.md) | 8 |  | BASE TABLE |
-| [users](users.md) | 9 |  | BASE TABLE |
-| [user_info](user_info.md) | 6 |  | BASE TABLE |
-| [vocabulary](vocabulary.md) | 6 |  | BASE TABLE |
+| [demo_term](demo_term.md) | 5 | 데모 용어 | BASE TABLE |
+| [demo_term_synonym](demo_term_synonym.md) | 3 | 데모 용어 동의어 | BASE TABLE |
+| [schema_migrations](schema_migrations.md) | 2 |  | BASE TABLE |
+| [social_user](social_user.md) | 5 | 소셜 사용자 | BASE TABLE |
+| [template_term](template_term.md) | 5 | 템플릿 용어 | BASE TABLE |
+| [template_vocabulary](template_vocabulary.md) | 2 | 템플릿 용어집 | BASE TABLE |
+| [term](term.md) | 8 | 용어 | BASE TABLE |
+| [users](users.md) | 9 | 사용자 | BASE TABLE |
+| [user_info](user_info.md) | 6 | 사용자 정보 | BASE TABLE |
+| [vocabulary](vocabulary.md) | 6 | 용어집 | BASE TABLE |
 
 ## Relations
 
@@ -27,28 +28,32 @@ erDiagram
 
 "demo_term" {
   bigint_20_ id PK
+  varchar_100_ term
+  varchar_2000_ meaning
   datetime_6_ created_at
   datetime_6_ updated_at
-  varchar_2000_ meaning
-  varchar_100_ term
 }
 "demo_term_synonym" {
   bigint_20_ id PK
   varchar_100_ synonym
   bigint_20_ demo_term_id FK
 }
+"schema_migrations" {
+  bigint_20_ version PK
+  tinyint_1_ dirty
+}
 "social_user" {
   bigint_20_ id PK
-  datetime_6_ created_at
   varchar_255_ provider
   varchar_255_ provider_user_id
   bigint_20_ user_id FK
+  datetime_6_ created_at
 }
 "template_term" {
   bigint_20_ id PK
+  varchar_100_ term
   varchar_2000_ meaning
   varchar_255_ synonym
-  varchar_100_ term
   bigint_20_ template_vocabulary_id FK
 }
 "template_vocabulary" {
@@ -57,40 +62,40 @@ erDiagram
 }
 "term" {
   bigint_20_ id PK
-  datetime_6_ created_at
-  datetime_6_ updated_at
+  varchar_255_ uid
+  varchar_100_ term
   varchar_2000_ meaning
   varchar_255_ synonym
-  varchar_100_ term
-  varchar_255_ uid
   bigint_20_ vocabulary_id FK
+  datetime_6_ created_at
+  datetime_6_ updated_at
 }
 "users" {
   bigint_20_ id PK
+  varchar_255_ uid
   varchar_255_ email
-  datetime_6_ last_updated_at
+  varchar_30_ status
+  datetime_6_ registered_at
   bit_1_ onboarding_completed
   datetime_6_ onboarding_completed_at
-  datetime_6_ registered_at
-  varchar_30_ status
-  varchar_255_ uid
   datetime_6_ withdrawn_at
+  datetime_6_ last_updated_at
 }
 "user_info" {
   bigint_20_ id PK
+  varchar_10_ nickname
+  bit_1_ marketing_email_opt_in
   varchar_20_ funnel
   varchar_20_ job
-  bit_1_ marketing_email_opt_in
-  varchar_10_ nickname
   bigint_20_ user_id FK
 }
 "vocabulary" {
   bigint_20_ id PK
+  varchar_255_ uid
+  varchar_20_ name
+  varchar_255_ user_uid
   datetime_6_ created_at
   datetime_6_ updated_at
-  varchar_20_ name
-  varchar_255_ uid
-  varchar_255_ user_uid
 }
 ```
 

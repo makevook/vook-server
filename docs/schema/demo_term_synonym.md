@@ -2,18 +2,20 @@
 
 ## Description
 
+데모 용어 동의어
+
 <details>
 <summary><strong>Table Definition</strong></summary>
 
 ```sql
 CREATE TABLE `demo_term_synonym` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `synonym` varchar(100) NOT NULL,
-  `demo_term_id` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `synonym` varchar(100) NOT NULL COMMENT '동의어',
+  `demo_term_id` bigint(20) NOT NULL COMMENT '데모 용어 ID',
   PRIMARY KEY (`id`),
-  KEY `FKu0pc6dmrckuupfj3y7n9vxs0` (`demo_term_id`),
-  CONSTRAINT `FKu0pc6dmrckuupfj3y7n9vxs0` FOREIGN KEY (`demo_term_id`) REFERENCES `demo_term` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  KEY `fk_demo_term_synonym_demo_term` (`demo_term_id`),
+  CONSTRAINT `fk_demo_term_synonym_demo_term` FOREIGN KEY (`demo_term_id`) REFERENCES `demo_term` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=[Redacted by tbls] DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='데모 용어 동의어'
 ```
 
 </details>
@@ -22,22 +24,22 @@ CREATE TABLE `demo_term_synonym` (
 
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | bigint(20) |  | false | auto_increment |  |  |  |
-| synonym | varchar(100) |  | false |  |  |  |  |
-| demo_term_id | bigint(20) |  | false |  |  | [demo_term](demo_term.md) |  |
+| id | bigint(20) |  | false | auto_increment |  |  | ID |
+| synonym | varchar(100) |  | false |  |  |  | 동의어 |
+| demo_term_id | bigint(20) |  | false |  |  | [demo_term](demo_term.md) | 데모 용어 ID |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
-| FKu0pc6dmrckuupfj3y7n9vxs0 | FOREIGN KEY | FOREIGN KEY (demo_term_id) REFERENCES demo_term (id) |
+| fk_demo_term_synonym_demo_term | FOREIGN KEY | FOREIGN KEY (demo_term_id) REFERENCES demo_term (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
-| FKu0pc6dmrckuupfj3y7n9vxs0 | KEY FKu0pc6dmrckuupfj3y7n9vxs0 (demo_term_id) USING BTREE |
+| fk_demo_term_synonym_demo_term | KEY fk_demo_term_synonym_demo_term (demo_term_id) USING BTREE |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
 
 ## Relations
@@ -54,10 +56,10 @@ erDiagram
 }
 "demo_term" {
   bigint_20_ id PK
+  varchar_100_ term
+  varchar_2000_ meaning
   datetime_6_ created_at
   datetime_6_ updated_at
-  varchar_2000_ meaning
-  varchar_100_ term
 }
 ```
 

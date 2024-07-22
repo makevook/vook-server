@@ -2,23 +2,25 @@
 
 ## Description
 
+사용자
+
 <details>
 <summary><strong>Table Definition</strong></summary>
 
 ```sql
 CREATE TABLE `users` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) DEFAULT NULL,
-  `last_updated_at` datetime(6) DEFAULT NULL,
-  `onboarding_completed` bit(1) NOT NULL,
-  `onboarding_completed_at` datetime(6) DEFAULT NULL,
-  `registered_at` datetime(6) DEFAULT NULL,
-  `status` varchar(30) NOT NULL,
-  `uid` varchar(255) DEFAULT NULL,
-  `withdrawn_at` datetime(6) DEFAULT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `uid` varchar(255) DEFAULT NULL COMMENT 'UID',
+  `email` varchar(255) DEFAULT NULL COMMENT '이메일',
+  `status` varchar(30) NOT NULL COMMENT '상태',
+  `registered_at` datetime(6) DEFAULT NULL COMMENT '가입 일시',
+  `onboarding_completed` bit(1) NOT NULL COMMENT '온보딩 완료 여부',
+  `onboarding_completed_at` datetime(6) DEFAULT NULL COMMENT '온보딩 완료 일시',
+  `withdrawn_at` datetime(6) DEFAULT NULL COMMENT '탈퇴 일시',
+  `last_updated_at` datetime(6) DEFAULT NULL COMMENT '마지막 수정 일시',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UK6dotkott2kjsp8vw4d0m25fb7` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  UNIQUE KEY `uk_users_email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자'
 ```
 
 </details>
@@ -27,29 +29,29 @@ CREATE TABLE `users` (
 
 | Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | bigint(20) |  | false | auto_increment | [social_user](social_user.md) [user_info](user_info.md) |  |  |
-| email | varchar(255) | NULL | true |  |  |  |  |
-| last_updated_at | datetime(6) | NULL | true |  |  |  |  |
-| onboarding_completed | bit(1) |  | false |  |  |  |  |
-| onboarding_completed_at | datetime(6) | NULL | true |  |  |  |  |
-| registered_at | datetime(6) | NULL | true |  |  |  |  |
-| status | varchar(30) |  | false |  |  |  |  |
-| uid | varchar(255) | NULL | true |  |  |  |  |
-| withdrawn_at | datetime(6) | NULL | true |  |  |  |  |
+| id | bigint(20) |  | false | auto_increment | [social_user](social_user.md) [user_info](user_info.md) |  | ID |
+| uid | varchar(255) | NULL | true |  |  |  | UID |
+| email | varchar(255) | NULL | true |  |  |  | 이메일 |
+| status | varchar(30) |  | false |  |  |  | 상태 |
+| registered_at | datetime(6) | NULL | true |  |  |  | 가입 일시 |
+| onboarding_completed | bit(1) |  | false |  |  |  | 온보딩 완료 여부 |
+| onboarding_completed_at | datetime(6) | NULL | true |  |  |  | 온보딩 완료 일시 |
+| withdrawn_at | datetime(6) | NULL | true |  |  |  | 탈퇴 일시 |
+| last_updated_at | datetime(6) | NULL | true |  |  |  | 마지막 수정 일시 |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
-| UK6dotkott2kjsp8vw4d0m25fb7 | UNIQUE | UNIQUE KEY UK6dotkott2kjsp8vw4d0m25fb7 (email) |
+| uk_users_email | UNIQUE | UNIQUE KEY uk_users_email (email) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
-| UK6dotkott2kjsp8vw4d0m25fb7 | UNIQUE KEY UK6dotkott2kjsp8vw4d0m25fb7 (email) USING BTREE |
+| uk_users_email | UNIQUE KEY uk_users_email (email) USING BTREE |
 
 ## Relations
 
@@ -61,28 +63,28 @@ erDiagram
 
 "users" {
   bigint_20_ id PK
+  varchar_255_ uid
   varchar_255_ email
-  datetime_6_ last_updated_at
+  varchar_30_ status
+  datetime_6_ registered_at
   bit_1_ onboarding_completed
   datetime_6_ onboarding_completed_at
-  datetime_6_ registered_at
-  varchar_30_ status
-  varchar_255_ uid
   datetime_6_ withdrawn_at
+  datetime_6_ last_updated_at
 }
 "social_user" {
   bigint_20_ id PK
-  datetime_6_ created_at
   varchar_255_ provider
   varchar_255_ provider_user_id
   bigint_20_ user_id FK
+  datetime_6_ created_at
 }
 "user_info" {
   bigint_20_ id PK
+  varchar_10_ nickname
+  bit_1_ marketing_email_opt_in
   varchar_20_ funnel
   varchar_20_ job
-  bit_1_ marketing_email_opt_in
-  varchar_10_ nickname
   bigint_20_ user_id FK
 }
 ```

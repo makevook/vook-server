@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - release
+    paths:
+      - "server/**"
 
 jobs:
   deploy:
@@ -12,6 +14,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
       - name: Deploy
         uses: dagger/dagger-for-github@v5
         env:
@@ -23,7 +27,7 @@ jobs:
           module: ./cicd
           args: >-
             deploy
-            --source-dir=api
+            --source-dir=server
             --profile=stag
             --ssh-dest=env:SSH_DEST
             --ssh-key=env:SSH_KEY

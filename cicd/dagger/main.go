@@ -16,6 +16,8 @@ func (v *VookServer) BuildApiJar(
 	dir *dagger.Directory,
 	// +optional
 	test bool,
+	// +optional
+	subModule string,
 ) (*dagger.File, error) {
 	c := dag.Java().
 		Init().
@@ -24,17 +26,31 @@ func (v *VookServer) BuildApiJar(
 		Container()
 
 	if test {
+		var testCommand []string
+		if subModule == "" {
+			testCommand = []string{"./gradlew", "test"}
+		} else {
+			testCommand = []string{"./gradlew", fmt.Sprintf(":%s:test", subModule)}
+		}
+
 		_, err := c.
 			With(dag.DockerService().WithCacheVolume("docker-var/lib/docker").BindAsService).
-			WithExec([]string{"./gradlew", "test"}).
+			WithExec(testCommand).
 			Sync(ctx)
 		if err != nil {
 			return nil, errors.New("test fail:" + err.Error())
 		}
 	}
 
+	var bootJarCommand []string
+	if subModule == "" {
+		bootJarCommand = []string{"./gradlew", "bootJar"}
+	} else {
+		bootJarCommand = []string{"./gradlew", fmt.Sprintf(":%s:bootJar", subModule)}
+	}
+
 	jarFile := c.
-		WithExec([]string{"./gradlew", "bootJar"}).
+		WithExec(bootJarCommand).
 		File("jar/api.jar")
 
 	return jarFile, nil
@@ -146,7 +162,7 @@ func (v *VookServer) Deploy(
 	version string,
 	command string,
 ) error {
-	jarFile, err := v.BuildApiJar(ctx, sourceDir, true)
+	jarFile, err := v.BuildApiJar(ctx, sourceDir, true, "api")
 	if err != nil {
 		return err
 	}
