@@ -1,4 +1,4 @@
-package vook.server.api.domain.demo.logic;
+package vook.server.api.domain.demo.service;
 
 import com.meilisearch.sdk.SearchRequest;
 import lombok.Builder;
