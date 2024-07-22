@@ -1,7 +1,7 @@
 package vook.server.api.web.user.reqres;
 
-import vook.server.api.domain.user.model.Funnel;
-import vook.server.api.domain.user.model.Job;
+import vook.server.api.domain.user.model.user_info.Funnel;
+import vook.server.api.domain.user.model.user_info.Job;
 import vook.server.api.web.user.usecase.OnboardingUserUseCase;
 
 public record UserOnboardingRequest(

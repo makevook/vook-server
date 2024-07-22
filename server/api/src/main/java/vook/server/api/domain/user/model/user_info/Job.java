@@ -1,4 +1,4 @@
-package vook.server.api.domain.user.model;
+package vook.server.api.domain.user.model.user_info;
 
 public enum Job {
     //기획자

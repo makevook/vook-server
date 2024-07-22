@@ -6,7 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import vook.server.api.domain.user.logic.UserLogic;
-import vook.server.api.domain.user.model.User;
+import vook.server.api.domain.user.model.user.User;
 import vook.server.api.web.common.auth.data.VookLoginUser;
 import vook.server.api.web.common.response.CommonApiResponse;
 import vook.server.api.web.user.reqres.UserInfoResponse;

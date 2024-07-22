@@ -1,4 +1,4 @@
-package vook.server.api.domain.user.model;
+package vook.server.api.domain.user.model.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

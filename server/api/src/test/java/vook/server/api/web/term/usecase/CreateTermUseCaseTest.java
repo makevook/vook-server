@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.domain.user.model.User;
+import vook.server.api.domain.user.model.user.User;
 import vook.server.api.domain.vocabulary.exception.TermLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
 import vook.server.api.domain.vocabulary.model.term.Term;

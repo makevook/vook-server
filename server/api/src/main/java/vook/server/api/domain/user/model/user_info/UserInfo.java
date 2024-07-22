@@ -1,7 +1,8 @@
-package vook.server.api.domain.user.model;
+package vook.server.api.domain.user.model.user_info;
 
 import jakarta.persistence.*;
 import lombok.*;
+import vook.server.api.domain.user.model.user.User;
 
 @Getter
 @Entity

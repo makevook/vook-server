@@ -1,9 +1,10 @@
-package vook.server.api.domain.user.model;
+package vook.server.api.domain.user.model.social_user;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import vook.server.api.domain.user.model.user.User;
 
 import java.time.LocalDateTime;
 

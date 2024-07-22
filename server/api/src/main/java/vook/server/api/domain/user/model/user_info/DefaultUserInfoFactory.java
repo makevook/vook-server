@@ -1,7 +1,8 @@
-package vook.server.api.domain.user.model;
+package vook.server.api.domain.user.model.user_info;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import vook.server.api.domain.user.model.user.User;
 import vook.server.api.globalcommon.annotation.ModelFactory;
 
 @ModelFactory

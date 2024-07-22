@@ -1,8 +1,12 @@
-package vook.server.api.domain.user.model;
+package vook.server.api.domain.user.model.user;
 
 import jakarta.persistence.*;
 import lombok.*;
 import vook.server.api.domain.user.exception.*;
+import vook.server.api.domain.user.model.social_user.SocialUser;
+import vook.server.api.domain.user.model.user_info.Funnel;
+import vook.server.api.domain.user.model.user_info.Job;
+import vook.server.api.domain.user.model.user_info.UserInfo;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
