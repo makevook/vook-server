@@ -40,5 +40,4 @@ service:
     accessTokenExpiredMinute: 30 # 30 minutes
     refreshTokenExpiredMinute: 10080 # 60 * 24 * 7 == 1 week
 logging:
-  level:
-    vook.server.api: DEBUG
+  config: classpath:logback.xml

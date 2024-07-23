@@ -35,7 +35,7 @@ public class JWTFilter extends OncePerRequestFilter {
         try {
             oAuth2User = VookLoginUser.of(tokenService.validateAndGetUid(token));
         } catch (Exception e) {
-            log.error("JWT validation failed", e);
+            log.debug("JWT validation failed", e);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

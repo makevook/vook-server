@@ -24,12 +24,12 @@ public class VookOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        log.info("OAuth2User: {}", oAuth2User);
+        log.debug("OAuth2User: {}", oAuth2User);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2Response oAuth2Response = toOAuth2Response(registrationId, oAuth2User);
         if (oAuth2Response == null) {
-            log.info("Unsupported registrationId: {}", registrationId);
+            log.warn("Unsupported registrationId: {}", registrationId);
             return null;
         }
 
