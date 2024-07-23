@@ -7,6 +7,7 @@ import com.meilisearch.sdk.exceptions.MeilisearchApiException;
 import com.meilisearch.sdk.model.TaskInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import vook.server.api.domain.vocabulary.model.term.Term;
 import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class MeilisearchSearchManagementService extends MeilisearchService implements SearchManagementService {
 
@@ -103,12 +105,14 @@ public class MeilisearchSearchManagementService extends MeilisearchService imple
 
     @Override
     public void saveAll(List<Term> terms) {
+        log.debug("Save all terms to index");
         if (terms.isEmpty()) {
             return;
         }
         Index index = client.index(terms.getFirst().getVocabulary().getUid());
         TaskInfo taskInfo = index.addDocuments(getDocuments(terms));
         client.waitForTask(taskInfo.getTaskUid());
+        log.debug("Save all terms to index done");
     }
 
     @Override
