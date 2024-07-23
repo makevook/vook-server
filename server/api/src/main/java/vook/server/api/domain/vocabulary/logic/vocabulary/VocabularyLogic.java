@@ -4,13 +4,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import vook.server.api.domain.vocabulary.exception.VocabularyLimitExceededException;
 import vook.server.api.domain.vocabulary.exception.VocabularyNotFoundException;
 import vook.server.api.domain.vocabulary.model.term.Term;
 import vook.server.api.domain.vocabulary.model.term.TermRepository;
 import vook.server.api.domain.vocabulary.model.vocabulary.UserUid;
 import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
+import vook.server.api.domain.vocabulary.model.vocabulary.VocabularyFactory;
 import vook.server.api.domain.vocabulary.model.vocabulary.VocabularyRepository;
+import vook.server.api.domain.vocabulary.service.SearchManagementService;
 import vook.server.api.globalcommon.annotation.DomainLogic;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VocabularyLogic {
 
+    private final VocabularyFactory vocabularyFactory;
     private final VocabularyRepository repository;
     private final TermRepository termRepository;
     private final SearchManagementService searchService;
@@ -31,24 +33,19 @@ public class VocabularyLogic {
         return repository.findAllUidsByUserUid(userUid);
     }
 
-    public Vocabulary create(@Valid VocabularyCreateCommand command) {
-        UserUid userUid = command.userUid();
-        if (repository.findAllByUserUid(userUid).size() >= 3) {
-            throw new VocabularyLimitExceededException();
-        }
-
-        Vocabulary saved = repository.save(Vocabulary.forCreateOf(command.name(), userUid));
+    public Vocabulary create(@NotNull @Valid VocabularyCreateCommand command) {
+        Vocabulary saved = repository.save(vocabularyFactory.create(command.name(), command.userUid()));
         searchService.save(saved);
         return saved;
     }
 
-    public void update(@Valid VocabularyUpdateCommand command) {
-        Vocabulary vocabulary = repository.findByUid(command.vocabularyUid()).orElseThrow(VocabularyNotFoundException::new);
+    public void update(@NotNull @Valid VocabularyUpdateCommand command) {
+        Vocabulary vocabulary = getVocabulary(command.vocabularyUid());
         vocabulary.update(command.name());
     }
 
     public void delete(@NotBlank String vocabularyUid) {
-        Vocabulary vocabulary = repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
+        Vocabulary vocabulary = getVocabulary(vocabularyUid);
         List<String> termUids = termRepository.findByVocabulary(vocabulary).stream().map(Term::getUid).toList();
         termRepository.deleteAllByUids(termUids);
         repository.delete(vocabulary);
@@ -56,12 +53,11 @@ public class VocabularyLogic {
     }
 
     public Vocabulary getByUid(@NotBlank String vocabularyUid) {
+        return getVocabulary(vocabularyUid);
+    }
+
+    private Vocabulary getVocabulary(String vocabularyUid) {
         return repository.findByUid(vocabularyUid).orElseThrow(VocabularyNotFoundException::new);
     }
 
-    public interface SearchManagementService {
-        void save(Vocabulary saved);
-
-        void delete(Vocabulary vocabulary);
-    }
 }
