@@ -6,15 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import vook.server.api.devhelper.app.InitService;
-import vook.server.api.devhelper.app.TestTermsLoader;
-import vook.server.api.domain.demo.model.DemoTerm;
-import vook.server.api.domain.demo.model.DemoTermRepository;
+import vook.server.api.devhelper.app.sync.SyncService;
 import vook.server.api.domain.demo.service.DemoTermSearchCommand;
 import vook.server.api.domain.demo.service.DemoTermSearchResult;
 import vook.server.api.testhelper.IntegrationTestBase;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,19 +21,11 @@ class MeilisearchDemoTermSearchServiceTest extends IntegrationTestBase {
     MeilisearchDemoTermSearchService service;
 
     @Autowired
-    private TestTermsLoader testTermsLoader;
-    @Autowired
-    private DemoTermRepository demoTermRepository;
+    SyncService syncService;
 
     @BeforeAll
     void beforeAll() {
-        List<DemoTerm> terms = testTermsLoader.getTerms(
-                "classpath:init/demo.tsv",
-                InitService::convertToDemoTerm
-        );
-        demoTermRepository.saveAll(terms);
-        service.init();
-        service.addTerms(terms);
+        syncService.sync();
     }
 
     @AfterAll

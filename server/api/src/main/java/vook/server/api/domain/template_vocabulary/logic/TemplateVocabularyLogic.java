@@ -14,11 +14,6 @@ public class TemplateVocabularyLogic {
     private final TemplateVocabularyRepository vocabularyRepository;
     private final TemplateTermRepository termRepository;
 
-    public void create(@Valid TemplateVocabularyCreateCommand command) {
-        TemplateVocabulary vocabulary = vocabularyRepository.save(command.toVocabulary());
-        termRepository.saveAll(command.toTerms(vocabulary));
-    }
-
     public List<TemplateTerm> getTermsByType(@Valid TemplateVocabularyType type) {
         TemplateVocabulary vocabulary = vocabularyRepository.findByType(type).orElseThrow();
         return termRepository.findByTemplateVocabulary(vocabulary);
