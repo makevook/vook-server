@@ -14,7 +14,7 @@ public class GlobalRestControllerAdvice {
 
     @ExceptionHandler(AppException.class)
     public ResponseEntity<?> handleAppException(AppException e) {
-        log.error(e.getMessage(), e);
+        log.debug(e.getMessage(), e);
         String contents = e.getClass().getSimpleName().replace("Exception", "");
         CommonApiException badRequest = CommonApiException.badRequest(ApiResponseCode.BadRequest.VIOLATION_BUSINESS_RULE, e, contents);
         return ResponseEntity.status(badRequest.statusCode()).body(badRequest.response());
@@ -22,7 +22,7 @@ public class GlobalRestControllerAdvice {
 
     @ExceptionHandler(CommonApiException.class)
     public ResponseEntity<?> handleCommonApiException(CommonApiException e) {
-        log.error(e.getMessage(), e);
+        log.debug(e.getMessage(), e);
         return ResponseEntity.status(e.statusCode()).body(e.response());
     }
 
