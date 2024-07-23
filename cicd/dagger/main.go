@@ -10,7 +10,7 @@ import (
 
 type VookServer struct{}
 
-func (v *VookServer) BuildApiJar(
+func (v *VookServer) BuildJar(
 	ctx context.Context,
 	// 빌드 대상의 디렉토리
 	dir *dagger.Directory,
@@ -51,17 +51,19 @@ func (v *VookServer) BuildApiJar(
 
 	jarFile := c.
 		WithExec(bootJarCommand).
-		File("jar/api.jar")
+		File(fmt.Sprintf("jar/%s.jar", subModule))
 
 	return jarFile, nil
 }
 
-func (v *VookServer) BuildApiImage(
+func (v *VookServer) BuildImage(
 	// jar 파일
 	jarFile *dagger.File,
 	// profile
 	// +optional
 	profile []string,
+	// 이미지 이름
+	name string,
 ) *dagger.File {
 	if profile == nil {
 		profile = []string{"default"}
@@ -85,9 +87,9 @@ ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=` + strings.Join(profile, 
 			Platform: []dagger.Platform{"linux/arm64"},
 		}).
 		Save(dagger.DockerBuildSaveOpts{
-			Name: "api",
+			Name: name,
 		}).
-		File("api_linux_arm64.tar")
+		File(fmt.Sprintf("%s_linux_arm64.tar", name))
 }
 
 func (v *VookServer) SendImage(
@@ -162,12 +164,12 @@ func (v *VookServer) Deploy(
 	version string,
 	command string,
 ) error {
-	jarFile, err := v.BuildApiJar(ctx, sourceDir, true, "api")
+	jarFile, err := v.BuildJar(ctx, sourceDir, true, "api")
 	if err != nil {
 		return err
 	}
 
-	imageTar := v.BuildApiImage(jarFile, []string{"default", profile})
+	imageTar := v.BuildImage(jarFile, []string{"default", profile}, "api")
 
 	err = v.SendImage(ctx, sshDest, sshKey, targetPath, imageTar)
 	if err != nil {

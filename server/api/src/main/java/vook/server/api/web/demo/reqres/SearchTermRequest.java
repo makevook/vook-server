@@ -1,7 +1,7 @@
 package vook.server.api.web.demo.reqres;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import vook.server.api.domain.demo.logic.dto.DemoTermSearchCommand;
+import vook.server.api.domain.demo.service.DemoTermSearchCommand;
 
 import java.util.List;
 

@@ -11,6 +11,10 @@ subprojects {
 }
 
 allprojects {
+    ext {
+        springModulithVersion = "1.2.1"
+    }
+
     group = 'vook'
     version = '0.0.1-SNAPSHOT'
 
@@ -37,5 +41,11 @@ allprojects {
 
     tasks.named('test') {
         useJUnitPlatform()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.modulith:spring-modulith-bom:$springModulithVersion"
+        }
     }
 }

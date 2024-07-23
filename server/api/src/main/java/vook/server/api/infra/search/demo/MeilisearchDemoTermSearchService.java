@@ -8,12 +8,13 @@ import com.meilisearch.sdk.model.Searchable;
 import com.meilisearch.sdk.model.TaskInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import vook.server.api.domain.demo.logic.DemoTermSearchService;
-import vook.server.api.domain.demo.logic.dto.DemoTermSearchCommand;
-import vook.server.api.domain.demo.logic.dto.DemoTermSearchResult;
 import vook.server.api.domain.demo.model.DemoTerm;
 import vook.server.api.domain.demo.model.DemoTermSynonym;
+import vook.server.api.domain.demo.service.DemoTermSearchCommand;
+import vook.server.api.domain.demo.service.DemoTermSearchResult;
+import vook.server.api.domain.demo.service.DemoTermSearchService;
 import vook.server.api.infra.search.common.MeilisearchProperties;
 import vook.server.api.infra.search.common.MeilisearchService;
 
@@ -21,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class MeilisearchDemoTermSearchService extends MeilisearchService implements DemoTermSearchService {
 
@@ -42,9 +44,11 @@ public class MeilisearchDemoTermSearchService extends MeilisearchService impleme
     }
 
     public void addTerms(List<DemoTerm> terms) {
+        log.debug("Add demo terms to index");
         Index index = client.index(DEMO_TERMS_INDEX_UID);
         TaskInfo taskInfo = index.addDocuments(getDocuments(terms));
         client.waitForTask(taskInfo.getTaskUid());
+        log.debug("Add demo terms to index done");
     }
 
     public DemoTermSearchResult search(DemoTermSearchCommand params) {
