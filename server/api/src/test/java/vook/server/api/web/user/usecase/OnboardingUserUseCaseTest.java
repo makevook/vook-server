@@ -12,7 +12,6 @@ import vook.server.api.domain.vocabulary.model.term.TermRepository;
 import vook.server.api.domain.vocabulary.model.vocabulary.UserUid;
 import vook.server.api.domain.vocabulary.model.vocabulary.VocabularyRepository;
 import vook.server.api.testhelper.IntegrationTestBase;
-import vook.server.api.testhelper.creator.TestTemplateVocabularyCreator;
 import vook.server.api.testhelper.creator.TestUserCreator;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,8 +22,6 @@ class OnboardingUserUseCaseTest extends IntegrationTestBase {
     @Autowired
     OnboardingUserUseCase useCase;
 
-    @Autowired
-    TestTemplateVocabularyCreator testTemplateVocabularyCreator;
     @Autowired
     TestUserCreator testUserCreator;
     @Autowired
@@ -38,7 +35,6 @@ class OnboardingUserUseCaseTest extends IntegrationTestBase {
     @DisplayName("유저 온보딩 - 정상")
     void onboardingUser() {
         // given
-        testTemplateVocabularyCreator.createTemplateVocabulary();
         var user = testUserCreator.createRegisteredUser();
         var command = new OnboardingUserUseCase.Command(user.getUid(), Funnel.FACEBOOK, Job.DEVELOPER);
 

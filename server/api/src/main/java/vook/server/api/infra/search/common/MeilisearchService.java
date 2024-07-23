@@ -7,9 +7,11 @@ import com.meilisearch.sdk.model.IndexesQuery;
 import com.meilisearch.sdk.model.Results;
 import com.meilisearch.sdk.model.TaskInfo;
 import com.meilisearch.sdk.model.TypoTolerance;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 
+@Slf4j
 public abstract class MeilisearchService {
 
     protected final Client client;
@@ -19,16 +21,20 @@ public abstract class MeilisearchService {
     }
 
     protected void clearAllByPrefix(String uidPrefix) {
+        log.debug("Clear all indexes by prefix: {}", uidPrefix);
         Results<Index> indexes = client.getIndexes(new IndexesQuery() {{
             setLimit(Integer.MAX_VALUE);
         }});
         Arrays.stream(indexes.getResults())
                 .map(Index::getUid)
                 .filter(uid -> uid.startsWith(uidPrefix))
-                .forEach(client::deleteIndex);
+                .map(client::deleteIndex)
+                .forEach(taskInfo -> client.waitForTask(taskInfo.getTaskUid()));
+        log.debug("Clear all indexes by prefix done: {}", uidPrefix);
     }
 
     protected void createIndex(String indexUid, String primaryKeyName) {
+        log.debug("Create index: {}", indexUid);
         TaskInfo indexCreateTask = client.createIndex(indexUid, primaryKeyName);
         client.waitForTask(indexCreateTask.getTaskUid());
 
@@ -63,5 +69,6 @@ public abstract class MeilisearchService {
         typoTolerance.setEnabled(false);
         TaskInfo updateTypoTask = client.index(indexUid).updateTypoToleranceSettings(typoTolerance);
         client.waitForTask(updateTypoTask.getTaskUid());
+        log.debug("Create index done: {}", indexUid);
     }
 }

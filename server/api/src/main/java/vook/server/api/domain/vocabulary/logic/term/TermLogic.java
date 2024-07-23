@@ -9,6 +9,7 @@ import vook.server.api.domain.vocabulary.exception.TermNotFoundException;
 import vook.server.api.domain.vocabulary.model.term.Term;
 import vook.server.api.domain.vocabulary.model.term.TermFactory;
 import vook.server.api.domain.vocabulary.model.term.TermRepository;
+import vook.server.api.domain.vocabulary.service.SearchManagementService;
 import vook.server.api.globalcommon.annotation.DomainLogic;
 
 import java.util.List;
@@ -65,17 +66,5 @@ public class TermLogic {
 
     private Term getTermByUid(String uid) {
         return termRepository.findByUid(uid).orElseThrow(TermNotFoundException::new);
-    }
-
-    public interface SearchManagementService {
-        void save(Term term);
-
-        void update(Term term);
-
-        void delete(Term term);
-
-        void saveAll(List<Term> terms);
-
-        void deleteAll(List<Term> terms);
     }
 }

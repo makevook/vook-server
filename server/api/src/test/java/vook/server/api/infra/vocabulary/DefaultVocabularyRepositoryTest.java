@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vook.server.api.domain.vocabulary.model.vocabulary.UserUid;
 import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
+import vook.server.api.domain.vocabulary.model.vocabulary.VocabularyFactory;
 import vook.server.api.infra.vocabulary.cache.UserVocabularyCache;
 import vook.server.api.infra.vocabulary.cache.UserVocabularyCacheRepository;
 import vook.server.api.testhelper.IntegrationTestBase;
@@ -24,6 +25,9 @@ class DefaultVocabularyRepositoryTest extends IntegrationTestBase {
     @Autowired
     UserVocabularyCacheRepository userVocabularyCacheRepository;
 
+    @Autowired
+    VocabularyFactory vocabularyFactory;
+
     @AfterEach
     void tearDown() {
         userVocabularyCacheRepository.deleteAll();
@@ -35,7 +39,7 @@ class DefaultVocabularyRepositoryTest extends IntegrationTestBase {
         // given
         String name = "용어집1";
         UserUid userUid = new UserUid("user-uid");
-        Vocabulary vocabulary = Vocabulary.forCreateOf(name, userUid);
+        Vocabulary vocabulary = vocabularyFactory.create(name, userUid);
 
         // when
         Vocabulary saved = defaultVocabularyRepository.save(vocabulary);
@@ -56,7 +60,7 @@ class DefaultVocabularyRepositoryTest extends IntegrationTestBase {
         // given
         String name = "용어집1";
         UserUid userUid = new UserUid("user-uid");
-        Vocabulary saved = defaultVocabularyRepository.save(Vocabulary.forCreateOf(name, userUid));
+        Vocabulary saved = defaultVocabularyRepository.save(vocabularyFactory.create(name, userUid));
 
         UserVocabularyCache savedCache = userVocabularyCacheRepository.findById(userUid.getValue()).orElseThrow();
         assertThat(savedCache.vocabularyUids()).containsExactly(saved.getUid());
@@ -76,8 +80,8 @@ class DefaultVocabularyRepositoryTest extends IntegrationTestBase {
     void findAllByUserUid() {
         // given
         UserUid userUid = new UserUid("user-uid");
-        Vocabulary vocabulary1 = defaultVocabularyRepository.save(Vocabulary.forCreateOf("용어집1", userUid));
-        Vocabulary vocabulary2 = defaultVocabularyRepository.save(Vocabulary.forCreateOf("용어집2", userUid));
+        Vocabulary vocabulary1 = defaultVocabularyRepository.save(vocabularyFactory.create("용어집1", userUid));
+        Vocabulary vocabulary2 = defaultVocabularyRepository.save(vocabularyFactory.create("용어집2", userUid));
 
         // when
         List<String> vocabularyUids = defaultVocabularyRepository.findAllUidsByUserUid(userUid);

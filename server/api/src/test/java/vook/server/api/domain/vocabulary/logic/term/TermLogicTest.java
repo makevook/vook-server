@@ -9,7 +9,7 @@ import vook.server.api.domain.vocabulary.model.term.Term;
 import vook.server.api.domain.vocabulary.model.term.TermRepository;
 import vook.server.api.domain.vocabulary.model.vocabulary.Vocabulary;
 import vook.server.api.globalcommon.exception.ParameterValidateException;
-import vook.server.api.infra.search.vocabulary.MeilisearchVocabularySearchService;
+import vook.server.api.infra.search.vocabulary.MeilisearchSearchManagementService;
 import vook.server.api.testhelper.IntegrationTestBase;
 import vook.server.api.testhelper.creator.TestUserCreator;
 import vook.server.api.testhelper.creator.TestVocabularyCreator;
@@ -35,7 +35,7 @@ class TermLogicTest extends IntegrationTestBase {
     TestVocabularyCreator vocabularyCreator;
 
     @Autowired
-    MeilisearchVocabularySearchService searchService;
+    MeilisearchSearchManagementService searchService;
     @Autowired
     TermRepository termRepository;
 
