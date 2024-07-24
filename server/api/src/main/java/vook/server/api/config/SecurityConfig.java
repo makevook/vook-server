@@ -15,8 +15,11 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpStatusRequestRejectedHandler;
+import org.springframework.security.web.firewall.RequestRejectedHandler;
 import vook.server.api.web.common.auth.app.TokenService;
 import vook.server.api.web.common.auth.jwt.JWTFilter;
+import vook.server.api.web.common.auth.oauth2.LoginPolicyChecker;
 import vook.server.api.web.common.auth.oauth2.LoginSuccessHandler;
 import vook.server.api.web.common.auth.oauth2.VookOAuth2UserService;
 
@@ -93,5 +96,17 @@ public class SecurityConfig {
                     params.put("prompt", "consent");
                 }));
         return authorizationRequestResolver;
+    }
+
+    @Bean
+    public RequestRejectedHandler requestRejectedHandler() {
+        HttpStatusRequestRejectedHandler defaultHandler = new HttpStatusRequestRejectedHandler();
+        return (request, response, requestRejectedException) -> {
+            if (requestRejectedException instanceof LoginPolicyChecker.VookRequestRejectedException) {
+                response.sendRedirect(loginFailUrl);
+            } else {
+                defaultHandler.handle(request, response, requestRejectedException);
+            }
+        };
     }
 }
