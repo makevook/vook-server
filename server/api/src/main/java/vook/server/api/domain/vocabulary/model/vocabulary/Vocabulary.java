@@ -21,6 +21,7 @@ public class Vocabulary extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String uid;
 
     /**
@@ -30,7 +31,10 @@ public class Vocabulary extends BaseEntity {
     private String name;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "user_uid", nullable = false))
+    @AttributeOverride(
+            name = "value",
+            column = @Column(name = "user_uid", nullable = false, unique = true)
+    )
     private UserUid userUid;
 
     @Builder.Default
