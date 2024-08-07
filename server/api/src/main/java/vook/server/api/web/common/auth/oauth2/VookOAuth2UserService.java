@@ -20,6 +20,7 @@ import vook.server.api.web.common.auth.data.VookLoginUser;
 public class VookOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserLogic userLogic;
+    private final LoginPolicyChecker loginPolicyChecker;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -32,6 +33,8 @@ public class VookOAuth2UserService extends DefaultOAuth2UserService {
             log.warn("Unsupported registrationId: {}", registrationId);
             return null;
         }
+
+        loginPolicyChecker.check(oAuth2Response);
 
         return userLogic.findByProvider(oAuth2Response.getProvider(), oAuth2Response.getProviderId())
                 .map(VookLoginUser::from)

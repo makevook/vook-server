@@ -1,0 +1,36 @@
+name: Branch Protection Rules
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  check-branch-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "develop 브랜치 머지 룰 확인"
+        if: github.event.pull_request.base.ref == 'develop'
+        run: |
+          HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
+          if [[ "$HEAD_BRANCH" != issue/* && "$HEAD_BRANCH" != bugfix/* && "$HEAD_BRANCH" != hotfix/* ]]; then
+            echo "'issue/', 'bugfix/' 또는 'hotfix/'로 시작하는 브랜치만 'develop' 브랜치로 머지할 수 있습니다."
+            exit 1
+          fi
+
+      - name: "release 브랜치 머지 룰 확인"
+        if: github.event.pull_request.base.ref == 'release'
+        run: |
+          HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
+          if [[ "$HEAD_BRANCH" != 'develop' && "$HEAD_BRANCH" != bugfix/* ]]; then
+            echo "'develop' 또는 'bugfix/'로 시작하는 브랜치만 'release' 브랜치로 머지할 수 있습니다."
+            exit 1
+          fi
+
+      - name: "main 브랜치 머지 룰 확인"
+        if: github.event.pull_request.base.ref == 'main'
+        run: |
+          HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
+          if [[ "$HEAD_BRANCH" != 'release' && "$HEAD_BRANCH" != hotfix/* ]]; then
+            echo "'release' 또는 'hotfix/'로 시작하는 브랜치만 'main' 브랜치로 머지할 수 있습니다."
+            exit 1
+          fi

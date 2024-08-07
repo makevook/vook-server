@@ -5,7 +5,15 @@ public abstract class JWTHelper {
         try {
             return supplier.get();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new JWTException(e);
+        }
+    }
+
+    protected static <T> T run(CheckedSupplier<T> supplier, String useData) {
+        try {
+            return supplier.get();
+        } catch (Exception e) {
+            throw new JWTException(e, useData);
         }
     }
 
