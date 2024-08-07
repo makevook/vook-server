@@ -11,7 +11,9 @@ import java.util.List;
 
 @Getter
 @Entity
-@Table(name = "vocabulary")
+@Table(name = "vocabulary", indexes = {
+        @Index(name = "idx_vocabulary_user_uid", columnList = "user_uid")
+})
 @Builder(access = AccessLevel.PACKAGE)
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -31,10 +33,7 @@ public class Vocabulary extends BaseEntity {
     private String name;
 
     @Embedded
-    @AttributeOverride(
-            name = "value",
-            column = @Column(name = "user_uid", nullable = false, unique = true)
-    )
+    @AttributeOverride(name = "value", column = @Column(name = "user_uid", nullable = false))
     private UserUid userUid;
 
     @Builder.Default
