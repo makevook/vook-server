@@ -1,11 +1,13 @@
 package vook.server.api.web.common.response;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import vook.server.api.globalcommon.exception.AppException;
 
 @Slf4j
@@ -38,6 +40,12 @@ public class GlobalRestControllerAdvice {
         log.debug(e.getMessage(), e);
         CommonApiException badRequest = CommonApiException.badRequest(ApiResponseCode.BadRequest.INVALID_PARAMETER, e);
         return ResponseEntity.status(badRequest.statusCode()).body(badRequest.response());
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<?> handleNoResourceFoundException(NoResourceFoundException e) {
+        log.debug(e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @ExceptionHandler(Exception.class)
