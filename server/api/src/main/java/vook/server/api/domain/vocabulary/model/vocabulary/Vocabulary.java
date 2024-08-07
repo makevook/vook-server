@@ -11,7 +11,9 @@ import java.util.List;
 
 @Getter
 @Entity
-@Table(name = "vocabulary")
+@Table(name = "vocabulary", indexes = {
+        @Index(name = "idx_vocabulary_user_uid", columnList = "user_uid")
+})
 @Builder(access = AccessLevel.PACKAGE)
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -21,6 +23,7 @@ public class Vocabulary extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String uid;
 
     /**

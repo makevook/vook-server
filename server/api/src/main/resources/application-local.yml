@@ -39,5 +39,9 @@ service:
     loginFailUrl: http://localhost:3000/auth?error
     accessTokenExpiredMinute: 30 # 30 minutes
     refreshTokenExpiredMinute: 10080 # 60 * 24 * 7 == 1 week
+  loginPolicy:
+    loginRestriction:
+      enable: false
+      allowedEmails: ""
 logging:
   config: classpath:logback.xml
