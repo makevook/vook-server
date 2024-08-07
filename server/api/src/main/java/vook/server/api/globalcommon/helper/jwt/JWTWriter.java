@@ -8,6 +8,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import vook.server.api.globalcommon.helper.format.FormatHelper;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -58,7 +59,7 @@ public class JWTWriter extends JWTHelper {
             signedJWT.sign(signer);
 
             return signedJWT.serialize();
-        });
+        }, FormatHelper.slf4j("claims: {}", claims));
     }
 
     public static class Builder {

@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import vook.server.api.globalcommon.helper.jwt.JWTException;
 import vook.server.api.web.common.auth.app.TokenService;
 import vook.server.api.web.common.auth.data.AuthValues;
 import vook.server.api.web.common.auth.data.VookLoginUser;
@@ -34,8 +35,8 @@ public class JWTFilter extends OncePerRequestFilter {
         OAuth2User oAuth2User;
         try {
             oAuth2User = VookLoginUser.of(tokenService.validateAndGetUid(token));
-        } catch (Exception e) {
-            log.debug("JWT validation failed", e);
+        } catch (JWTException e) {
+            log.warn(e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
