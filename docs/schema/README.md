@@ -65,7 +65,7 @@ erDiagram
   varchar_255_ uid
   varchar_100_ term
   varchar_2000_ meaning
-  varchar_255_ synonym
+  varchar_4000_ synonym
   bigint_20_ vocabulary_id FK
   datetime_6_ created_at
   datetime_6_ updated_at

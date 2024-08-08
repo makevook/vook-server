@@ -13,11 +13,12 @@ CREATE TABLE `term` (
   `uid` varchar(255) DEFAULT NULL COMMENT 'UID',
   `term` varchar(100) NOT NULL COMMENT '용어',
   `meaning` varchar(2000) NOT NULL COMMENT '뜻',
-  `synonym` varchar(255) DEFAULT NULL COMMENT '동의어',
+  `synonym` varchar(4000) DEFAULT NULL COMMENT '동의어',
   `vocabulary_id` bigint(20) NOT NULL COMMENT '용어집 ID',
   `created_at` datetime(6) DEFAULT NULL COMMENT '생성일시',
   `updated_at` datetime(6) DEFAULT NULL COMMENT '수정일시',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_term_uid` (`uid`),
   KEY `fk_term_vocabulary` (`vocabulary_id`),
   CONSTRAINT `fk_term_vocabulary` FOREIGN KEY (`vocabulary_id`) REFERENCES `vocabulary` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='용어'
@@ -33,7 +34,7 @@ CREATE TABLE `term` (
 | uid | varchar(255) | NULL | true |  |  |  | UID |
 | term | varchar(100) |  | false |  |  |  | 용어 |
 | meaning | varchar(2000) |  | false |  |  |  | 뜻 |
-| synonym | varchar(255) | NULL | true |  |  |  | 동의어 |
+| synonym | varchar(4000) | NULL | true |  |  |  | 동의어 |
 | vocabulary_id | bigint(20) |  | false |  |  | [vocabulary](vocabulary.md) | 용어집 ID |
 | created_at | datetime(6) | NULL | true |  |  |  | 생성일시 |
 | updated_at | datetime(6) | NULL | true |  |  |  | 수정일시 |
@@ -44,6 +45,7 @@ CREATE TABLE `term` (
 | ---- | ---- | ---------- |
 | fk_term_vocabulary | FOREIGN KEY | FOREIGN KEY (vocabulary_id) REFERENCES vocabulary (id) |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
+| uk_term_uid | UNIQUE | UNIQUE KEY uk_term_uid (uid) |
 
 ## Indexes
 
@@ -51,6 +53,7 @@ CREATE TABLE `term` (
 | ---- | ---------- |
 | fk_term_vocabulary | KEY fk_term_vocabulary (vocabulary_id) USING BTREE |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
+| uk_term_uid | UNIQUE KEY uk_term_uid (uid) USING BTREE |
 
 ## Relations
 
@@ -64,7 +67,7 @@ erDiagram
   varchar_255_ uid
   varchar_100_ term
   varchar_2000_ meaning
-  varchar_255_ synonym
+  varchar_4000_ synonym
   bigint_20_ vocabulary_id FK
   datetime_6_ created_at
   datetime_6_ updated_at
