@@ -19,7 +19,8 @@ CREATE TABLE `users` (
   `withdrawn_at` datetime(6) DEFAULT NULL COMMENT '탈퇴 일시',
   `last_updated_at` datetime(6) DEFAULT NULL COMMENT '마지막 수정 일시',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_users_email` (`email`)
+  UNIQUE KEY `uk_users_email` (`email`),
+  UNIQUE KEY `uk_users_uid` (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자'
 ```
 
@@ -45,6 +46,7 @@ CREATE TABLE `users` (
 | ---- | ---- | ---------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 | uk_users_email | UNIQUE | UNIQUE KEY uk_users_email (email) |
+| uk_users_uid | UNIQUE | UNIQUE KEY uk_users_uid (uid) |
 
 ## Indexes
 
@@ -52,6 +54,7 @@ CREATE TABLE `users` (
 | ---- | ---------- |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
 | uk_users_email | UNIQUE KEY uk_users_email (email) USING BTREE |
+| uk_users_uid | UNIQUE KEY uk_users_uid (uid) USING BTREE |
 
 ## Relations
 

@@ -15,7 +15,9 @@ CREATE TABLE `vocabulary` (
   `user_uid` varchar(255) NOT NULL COMMENT '사용자 UID',
   `created_at` datetime(6) DEFAULT NULL COMMENT '생성일시',
   `updated_at` datetime(6) DEFAULT NULL COMMENT '수정일시',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_vocabulary_uid` (`uid`),
+  KEY `idx_vocabulary_user_uid` (`user_uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='용어집'
 ```
 
@@ -37,12 +39,15 @@ CREATE TABLE `vocabulary` (
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
+| uk_vocabulary_uid | UNIQUE | UNIQUE KEY uk_vocabulary_uid (uid) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
+| idx_vocabulary_user_uid | KEY idx_vocabulary_user_uid (user_uid) USING BTREE |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
+| uk_vocabulary_uid | UNIQUE KEY uk_vocabulary_uid (uid) USING BTREE |
 
 ## Relations
 
@@ -64,7 +69,7 @@ erDiagram
   varchar_255_ uid
   varchar_100_ term
   varchar_2000_ meaning
-  varchar_255_ synonym
+  varchar_4000_ synonym
   bigint_20_ vocabulary_id FK
   datetime_6_ created_at
   datetime_6_ updated_at
