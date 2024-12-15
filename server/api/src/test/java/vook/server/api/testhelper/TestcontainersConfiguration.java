@@ -56,7 +56,7 @@ class TestcontainersConfiguration {
 
     @Bean
     MeilisearchContainer meilisearchContainer() {
-        return new MeilisearchContainer("getmeili/meilisearch:v1.9.0");
+        return new MeilisearchContainer("getmeili/meilisearch:v1.11.3");
     }
 
     @Bean
