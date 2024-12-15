@@ -1,0 +1,6 @@
+services:
+  meilisearch:
+    volumes:
+      - ./temp/meilisearch/dumps:/dumps
+    environment:
+      - MEILI_IMPORT_DUMP=/dumps/${MEILISEARCH_DUMP_FILE}
