@@ -36,7 +36,7 @@ services:
       db:
         condition: service_healthy
   meilisearch:
-    image: getmeili/meilisearch:v1.9.0
+    image: getmeili/meilisearch:v1.11.3
     volumes:
       - meili_data:/meili_data
     ports:
